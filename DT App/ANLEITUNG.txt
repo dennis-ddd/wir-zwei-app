@@ -1,0 +1,71 @@
+Wir zwei – App für euch beide
+=============================
+
+Stand: 17.11.2026, 23:50
+
+Was ist drin
+- index.html            die App
+- manifest.webmanifest, sw.js, icons/   machen sie installierbar und offline-fähig
+
+Was die App kann
+- Dienstpläne von beiden: Früh, Spät, Nacht, Frei, Urlaub oder eigene Zeiten. Beide können alles eintragen
+  und ändern. Die App merkt sich eure zuletzt benutzten Uhrzeiten je Dienstart.
+- Einkaufsliste: Artikel eintragen (mehrere mit Komma), abhaken, Erledigte löschen.
+- Events: zeigt Tage, an denen ihr beide frei habt, und warnt, wenn ein Event mit einem Dienst kollidiert.
+- Haushalt: Ihr meldet selbst, was ihr erledigt habt („Geschirrspüler ausgeräumt“). Der andere sieht es sofort.
+  Aufgaben, die gemacht werden müssen, tragt ihr selbst ein. Die App gibt keine Aufgaben vor.
+
+------------------------------------------------------------
+1. App online stellen (GitHub Pages, wie beim Handstand-Coach)
+------------------------------------------------------------
+1. Auf github.com ein neues Repository anlegen (öffentlich), z. B. "wir-zwei".
+2. Alle Dateien dieses Ordners hochladen (Add file > Upload files), den Ordner icons/ mit.
+3. Settings > Pages > Branch "main", Ordner "/ (root)" > Save.
+4. Nach ca. einer Minute ist die App unter https://DEINNAME.github.io/wir-zwei/ erreichbar.
+
+Ohne Schritt 2 unten läuft die App schon, speichert aber nur auf dem eigenen Handy.
+
+------------------------------------------------------------
+2. Gemeinsamer Speicher
+------------------------------------------------------------
+Eure Datenbank (theresdennis) ist schon fest in der App eingetragen.
+Wenn du die App zum ersten Mal öffnest und eure Namen eingibst, verbindet sie sich automatisch.
+Danach: Zahnrad > "Einladungslink teilen" > Link an deine Freundin schicken.
+Sie öffnet ihn, tippt auf ihren Namen, fertig.
+
+Falls oben "Nur auf diesem Handy gespeichert" steht: In Firebase unter Realtime Database > Regeln
+prüfen, ob dieser Text dort steht und veröffentlicht ist:
+
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "paare": {
+      "$code": {
+        ".read": "$code.length >= 20",
+        ".write": "$code.length >= 20"
+      }
+    }
+  }
+}
+
+Danach in der App: Zahnrad > Verbinden.
+
+------------------------------------------------------------
+3. Auf dem Handy installieren
+------------------------------------------------------------
+- Android (Chrome): Adresse öffnen, Menü (drei Punkte) > "App installieren" oder "Zum Startbildschirm".
+- iPhone (Safari): Teilen-Symbol > "Zum Home-Bildschirm".
+  Den Einladungslink auf dem iPhone zuerst in Safari öffnen, beitreten, DANN zum Home-Bildschirm hinzufügen.
+
+Offline: Einträge ohne Internet werden gespeichert und automatisch nachgereicht.
+
+Benachrichtigungen: Wenn der andere etwas einträgt, erscheint eine Meldung, solange die App offen ist
+oder kurz im Hintergrund läuft. Echte Push-Nachrichten bei geschlossener App bräuchten einen zusätzlichen Server.
+
+Lokal testen am Computer
+Im Ordner: python3 -m http.server 8000   dann http://localhost:8000 öffnen.
+
+Updates
+Neue Version = index.html (und sw.js mit neuer VERSION) ersetzen. Die App holt sich die neue Seite
+beim nächsten Öffnen mit Internet.

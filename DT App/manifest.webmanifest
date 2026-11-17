@@ -1,0 +1,17 @@
+{
+ "name": "Wir zwei",
+ "short_name": "Wir zwei",
+ "description": "Dienstpläne, Einkaufsliste, Events und Haushalt für zwei",
+ "start_url": "./index.html",
+ "scope": "./",
+ "display": "standalone",
+ "orientation": "portrait",
+ "background_color": "#F5F6FA",
+ "theme_color": "#F5F6FA",
+ "lang": "de",
+ "icons": [
+  { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+  { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+  { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+ ]
+}
