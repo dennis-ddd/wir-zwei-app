@@ -193,7 +193,7 @@ details.card summary{font-weight:700;cursor:pointer}
 
 <script>
 "use strict";
-var APP_VERSION = "1.1 · 17.11.2026";
+var APP_VERSION = "1.2 · 18.11.2026";
 /* Eure Datenbank. Neue App-Installationen verbinden sich automatisch damit. */
 var DEFAULT_DB = "https://theresdennis-default-rtdb.europe-west1.firebasedatabase.app";
 var $ = function (s, r) { return (r || document).querySelector(s); };
@@ -324,12 +324,20 @@ function when(ts) {
 function mins(t) { if (!t) return null; var a = t.split(":"); return +a[0] * 60 + +a[1]; }
 
 /* ---------- Dienste ---------- */
-var TYPES = ["Früh", "Spät", "Nacht", "Frei", "Urlaub", "Eigene"];
-var DEF = { "Früh": ["06:00", "14:00"], "Spät": ["14:00", "22:00"], "Nacht": ["21:30", "06:30"], "Eigene": ["09:00", "17:00"] };
-var LONG = { "Früh": "Frühdienst", "Spät": "Spätdienst", "Nacht": "Nachtdienst", "Frei": "Frei", "Urlaub": "Urlaub", "Eigene": "Dienst" };
+var TYPES = ["Früh", "Spät", "Nacht", "Dienstreise", "Mainz", "Auftritt", "Frei", "Urlaub", "Eigene"];
+var DEF = { "Früh": ["06:00", "14:00"], "Spät": ["14:00", "22:00"], "Nacht": ["21:30", "06:30"], "Auftritt": ["19:00", "22:00"], "Eigene": ["09:00", "17:00"] };
+var ALLDAY = { "Dienstreise": 1, "Mainz": 1 };   /* ganztägig, Uhrzeit freiwillig */
+var LONG = { "Früh": "Frühdienst", "Spät": "Spätdienst", "Nacht": "Nachtdienst", "Frei": "Frei", "Urlaub": "Urlaub", "Eigene": "Dienst", "Dienstreise": "Dienstreise", "Mainz": "Mainz", "Auftritt": "Auftritt" };
+function busyText(p, s) {
+  var n = person(p).name, t = s.from ? " (" + s.from + "–" + s.to + ")" : "";
+  if (s.type === "Dienstreise") return n + " ist auf Dienstreise" + t;
+  if (s.type === "Mainz") return n + " ist in Mainz" + t;
+  if (s.type === "Auftritt") return n + " hat einen Auftritt" + t;
+  return n + " hat " + LONG[s.type] + t;
+}
 function isWork(t) { return t && t !== "Frei" && t !== "Urlaub"; }
 function shift(p, date) { return coll("shifts")[p + "_" + date] || null; }
-function shiftTime(s) { return isWork(s.type) && s.from ? s.from + "–" + s.to : ""; }
+function shiftTime(s) { if (!isWork(s.type)) return ""; if (s.from) return s.from + "–" + (s.to || "?"); return ALLDAY[s.type] ? "ganztägig" : ""; }
 
 /* ---------- Ansicht wechseln ---------- */
 function show(t) {
@@ -452,7 +460,7 @@ function openShift(p, date) {
   html += '<div class="fl"><span class="lab">Für wen?</span><div class="seg" id="sh-who">' + ["p1", "p2"].map(function (x) { return '<button type="button" data-p="' + x + '">' + av(x) + esc(person(x).name) + "</button>"; }).join("") + "</div></div>";
   html += '<div class="fl"><label for="sh-date">Datum</label><input class="f" type="date" id="sh-date" value="' + date + '"></div>';
   html += '<div class="fl"><span class="lab">Dienstart</span><div class="grid3" id="sh-type">' + TYPES.map(function (t) { return '<button type="button" class="chip" data-t="' + t + '">' + t + "</button>"; }).join("") + "</div></div>";
-  html += '<div class="grid2" id="sh-times"><div class="fl"><label for="sh-from">Von</label><input class="f" type="time" id="sh-from" value="' + tt[0] + '"></div><div class="fl"><label for="sh-to">Bis</label><input class="f" type="time" id="sh-to" value="' + tt[1] + '"></div></div>';
+  html += '<div class="grid2" id="sh-times"><div class="fl"><label for="sh-from" id="sh-from-l">Von</label><input class="f" type="time" id="sh-from" value="' + tt[0] + '"></div><div class="fl"><label for="sh-to" id="sh-to-l">Bis</label><input class="f" type="time" id="sh-to" value="' + tt[1] + '"></div></div>';
   html += '<div class="fl"><label for="sh-rep">Wiederholen</label><select class="f" id="sh-rep"><option value="0">Nicht wiederholen</option><option value="1">Auch nächste Woche</option><option value="3">Die nächsten 3 Wochen</option><option value="7">Die nächsten 7 Wochen</option></select></div>';
   html += '<div class="fl"><label for="sh-note">Notiz (optional)</label><textarea class="f" id="sh-note" placeholder="z. B. Station, Vertretung …">' + esc(orig ? orig.note || "" : "") + "</textarea></div>";
   if (orig && orig.by) html += '<div class="muted">Zuletzt geändert von ' + esc(von(orig.by)) + " · " + when(orig.at) + "</div>";
@@ -462,6 +470,8 @@ function openShift(p, date) {
     $$("#sh-who button").forEach(function (b) { b.setAttribute("aria-pressed", b.getAttribute("data-p") === st.p); });
     $$("#sh-type button").forEach(function (b) { b.setAttribute("aria-pressed", b.getAttribute("data-t") === st.type); b.style.setProperty("--sel", st.p === "p1" ? "var(--a)" : "var(--b)"); });
     $("#sh-times").hidden = !isWork(st.type);
+    var opt = !!ALLDAY[st.type];
+    $("#sh-from-l").textContent = opt ? "Von (optional)" : "Von"; $("#sh-to-l").textContent = opt ? "Bis (optional)" : "Bis";
   }
   $$("#sh-who button").forEach(function (b) { b.onclick = function () { st.p = b.getAttribute("data-p"); paint(); }; });
   $$("#sh-type button").forEach(function (b) { b.onclick = function () { st.type = b.getAttribute("data-t"); var x = times(st.p, st.type); $("#sh-from").value = x[0]; $("#sh-to").value = x[1]; paint(); }; });
@@ -469,8 +479,8 @@ function openShift(p, date) {
   $("#sh-save").onclick = function () {
     var d = $("#sh-date").value; if (!d) { toast("Bitte ein Datum wählen"); return; }
     var work = isWork(st.type), from = work ? $("#sh-from").value : "", to = work ? $("#sh-to").value : "";
-    if (work && (!from || !to)) { toast("Bitte Uhrzeiten eintragen"); return; }
-    if (work) { lastTimes[st.p] = lastTimes[st.p] || {}; lastTimes[st.p][st.type] = [from, to]; LS.set("times", lastTimes); }
+    if (work && !ALLDAY[st.type] && (!from || !to)) { toast("Bitte Uhrzeiten eintragen"); return; }
+    if (work && from && to) { lastTimes[st.p] = lastTimes[st.p] || {}; lastTimes[st.p][st.type] = [from, to]; LS.set("times", lastTimes); }
     var rep = +$("#sh-rep").value, note = $("#sh-note").value.trim(), now = Date.now();
     var newKey = st.p + "_" + d;
     if (origKey && origKey !== newKey) write("shifts/" + origKey, null);
@@ -516,11 +526,11 @@ function conflicts(ev) {
   who.forEach(function (p) {
     var s = shift(p, ev.date);
     if (s && isWork(s.type)) {
-      var f = mins(s.from), to = mins(s.to); if (to <= f) to += 1440;
-      if (t == null || (t >= f && t < to) || (t + 1440 >= f && t + 1440 < to)) out.push(person(p).name + " hat " + LONG[s.type] + (s.from ? " (" + s.from + "–" + s.to + ")" : ""));
+      if (!s.from || !s.to || t == null) out.push(busyText(p, s));
+      else { var f = mins(s.from), to = mins(s.to); if (to <= f) to += 1440; if ((t >= f && t < to) || (t + 1440 >= f && t + 1440 < to)) out.push(busyText(p, s)); }
     }
     var prev = shift(p, iso(addDays(pISO(ev.date), -1)));
-    if (prev && isWork(prev.type) && t != null) { var pf = mins(prev.from), pt = mins(prev.to); if (pt <= pf && t < pt) out.push(person(p).name + " hat bis " + prev.to + " Nachtdienst"); }
+    if (prev && isWork(prev.type) && t != null && prev.from && prev.to) { var pf = mins(prev.from), pt = mins(prev.to); if (pt <= pf && t < pt) out.push(person(p).name + " hat bis " + prev.to + " Nachtdienst"); }
   });
   return out;
 }
