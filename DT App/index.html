@@ -99,10 +99,10 @@ textarea.f{height:72px;padding:12px 14px;resize:none}
 .logitem time{font-size:12px;color:var(--mute);font-weight:700}
 /* Nav */
 nav.tabs{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);display:flex;justify-content:space-around;padding:6px 4px calc(var(--safe-b) + 8px);z-index:10}
-nav.tabs button{border:0;background:none;color:var(--mute);display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11px;font-weight:600;min-width:62px;min-height:52px;justify-content:center;position:relative}
+nav.tabs button{border:0;background:none;color:var(--mute);display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11px;font-weight:600;min-width:52px;flex:1;max-width:80px;min-height:52px;justify-content:center;position:relative}
 nav.tabs button[aria-current=page]{color:var(--ink);font-weight:800}
 nav.tabs button[aria-current=page] svg{stroke-width:2.3}
-.badge{position:absolute;top:2px;right:12px;min-width:18px;height:18px;border-radius:9px;background:var(--b);color:#fff;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;padding:0 5px}
+.badge{position:absolute;top:2px;right:8px;min-width:18px;height:18px;border-radius:9px;background:var(--b);color:#fff;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;padding:0 5px}
 /* Sheet */
 .sheet{position:fixed;inset:0;z-index:30;display:flex;align-items:flex-end;justify-content:center;background:rgba(15,17,26,.45)}
 .panel{background:var(--bg);width:100%;max-width:560px;max-height:92vh;overflow:auto;border-radius:24px 24px 0 0;padding:16px 18px calc(var(--safe-b) + 20px);display:flex;flex-direction:column;gap:16px;animation:up .2s ease-out}
@@ -112,9 +112,34 @@ nav.tabs button[aria-current=page] svg{stroke-width:2.3}
 .actions{display:grid;grid-template-columns:1fr 2fr;gap:10px}.actions.one{grid-template-columns:1fr}
 .setup{position:fixed;inset:0;z-index:40;background:var(--bg);overflow:auto}
 .setup .view{padding-bottom:40px}
-.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(var(--safe-b) + 92px);background:var(--ink);color:#fff;padding:12px 16px;border-radius:14px;font-size:14px;font-weight:600;z-index:50;max-width:90vw;box-shadow:0 6px 20px rgba(0,0,0,.2)}
+.toast{position:fixed;left:50%;transform:translateX(-50%);top:calc(var(--safe-t) + 12px);background:var(--ink);color:#fff;padding:12px 16px;border-radius:14px;font-size:14px;font-weight:600;z-index:50;max-width:90vw;box-shadow:0 6px 20px rgba(0,0,0,.2)}
 .help{font-size:13px;color:var(--mute);line-height:1.5;margin:0}.help code{background:#E9EBF1;padding:1px 5px;border-radius:5px;font-size:12px}
 details.card summary{font-weight:700;cursor:pointer}
+.score{display:flex;align-items:center;justify-content:center;gap:10px;background:var(--card);border-radius:16px;padding:10px}
+.score b{font-size:22px;font-weight:800;min-width:24px;text-align:center}
+.qopts{display:flex;flex-direction:column;gap:8px}
+.qopt{display:flex;justify-content:space-between;align-items:center;gap:10px;min-height:52px;padding:10px 14px;border-radius:14px;border:1px solid var(--line2);background:var(--card);font-size:15px;font-weight:600;text-align:left;color:var(--ink)}
+.qopt:disabled{cursor:default;opacity:1}
+.qopt.mine{border:2px solid var(--ink)}
+.qopt.right{background:var(--okt);border-color:var(--ok);color:var(--oki)}
+.qopt.wrong{background:#FDECEC;border-color:#E3B4B4;color:var(--danger)}
+.qopt .marks{display:flex;gap:4px}
+.res{font-size:12px;font-weight:800;border-radius:8px;padding:3px 7px}.res.y{background:var(--okt);color:var(--oki)}.res.n{background:#FDECEC;color:var(--danger)}
+.drawcard{background:var(--card);border-radius:18px;padding:10px;display:flex;gap:12px;align-items:center}
+.drawimg{width:84px;height:84px;border-radius:12px;overflow:hidden;border:1px solid var(--line);padding:0;background:#fff;flex-shrink:0}
+.drawimg img{width:100%;height:100%;display:block}
+.drawcard .body{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px;font-size:14px}
+.wordbox{background:var(--card);border-radius:16px;padding:12px;display:flex;flex-direction:column;align-items:center;gap:4px}
+.wordbox b{font-size:24px;font-weight:800}
+.drawcv{display:block;margin:0 auto;border-radius:16px;background:#fff;border:1px solid var(--line2);touch-action:none}
+.tools{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.sw{width:36px;height:36px;border-radius:50%;border:2px solid var(--line2);padding:0}
+.sw.on{outline:3px solid var(--ink);outline-offset:2px}
+.bigimg{width:100%;max-width:420px;align-self:center;border-radius:16px;border:1px solid var(--line2);background:#fff;display:block}
+.wheelwrap{position:relative;display:flex;justify-content:center;padding-top:6px}
+.pointer{position:absolute;top:0;left:50%;transform:translateX(-50%);width:0;height:0;border-left:14px solid transparent;border-right:14px solid transparent;border-top:24px solid var(--ink);z-index:2}
+.wheelres{text-align:center;font-size:26px;font-weight:800;min-height:36px}
+.wheelmini{width:40px;height:40px;border-radius:50%;flex-shrink:0;background:conic-gradient(#2F5BD8 0 25%,#B9470B 0 50%,#157347 0 75%,#7B1FA2 0)}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 </style>
 </head>
@@ -178,12 +203,20 @@ details.card summary{font-weight:700;cursor:pointer}
   <div id="l-list"></div>
 </main>
 
+<!-- ========== SPIELE ========== -->
+<main class="view" id="v-spiele" data-view="spiele" hidden>
+  <h1>Spiele</h1>
+  <div class="seg three" id="g-seg"><button type="button" data-g="quiz">Quiz</button><button type="button" data-g="malen">Malen</button><button type="button" data-g="rad">Glücksrad</button></div>
+  <div id="g-body" style="display:flex;flex-direction:column;gap:14px"></div>
+</main>
+
 <nav class="tabs" aria-label="Hauptmenü">
   <button data-tab="heute" aria-current="page"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg>Heute</button>
   <button data-tab="dienste"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Dienste<span class="badge" hidden></span></button>
   <button data-tab="einkauf"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h2l2.4 11h11l2-8H6.2"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Einkauf<span class="badge" hidden></span></button>
   <button data-tab="events"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>Events<span class="badge" hidden></span></button>
   <button data-tab="haushalt"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 6h10M10 12h10M10 18h10"/><path d="M3.5 6l1.2 1.2L7 5M3.5 12l1.2 1.2L7 11M3.5 18l1.2 1.2L7 17"/></svg>Haushalt<span class="badge" hidden></span></button>
+  <button data-tab="spiele"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="7" width="20" height="12" rx="6"/><path d="M7 11v4M5 13h4"/><circle cx="15.5" cy="12" r=".9" fill="currentColor"/><circle cx="17.5" cy="14.5" r=".9" fill="currentColor"/></svg>Spiele<span class="badge" hidden></span></button>
 </nav>
 
 <div class="sheet" id="sheet" hidden><div class="panel" role="dialog" aria-modal="true" id="panel"></div></div>
@@ -193,7 +226,7 @@ details.card summary{font-weight:700;cursor:pointer}
 
 <script>
 "use strict";
-var APP_VERSION = "1.2 · 18.11.2026";
+var APP_VERSION = "1.3 · 18.11.2026";
 /* Eure Datenbank. Neue App-Installationen verbinden sich automatisch damit. */
 var DEFAULT_DB = "https://theresdennis-default-rtdb.europe-west1.firebasedatabase.app";
 var $ = function (s, r) { return (r || document).querySelector(s); };
@@ -273,7 +306,11 @@ function connect() {
   es.addEventListener("patch", function (e) { var m = JSON.parse(e.data), ops = []; Object.keys(m.data || {}).forEach(function (k) { ops.push([m.path.replace(/\/$/, "") + "/" + k, m.data[k]]); }); applyRemote(ops); });
   es.addEventListener("cancel", function () { online = "off"; updateStatus(); });
 }
-function snapshotKeys() { return { log: Object.keys(coll("log")), shop: Object.keys(coll("shop")), events: Object.keys(coll("events")) }; }
+function snapshotKeys() {
+  var ds = {}; Object.keys(drawColl()).forEach(function (k) { ds[k] = drawColl()[k].status; });
+  var wl = wheelLast();
+  return { log: Object.keys(coll("log")), shop: Object.keys(coll("shop")), events: Object.keys(coll("events")), draw: ds, wheelAt: wl ? wl.at : 0, quizOther: !!quizDay(iso(today()))[other()] };
+}
 function applyRemote(ops) {
   var before = snapshotKeys();
   ops.forEach(function (o) {
@@ -293,6 +330,11 @@ function notifyNew(before) {
    ["events", function (v) { return person(v.by).name + " hat ein Event eingetragen: " + v.title; }]].forEach(function (d) {
     entries(d[0]).forEach(function (v) { if (before[d[0]].indexOf(v.id) < 0 && v.by && v.by !== me()) msgs.push(d[1](v)); });
   });
+  var o = person(other()).name;
+  Object.keys(drawColl()).forEach(function (k) { var d = drawColl()[k]; if (!(k in before.draw) && d.by !== me()) msgs.push(o + " hat etwas gemalt. Rate mal!"); else if (before.draw[k] === "open" && d.status === "solved" && d.by === me()) msgs.push(o + " hat dein Bild erraten: „" + d.word + "“"); });
+  var wl = wheelLast();
+  if (wl && wl.at !== before.wheelAt && wl.by !== me()) { msgs.push(o + " hat am Glücksrad gedreht: " + wl.result); if (wheelState && wheelState.id === wl.listId && !$("#sheet").hidden) spinTo(wl.idx, wl.at); }
+  if (!before.quizOther && quizDay(iso(today()))[other()]) msgs.push(o + " hat die Frage des Tages beantwortet");
   if (!msgs.length) return;
   toast(msgs[0]);
   try { if (document.hidden && "Notification" in window && Notification.permission === "granted") new Notification("Wir zwei", { body: msgs.join("\n"), icon: "icons/icon-192.png" }); } catch (e) {}
@@ -359,15 +401,16 @@ function render() {
     if (tab === "einkauf") renderEinkauf();
     if (tab === "events") renderEvents();
     if (tab === "haushalt") renderHaushalt();
+    if (tab === "spiele") renderSpiele();
   } catch (e) { console.error(e); }
   renderBadges(); updateStatus();
 }
 function partnerNewer(k, area) { var since = seen[area] || 0; return entries(k).filter(function (v) { return v.by && v.by !== me() && (v.at || 0) > since; }).length; }
 function renderBadges() {
-  var c = { dienste: partnerNewer("shifts", "dienste"), einkauf: partnerNewer("shop", "einkauf"), events: partnerNewer("events", "events"), haushalt: partnerNewer("log", "haushalt") + partnerNewer("todos", "haushalt") };
+  var c = { dienste: partnerNewer("shifts", "dienste"), einkauf: partnerNewer("shop", "einkauf"), events: partnerNewer("events", "events"), haushalt: partnerNewer("log", "haushalt") + partnerNewer("todos", "haushalt"), spiele: gamesTodo() };
   Object.keys(c).forEach(function (k) {
     var b = $('nav.tabs button[data-tab="' + k + '"] .badge'); if (!b) return;
-    var n = k === tab ? 0 : c[k]; b.hidden = !n; b.textContent = n > 9 ? "9+" : n;
+    var n = (k === tab && k !== "spiele") ? 0 : c[k]; b.hidden = !n; b.textContent = n > 9 ? "9+" : n;
   });
 }
 function isNew(v, area) { return v.by && v.by !== me() && (v.at || 0) > (viewSince[area] || 0); }
@@ -412,12 +455,14 @@ function renderHeute() {
   html += '<button class="tile" data-go="einkauf"><span class="num">' + openShop + '</span><span class="muted" style="font-weight:600">offen auf der Einkaufsliste</span></button>';
   html += '<button class="tile" data-go="events">' + (next ? '<span class="t">' + esc(relDay(next.date)) + " · " + esc(next.title) + '</span><span class="muted" style="font-weight:600">' + (next.time ? esc(next.time) + " Uhr" : "ganztägig") + "</span>" : '<span class="t">Kein Event</span><span class="muted" style="font-weight:600">Etwas zusammen planen</span>') + "</button>";
   html += "</div>";
+  var qd = quizDay(ts);
+  if (!qd[me()]) html += '<button class="tile" data-go="spiele" style="flex-direction:row;align-items:center;gap:12px;width:100%"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.5v.7M12 17h.01"/></svg><span style="display:flex;flex-direction:column"><span class="t">Frage des Tages</span><span class="muted" style="font-weight:600">' + (qd[other()] ? esc(person(other()).name) + " hat schon geantwortet" : "Noch nicht beantwortet") + "</span></span></button>";
   if (openTodo) html += '<button class="tile" data-go="haushalt" style="flex-direction:row;align-items:center;gap:12px;width:100%"><span class="num">' + openTodo + '</span><span class="muted" style="font-weight:600">Aufgabe' + (openTodo > 1 ? "n" : "") + " im Haushalt eingetragen</span></button>";
   $("#h-body").innerHTML = html;
   bindCommon($("#h-body"));
 }
 function bindCommon(root) {
-  $$("[data-go]", root).forEach(function (b) { b.onclick = function () { show(b.getAttribute("data-go")); }; });
+  $$("[data-go]", root).forEach(function (b) { b.onclick = function () { var g = b.getAttribute("data-go"); if (g === "spiele") { gameTab = "quiz"; LS.set("gtab", gameTab); } show(g); }; });
   $$("[data-act=log]", root).forEach(function (b) { b.onclick = function () { openLog(); }; });
 }
 $("#btn-settings").onclick = function () { openSettings(); };
@@ -636,6 +681,354 @@ function openLog() {
   $("#lg-title").onkeydown = function (e) { if (e.key === "Enter") { e.preventDefault(); submit(); } };
 }
 
+/* ---------- SPIELE ---------- */
+var gameTab = LS.get("gtab", "quiz");
+function G() { return tree.games || {}; }
+function quizDay(ds) { return (G().quiz || {})[ds] || {}; }
+function drawColl() { return (G().draw || {}); }
+function wheelLists() { return ((G().wheel || {}).lists) || {}; }
+function wheelLast() { return (G().wheel || {}).last || null; }
+
+/* Fragen: [Thema, Frage, [richtige Antwort, falsch, falsch, falsch]] */
+var QZ = [
+["Filme","Welcher Film gewann 1998 den Oscar als bester Film?",["Titanic","Forrest Gump","Gladiator","Der Soldat James Ryan"]],
+["Filme","Wie schnell muss der DeLorean in „Zurück in die Zukunft“ fahren, um durch die Zeit zu reisen?",["88 Meilen pro Stunde","100 Meilen pro Stunde","66 Meilen pro Stunde","121 Meilen pro Stunde"]],
+["Filme","Wie heißt Simbas Vater in „Der König der Löwen“?",["Mufasa","Scar","Rafiki","Zazu"]],
+["Filme","Wie heißt der Schneemann in „Die Eiskönigin“?",["Olaf","Sven","Kristoff","Hans"]],
+["Filme","„Das Leben ist wie eine Schachtel …“ – wie geht Forrest Gumps Spruch weiter?",["Pralinen","Kekse","Streichhölzer","Zigarren"]],
+["Filme","Wer führte Regie bei „Jurassic Park“ (1993)?",["Steven Spielberg","James Cameron","George Lucas","Ridley Scott"]],
+["Filme","Welches Tier begleitet Shrek im ersten Film?",["Ein Esel","Ein Pferd","Ein Drache","Ein Kater"]],
+["Filme","In welchem Film sagt Arnold Schwarzenegger „I'll be back“?",["Terminator","Predator","Total Recall","True Lies"]],
+["Filme","Wie heißt der Cowboy in „Toy Story“?",["Woody","Buzz","Jessie","Rex"]],
+["Filme","Wer spielt Captain Jack Sparrow?",["Johnny Depp","Orlando Bloom","Brad Pitt","Keanu Reeves"]],
+["Filme","Welche Pille schluckt Neo in „Matrix“?",["Die rote","Die blaue","Die grüne","Die weiße"]],
+["Filme","Wie heißt der große weiße Hai in „Findet Nemo“?",["Bruce","Anker","Chum","Jaws"]],
+["Videospiele","Wie heißt Marios Bruder?",["Luigi","Wario","Toad","Yoshi"]],
+["Videospiele","Welche Nummer hat Pikachu im Pokédex?",["25","1","7","151"]],
+["Videospiele","Wie heißt der Held in „The Legend of Zelda“?",["Link","Zelda","Ganon","Epona"]],
+["Videospiele","Wie heißen die grünen Monster in Minecraft, die explodieren?",["Creeper","Zombies","Enderman","Slimes"]],
+["Videospiele","Aus welcher Spielereihe stammt Lara Croft?",["Tomb Raider","Uncharted","Resident Evil","Assassin's Creed"]],
+["Videospiele","In welchem Jahr kam die Nintendo Switch heraus?",["2017","2015","2019","2013"]],
+["Videospiele","Wie heißt die Stadt in GTA V?",["Los Santos","Liberty City","Vice City","San Fierro"]],
+["Videospiele","Aus wie vielen Quadraten besteht jeder Stein in Tetris?",["4","3","5","6"]],
+["Videospiele","Wie viele Geister jagen Pac-Man?",["4","3","5","6"]],
+["Videospiele","Welche Farbe hat Sonic?",["Blau","Rot","Grün","Gelb"]],
+["Videospiele","Wie heißt der Fuchs, der Sonic begleitet?",["Tails","Knuckles","Shadow","Amy"]],
+["Videospiele","Wer ist Marios Erzfeind?",["Bowser","Wario","Donkey Kong","Ganondorf"]],
+["Harry Potter","Wie heißt Harrys Eule?",["Hedwig","Errol","Hermes","Pigwidgeon"]],
+["Harry Potter","Von welchem Gleis fährt der Hogwarts-Express ab?",["Gleis 9 ¾","Gleis 7 ½","Gleis 10 ¼","Gleis 9 ½"]],
+["Harry Potter","Welche Position spielt Harry beim Quidditch?",["Sucher","Hüter","Treiber","Jäger"]],
+["Harry Potter","Mit welchem Zauberspruch entwaffnet man den Gegner?",["Expelliarmus","Stupor","Lumos","Accio"]],
+["Harry Potter","Wie heißt der dreiköpfige Hund im ersten Band?",["Fluffy","Fang","Seidenschnabel","Krätze"]],
+["Harry Potter","Welche Gestalt hat Hermines Patronus?",["Otter","Katze","Hirsch","Schwan"]],
+["Harry Potter","Wie heißt Hagrids Babydrache im ersten Band?",["Norbert","Fawkes","Seidenschnabel","Aragog"]],
+["Harry Potter","Welche Farbe hat der Fahrende Ritter?",["Lila","Rot","Grün","Gelb"]],
+["Harry Potter","Welcher Hauself wird mit einer Socke befreit?",["Dobby","Kreacher","Winky","Hokey"]],
+["Harry Potter","Wer ist der Halbblutprinz?",["Severus Snape","Tom Riddle","Sirius Black","Remus Lupin"]],
+["Harry Potter","Welches Haus hat einen Dachs als Wappentier?",["Hufflepuff","Ravenclaw","Slytherin","Gryffindor"]],
+["Harry Potter","Wie heißt die Tageszeitung der Zauberer?",["Tagesprophet","Klitterer","Hexenwoche","Abendbote"]],
+["Fallout (Serie)","Wie heißt die Hauptfigur, die aus der Vault an die Oberfläche geht?",["Lucy MacLean","Nora","Moira Brown","Veronica Santangelo"]],
+["Fallout (Serie)","Aus welcher Vault stammt Lucy?",["Vault 33","Vault 101","Vault 111","Vault 13"]],
+["Fallout (Serie)","Welcher Schauspieler spielt den Ghul?",["Walton Goggins","Kyle MacLachlan","Aaron Moten","Moisés Arias"]],
+["Fallout (Serie)","Wie hieß der Ghul vor dem Atomkrieg?",["Cooper Howard","Hank MacLean","Bud Askins","Lee Moldaver"]],
+["Fallout (Serie)","Zu welcher Gruppe in Power-Rüstungen gehört Maximus?",["Stählerne Bruderschaft","Enklave","NCR","Minutemen"]],
+["Fallout (Serie)","Wie heißt Lucys Vater?",["Hank MacLean","Cooper Howard","Bud Askins","Norm MacLean"]],
+["Fallout (Serie)","In welcher Gegend spielt Staffel 1?",["Los Angeles","Las Vegas","Boston","Washington, D.C."]],
+["Fallout (Serie)","Welche Firma hat die Vaults gebaut?",["Vault-Tec","RobCo","Nuka-Cola","West-Tek"]],
+["Fallout (Serie)","Wie heißt Lucys jüngerer Bruder?",["Norm","Chet","Woody","Max"]],
+["Fallout (Serie)","Wie heißt die bekannteste Limonade der Fallout-Welt?",["Nuka-Cola","Atom-Cola","Vault-Cola","Rad-Cola"]],
+["Fallout (Serie)","Wie heißt das Maskottchen, das den Daumen hochhält?",["Vault Boy","Mr. Handy","Atom Man","Nuka Boy"]],
+["Fallout (Serie)","Auf welchem Streamingdienst läuft die Serie?",["Prime Video","Netflix","Disney+","Apple TV+"]],
+["Grey's Anatomy","Welchen Spitznamen hat Derek Shepherd?",["McDreamy","McSteamy","McHottie","McCharming"]],
+["Grey's Anatomy","Welchen Spitznamen hat Mark Sloan?",["McSteamy","McDreamy","McHottie","McSexy"]],
+["Grey's Anatomy","In welcher Stadt spielt die Serie?",["Seattle","Boston","Chicago","San Francisco"]],
+["Grey's Anatomy","Wie heißt Merediths Mutter?",["Ellis Grey","Lexie Grey","Susan Grey","Maggie Pierce"]],
+["Grey's Anatomy","Auf welches Fachgebiet spezialisiert sich Cristina Yang?",["Herzchirurgie","Neurochirurgie","Plastische Chirurgie","Kinderchirurgie"]],
+["Grey's Anatomy","Wie hieß das Krankenhaus in den ersten Staffeln?",["Seattle Grace","Seattle Mercy","St. Elsewhere","Grey Sloan Memorial"]],
+["Grey's Anatomy","Wer spielt Meredith Grey?",["Ellen Pompeo","Sandra Oh","Katherine Heigl","Chandra Wilson"]],
+["Grey's Anatomy","Wie heißt Merediths Halbschwester, die mit Mark Sloan zusammenkommt?",["Lexie Grey","Maggie Pierce","Amelia Shepherd","April Kepner"]],
+["Grey's Anatomy","Wer ist Merediths „Person“?",["Cristina Yang","Izzie Stevens","Callie Torres","Addison Montgomery"]],
+["Grey's Anatomy","Welchen Spitznamen bekommt George O'Malley?",["007","Bambi","Rookie","Doc Holiday"]],
+["Grey's Anatomy","Wie heißt Dereks erste Ehefrau?",["Addison Montgomery","Amelia Shepherd","Rose","Arizona Robbins"]],
+["Grey's Anatomy","Wer spielt Cristina Yang?",["Sandra Oh","Ellen Pompeo","Sara Ramírez","Kate Walsh"]],
+["Desperate Housewives","In welcher Straße wohnen die Frauen?",["Wisteria Lane","Elm Street","Maple Drive","Fairview Avenue"]],
+["Desperate Housewives","Wer erzählt die Serie aus dem Off?",["Mary Alice Young","Edie Britt","Susan Mayer","Karen McCluskey"]],
+["Desperate Housewives","Wie heißt Gabrielles Ehemann?",["Carlos Solis","Tom Scavo","Mike Delfino","Rex Van de Kamp"]],
+["Desperate Housewives","Welchen Beruf hat Mike Delfino?",["Klempner","Elektriker","Polizist","Arzt"]],
+["Desperate Housewives","Wer spielt Gabrielle Solis?",["Eva Longoria","Teri Hatcher","Marcia Cross","Felicity Huffman"]],
+["Desperate Housewives","Wie heißt die Stadt, in der die Serie spielt?",["Fairview","Springfield","Stars Hollow","Mystic Falls"]],
+["Desperate Housewives","Welchen Beruf hat Edie Britt?",["Immobilienmaklerin","Anwältin","Krankenschwester","Friseurin"]],
+["Desperate Housewives","Was ist Susan Mayer von Beruf, als die Serie beginnt?",["Kinderbuch-Illustratorin","Lehrerin","Köchin","Journalistin"]],
+["Desperate Housewives","Wie heißt Brees Ehemann in Staffel 1?",["Rex Van de Kamp","Orson Hodge","Karl Mayer","Paul Young"]],
+["Desperate Housewives","Wer spielt Bree?",["Marcia Cross","Nicollette Sheridan","Eva Longoria","Teri Hatcher"]],
+["Desperate Housewives","Wie heißt Lynettes Ehemann?",["Tom Scavo","Carlos Solis","Karl Mayer","Paul Young"]],
+["Bones","Welchen Spitznamen gibt Booth Dr. Temperance Brennan?",["Bones","Doc","Skull","Tempe"]],
+["Bones","Für welche Behörde arbeitet Seeley Booth?",["FBI","CIA","NSA","Polizei von Washington"]],
+["Bones","Wie heißt das Institut, an dem Brennan arbeitet?",["Jeffersonian","Smithsonian","Quantico","Lincoln-Institut"]],
+["Bones","Wer spielt Temperance Brennan?",["Emily Deschanel","Zooey Deschanel","Michaela Conlin","Tamara Taylor"]],
+["Bones","Wer spielt Seeley Booth?",["David Boreanaz","John Francis Daley","T. J. Thyne","Eric Millegan"]],
+["Bones","Was schreibt Brennan nebenbei?",["Kriminalromane","Kochbücher","Kinderbücher","Gedichte"]],
+["Bones","Wessen Bücher sind die Vorlage für die Serie?",["Kathy Reichs","Patricia Cornwell","Agatha Christie","Tess Gerritsen"]],
+["Bones","Worauf ist Jack Hodgins spezialisiert?",["Insekten, Sporen und Mineralien","Gesichtsrekonstruktion","Psychologie","Röntgenbilder"]],
+["Bones","Was macht Angela Montenegro im Team?",["Gesichtsrekonstruktionen und 3D-Bilder","Autopsien","Verhöre","Insektenanalysen"]],
+["Bones","Welchen Beruf hat Lance Sweets?",["Psychologe","Pathologe","Staatsanwalt","Insektenkundler"]],
+["Bones","Wie heißt die Tochter von Booth und Brennan?",["Christine","Angela","Daisy","Parker"]],
+["SpongeBob","Worin wohnt SpongeBob?",["In einer Ananas","In einem Stein","In einer Kokosnuss","In einer Muschel"]],
+["SpongeBob","Wie heißt SpongeBobs Schnecke?",["Gary","Larry","Barry","Harry"]],
+["SpongeBob","Welches Instrument spielt Thaddäus?",["Klarinette","Trompete","Saxophon","Geige"]],
+["SpongeBob","Aus welchem US-Bundesstaat kommt Sandy?",["Texas","Kalifornien","Florida","Alaska"]],
+["SpongeBob","Wie heißt Planktons Computer-Ehefrau?",["Karen","Sarah","Kathy","Carla"]],
+["SpongeBob","Wie heißt Mr. Krabs' Tochter?",["Perla","Sandy","Wanda","Mindy"]],
+["SpongeBob","Was will Plankton immer stehlen?",["Die Geheimformel für den Krabbenburger","Mr. Krabs' Geld","Garys Futter","SpongeBobs Pfannenwender"]],
+["SpongeBob","Wer ist SpongeBobs Fahrlehrerin?",["Mrs. Puff","Sandy","Perla","Mama Krabs"]],
+["SpongeBob","Wie heißen die Superhelden, die SpongeBob verehrt?",["Meerjungfraumann und Blaubarschbube","Aquaman und Robin","Krabbenmann und Muschelbube","Fischmann und Wurmbube"]],
+["SpongeBob","Wo arbeitet SpongeBob?",["In der Krossen Krabbe","Im Abfalleimer","Bei Mrs. Puff","In der Muschelbar"]],
+["SpongeBob","Wie heißt die Stadt, in der SpongeBob lebt?",["Bikini Bottom","Atlantis","Muschelhausen","Rock Bottom"]],
+["90er Kinderserien","Was ist Tabaluga?",["Ein kleiner Drache","Ein Pinguin","Ein Bär","Eine Schildkröte"]],
+["90er Kinderserien","Welche Kopfform hat Arnold aus „Hey Arnold!“?",["Wie ein Football","Wie ein Ei","Wie eine Birne","Wie ein Würfel"]],
+["90er Kinderserien","Wie heißt der lila Teletubby?",["Tinky Winky","Dipsy","Laa-Laa","Po"]],
+["90er Kinderserien","Was wollen Pinky und der Brain jede Nacht?",["Die Weltherrschaft","Käse","Aus dem Käfig ausbrechen","Berühmt werden"]],
+["90er Kinderserien","Welches Digimon gehört zu Tai?",["Agumon","Gabumon","Patamon","Gomamon"]],
+["90er Kinderserien","Wie heißt Bunnys Katze in „Sailor Moon“?",["Luna","Artemis","Diana","Minka"]],
+["90er Kinderserien","Welche Farbe trug Jason, der erste Anführer der Power Rangers?",["Rot","Blau","Schwarz","Grün"]],
+["90er Kinderserien","Wie viele Planeten-Kinder tragen bei „Captain Planet“ einen Ring?",["5","4","3","6"]],
+["90er Kinderserien","Wie heißt der Held von „Dragon Ball“?",["Son Goku","Vegeta","Krillin","Son Gohan"]],
+["90er Kinderserien","Wie heißt das ängstliche Baby mit Brille bei den „Rugrats“?",["Chuckie","Tommy","Phil","Angelica"]],
+["90er Kinderserien","Worin wohnte Peter Lustig bei „Löwenzahn“?",["In einem Bauwagen","In einem Leuchtturm","In einem Baumhaus","In einem Wohnmobil"]],
+["90er Kinderserien","Welches Pokémon bekommt Ash als erstes?",["Pikachu","Glumanda","Schiggy","Bisasam"]]
+];
+function hashStr(s) { var h = 2166136261; for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
+function rng(seed) { return function () { seed |= 0; seed = seed + 0x6D2B79F5 | 0; var t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+function shuffled(arr, seed) { var a = arr.slice(), r = rng(seed); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(r() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+var QORDER = shuffled(QZ.map(function (_, i) { return i; }), 4711);
+var QSTART = new Date(2026, 10, 18);
+function qFor(ds) {
+  var n = Math.round((pISO(ds) - QSTART) / 864e5), L = QZ.length;
+  var q = QZ[QORDER[((n % L) + L) % L]];
+  return { topic: q[0], q: q[1], opts: shuffled(q[2], hashStr(ds)), right: q[2][0] };
+}
+function quizScore() {
+  var s = { p1: 0, p2: 0 }, ts = iso(today()), all = G().quiz || {};
+  Object.keys(all).forEach(function (ds) {
+    var d = all[ds], q = qFor(ds), both = d.p1 && d.p2;
+    if (!both && ds >= ts) return;
+    ["p1", "p2"].forEach(function (p) { if (d[p] && d[p].a === q.right) s[p]++; });
+  });
+  return s;
+}
+function drawScore() { var s = { p1: 0, p2: 0 }; Object.keys(drawColl()).forEach(function (id) { var d = drawColl()[id]; if (d.status === "solved" && d.solvedBy) s[d.solvedBy]++; }); return s; }
+function gamesTodo() {
+  var n = 0, ts = iso(today()), d = quizDay(ts);
+  if (!d[me()]) n++;
+  Object.keys(drawColl()).forEach(function (id) { var x = drawColl()[id]; if (x.by !== me() && x.status === "open") n++; });
+  return n;
+}
+
+function renderSpiele() {
+  $$("#g-seg button").forEach(function (b) { b.setAttribute("aria-pressed", b.getAttribute("data-g") === gameTab); });
+  if (gameTab === "quiz") renderQuiz();
+  else if (gameTab === "malen") renderMalen();
+  else renderRad();
+}
+$$("#g-seg button").forEach(function (b) { b.onclick = function () { gameTab = b.getAttribute("data-g"); LS.set("gtab", gameTab); renderSpiele(); }; });
+function scoreLine(s, label) { return '<div class="score">' + av("p1") + '<b>' + s.p1 + '</b><span class="muted">' + esc(label) + '</span><b>' + s.p2 + "</b>" + av("p2") + "</div>"; }
+
+/* --- Frage des Tages --- */
+function renderQuiz() {
+  var ts = iso(today()), q = qFor(ts), d = quizDay(ts), mine = d[me()], his = d[other()], both = mine && his;
+  var h = scoreLine(quizScore(), "Punkte");
+  h += '<section class="card"><div class="card-h"><span class="pill mute">' + esc(q.topic) + '</span><span class="muted">Frage des Tages</span></div><h2 style="font-size:19px;line-height:1.35">' + esc(q.q) + "</h2>";
+  h += '<div class="qopts">' + q.opts.map(function (o) {
+    var cls = "qopt", marks = "";
+    if (mine && mine.a === o) cls += " mine";
+    if (both) { if (o === q.right) cls += " right"; else if ((mine && mine.a === o) || (his && his.a === o)) cls += " wrong"; }
+    if (both) ["p1", "p2"].forEach(function (p) { if (d[p] && d[p].a === o) marks += av(p); });
+    else if (mine && mine.a === o) marks = av(me());
+    return '<button class="' + cls + '" data-qa="' + esc(o) + '"' + (mine ? " disabled" : "") + '><span>' + esc(o) + '</span><span class="marks">' + marks + "</span></button>";
+  }).join("") + "</div>";
+  if (!mine) h += '<p class="help">' + (his ? esc(person(other()).name) + " hat schon geantwortet. Du bist dran!" : "Antworte, dann ist " + esc(person(other()).name) + " dran. Die Auflösung gibt es, wenn ihr beide geantwortet habt.") + "</p>";
+  else if (!his) h += '<div class="status local"><i></i>Warte auf ' + esc(person(other()).name) + ". Dann gibt's die Auflösung.</div>";
+  else {
+    var r1 = mine.a === q.right, r2 = his.a === q.right;
+    h += '<div class="status ' + (r1 && r2 ? "ok" : "off") + '"><i></i>' + (r1 && r2 ? "Beide richtig!" : r1 ? "Punkt für dich!" : r2 ? "Punkt für " + esc(person(other()).name) + "!" : "Beide daneben. Richtig wäre: " + esc(q.right)) + "</div>";
+  }
+  h += "</section>";
+  // Verlauf
+  var past = [];
+  for (var i = 1; i <= 7; i++) { var ds = iso(addDays(today(), -i)), dd = quizDay(ds); if (dd.p1 || dd.p2) past.push(ds); }
+  if (past.length) {
+    h += '<p class="label">Die letzten Tage</p><div class="list">' + past.map(function (ds) {
+      var qq = qFor(ds), dd = quizDay(ds);
+      var who = ["p1", "p2"].map(function (p) { return dd[p] ? '<span class="res ' + (dd[p].a === qq.right ? "y" : "n") + '">' + esc(person(p).name.charAt(0)) + (dd[p].a === qq.right ? " ✓" : " ✗") + "</span>" : ""; }).join("");
+      return '<div class="logitem" style="align-items:flex-start"><span class="txt">' + esc(qq.q) + "<small>" + esc(relDay(ds)) + " · " + esc(qq.right) + '</small></span><span style="display:flex;gap:4px;flex-shrink:0">' + who + "</span></div>";
+    }).join("") + "</div>";
+  }
+  $("#g-body").innerHTML = h;
+  $$("#g-body [data-qa]").forEach(function (b) { b.onclick = function () { if (quizDay(ts)[me()]) return; write("games/quiz/" + ts + "/" + me(), { a: b.getAttribute("data-qa"), at: Date.now(), by: me() }); }; });
+}
+
+/* --- Montagsmaler --- */
+var WORDS = ["Katze","Hund","Haus","Pizza","Fahrrad","Sonne","Regenbogen","Geschirrspüler","Zahnbürste","Kaffee","Einhorn","Rakete","Schneemann","Gitarre","Brille","Banane","Krankenhaus","Spritze","Zug","Flugzeug","Baum","Pilz","Schnecke","Ananas","Zauberstab","Besen","Eule","Drache","Krone","Schatzkiste","Leuchtturm","Burger","Eis","Kuchen","Geschenk","Weihnachtsbaum","Kerze","Regenschirm","Schlüssel","Handy","Fernseher","Sofa","Bett","Badewanne","Wecker","Fußball","Gameboy","Controller","Kamera","Mikrofon","Bühne","Koffer","Auto","Ampel","Brücke","Berg","Insel","Wal","Krake","Qualle","Hai","Pinguin","Giraffe","Elefant","Schmetterling","Biene","Spinne","Skelett","Knochen","Lupe","Herz","Ring","Hochzeitstorte","Feuerwerk","Zelt","Lagerfeuer","Mond","Stern","Wolke","Blitz","Schneeflocke","Kaktus","Blume","Erdbeere","Brezel","Pommes","Sushi","Waschmaschine","Staubsauger","Mainz","Dom","Riesenrad","Karussell","Bowling","Popcorn","Kinokarte","Krabbenburger","Pikachu","Sprechender Hut","Vault","Atombombe","Stethoskop"];
+function normWord(s) { return String(s || "").toLowerCase().replace(/ä/g, "ae").replace(/ö/g, "oe").replace(/ü/g, "ue").replace(/ß/g, "ss").replace(/[^a-z0-9]/g, ""); }
+function lev(a, b) { var m = a.length, n = b.length, d = []; for (var i = 0; i <= m; i++) { d[i] = [i]; } for (var j = 1; j <= n; j++) d[0][j] = j; for (i = 1; i <= m; i++) for (j = 1; j <= n; j++) d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)); return d[m][n]; }
+function guessOk(g, w) { var a = normWord(g), b = normWord(w); if (!a) return false; if (a === b) return true; return b.length >= 5 && lev(a, b) <= 1; }
+
+function renderMalen() {
+  var list = Object.keys(drawColl()).map(function (id) { var v = Object.assign({}, drawColl()[id]); v.id = id; return v; }).sort(function (a, b) { return b.at - a.at; });
+  var h = scoreLine(drawScore(), "Erraten");
+  h += '<button class="btn big" id="dr-new"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>Etwas malen</button>';
+  if (!list.length) h += '<div class="empty-hint">Noch keine Bilder. Mal einen Begriff, ' + esc(person(other()).name) + " muss raten.</div>";
+  list.forEach(function (d) {
+    var mineD = d.by === me(), guesses = d.guesses ? Object.keys(d.guesses).length : 0, nw = isNew(d, "spiele") && d.status === "open" ? ' <span class="new">NEU</span>' : "";
+    var st;
+    if (d.status === "solved") st = '<span class="okline">✓ ' + esc(nm(d.solvedBy)) + " hat „" + esc(d.word) + "“ erraten" + (guesses > 1 ? " (" + guesses + " Versuche)" : "") + "</span>";
+    else if (d.status === "given_up") st = '<span class="muted">Aufgelöst: „' + esc(d.word) + "“</span>";
+    else if (mineD) st = '<span class="muted">Dein Begriff: „' + esc(d.word) + "“ · " + esc(person(other()).name) + " rät noch" + (guesses ? " (" + guesses + " Versuche)" : "") + "</span>";
+    else st = '<span class="pill warn">Du bist dran: rate!</span>';
+    h += '<div class="drawcard"><button class="drawimg" data-dr="' + d.id + '" aria-label="Bild von ' + esc(person(d.by).name) + ' ansehen"><img src="' + esc(d.img) + '" alt=""></button><div class="body"><span style="font-weight:700;display:flex;gap:8px;align-items:center">' + av(d.by) + esc(nm(d.by)) + nw + '</span><span class="muted">' + when(d.at) + "</span>" + st + "</div>" + (mineD ? '<button class="x" data-drdel="' + d.id + '" aria-label="Bild löschen">' + ICON_X + "</button>" : "") + "</div>";
+  });
+  $("#g-body").innerHTML = h;
+  $("#dr-new").onclick = openDraw;
+  $$("#g-body [data-dr]").forEach(function (b) { b.onclick = function () { openGuess(b.getAttribute("data-dr")); }; });
+  $$("#g-body [data-drdel]").forEach(function (b) { b.onclick = function () { ask("Dieses Bild löschen?", function () { write("games/draw/" + b.getAttribute("data-drdel"), null); }, "Löschen"); }; });
+}
+function openDraw() {
+  var word = WORDS[Math.floor(Math.random() * WORDS.length)];
+  var COLORS = ["#1B1E2B", "#C62828", "#2F5BD8", "#157347", "#E8A100", "#B9470B", "#8E24AA", "#FFFFFF"];
+  var html = '<div class="grab"></div><div class="ph"><h2>Montagsmaler</h2><button class="icon" data-close aria-label="Schließen">' + ICON_X + "</button></div>";
+  html += '<div class="wordbox"><span class="muted">Dein Begriff (geheim)</span><b id="dw-word">' + esc(word) + '</b><div class="row" style="justify-content:center;flex-wrap:wrap"><button class="link" id="dw-other">Anderes Wort</button><button class="link" id="dw-own">Eigenes Wort</button></div><div class="addrow" id="dw-ownrow" hidden><label for="dw-ownin" class="sr">Eigenes Wort</label><input class="f" id="dw-ownin" placeholder="Eigenes Wort"><button class="btn" style="width:auto" id="dw-ownok">OK</button></div></div>';
+  html += '<canvas id="dw-cv" class="drawcv" aria-label="Malfläche"></canvas>';
+  html += '<div class="tools">' + COLORS.map(function (c, i) { return '<button class="sw' + (i === 0 ? " on" : "") + '" data-c="' + c + '" style="background:' + c + '" aria-label="' + (c === "#FFFFFF" ? "Radiergummi" : "Farbe " + (i + 1)) + '"></button>'; }).join("") + "</div>";
+  html += '<div class="row"><div class="seg three" style="flex:1" id="dw-size"><button type="button" data-s="3">Fein</button><button type="button" data-s="7" aria-pressed="true">Mittel</button><button type="button" data-s="16">Dick</button></div><button class="icon" id="dw-undo" aria-label="Rückgängig"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 14L4 9l5-5"/><path d="M4 9h11a5 5 0 0 1 0 10h-3"/></svg></button><button class="icon" id="dw-clear" aria-label="Alles löschen"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/></svg></button></div>';
+  html += '<button class="btn" id="dw-send">An ' + esc(person(other()).name) + " schicken</button>";
+  openSheet(html);
+  var cv = $("#dw-cv"), ctx = cv.getContext("2d"), strokes = [], cur = null, color = COLORS[0], size = 7;
+  function fit() { var pn = $("#panel"), cs = getComputedStyle(pn), w = Math.floor(Math.min(pn.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight), 520, Math.max(240, window.innerHeight - 400))), dpr = window.devicePixelRatio || 1; cv.style.width = w + "px"; cv.style.height = w + "px"; cv.width = Math.round(w * dpr); cv.height = Math.round(w * dpr); redraw(ctx, cv.width); }
+  function redraw(c, W) { c.fillStyle = "#fff"; c.fillRect(0, 0, W, W); strokes.forEach(function (s) { drawStroke(c, s, W); }); }
+  function drawStroke(c, s, W) { c.strokeStyle = s.c; c.fillStyle = s.c; c.lineWidth = s.w * W / 340; c.lineCap = "round"; c.lineJoin = "round"; if (s.p.length === 1) { c.beginPath(); c.arc(s.p[0][0] * W, s.p[0][1] * W, c.lineWidth / 2, 0, 7); c.fill(); return; } c.beginPath(); c.moveTo(s.p[0][0] * W, s.p[0][1] * W); for (var i = 1; i < s.p.length; i++) c.lineTo(s.p[i][0] * W, s.p[i][1] * W); c.stroke(); }
+  function pos(e) { var r = cv.getBoundingClientRect(); return [Math.max(0, Math.min(1, (e.clientX - r.left) / r.width)), Math.max(0, Math.min(1, (e.clientY - r.top) / r.height))]; }
+  cv.addEventListener("pointerdown", function (e) { e.preventDefault(); try { cv.setPointerCapture(e.pointerId); } catch (x) {} cur = { c: color, w: size, p: [pos(e)] }; strokes.push(cur); drawStroke(ctx, cur, cv.width); });
+  cv.addEventListener("pointermove", function (e) { if (!cur) return; e.preventDefault(); var p = pos(e), l = cur.p[cur.p.length - 1]; cur.p.push(p); ctx.strokeStyle = cur.c; ctx.lineWidth = cur.w * cv.width / 340; ctx.lineCap = "round"; ctx.beginPath(); ctx.moveTo(l[0] * cv.width, l[1] * cv.width); ctx.lineTo(p[0] * cv.width, p[1] * cv.width); ctx.stroke(); });
+  function end() { cur = null; }
+  cv.addEventListener("pointerup", end); cv.addEventListener("pointercancel", end); cv.addEventListener("pointerleave", end);
+  fit();
+  $$("#panel .sw").forEach(function (b) { b.onclick = function () { color = b.getAttribute("data-c"); $$("#panel .sw").forEach(function (x) { x.classList.toggle("on", x === b); }); }; });
+  $$("#dw-size button").forEach(function (b) { b.onclick = function () { size = +b.getAttribute("data-s"); $$("#dw-size button").forEach(function (x) { x.setAttribute("aria-pressed", x === b); }); }; });
+  $("#dw-undo").onclick = function () { strokes.pop(); redraw(ctx, cv.width); };
+  $("#dw-clear").onclick = function () { if (strokes.length) ask("Alles löschen?", function () { strokes = []; redraw(ctx, cv.width); }, "Löschen"); };
+  $("#dw-other").onclick = function () { word = WORDS[Math.floor(Math.random() * WORDS.length)]; $("#dw-word").textContent = word; };
+  $("#dw-own").onclick = function () { $("#dw-ownrow").hidden = false; $("#dw-ownin").focus(); };
+  $("#dw-ownok").onclick = function () { var v = $("#dw-ownin").value.trim(); if (v) { word = v; $("#dw-word").textContent = v; $("#dw-ownrow").hidden = true; } };
+  $("#dw-send").onclick = function () {
+    if (!strokes.length) { toast("Erst etwas malen"); return; }
+    var off = document.createElement("canvas"); off.width = off.height = 320; redraw(off.getContext("2d"), 320);
+    var img = off.toDataURL("image/png");
+    write("games/draw/" + rid(), { by: me(), word: word, img: img, at: Date.now(), status: "open" });
+    // nur die letzten 12 Bilder behalten
+    var ids = Object.keys(drawColl()).sort(function (a, b) { return drawColl()[b].at - drawColl()[a].at; });
+    ids.slice(12).forEach(function (id) { write("games/draw/" + id, null); });
+    closeSheet(); toast("Geschickt! " + person(other()).name + " darf raten.");
+  };
+}
+function openGuess(id) {
+  var d = drawColl()[id]; if (!d) return;
+  var canGuess = d.by !== me() && d.status === "open";
+  var html = '<div class="grab"></div><div class="ph"><h2>' + (canGuess ? "Was ist das?" : "Bild von " + esc(nm(d.by))) + '</h2><button class="icon" data-close aria-label="Schließen">' + ICON_X + "</button></div>";
+  html += '<img class="bigimg" src="' + esc(d.img) + '" alt="Zeichnung von ' + esc(person(d.by).name) + '">';
+  if (canGuess) html += '<form class="addrow" id="gs-form" autocomplete="off"><label for="gs-in" class="sr">Dein Tipp</label><input class="f" id="gs-in" placeholder="Dein Tipp …" enterkeyhint="send" autocapitalize="sentences"><button class="btn" style="width:auto">Raten</button></form><div id="gs-msg"></div><button class="link" id="gs-give" style="align-self:center">Aufgeben und auflösen</button>';
+  else html += '<div class="wordbox"><span class="muted">Begriff</span><b>' + esc(d.word) + "</b></div>";
+  var gl = d.guesses ? Object.keys(d.guesses).map(function (k) { return d.guesses[k]; }).sort(function (a, b) { return a.at - b.at; }) : [];
+  if (gl.length) html += '<div class="chips" id="gs-list">' + gl.map(function (g) { return '<span class="pill ' + (g.ok ? "ok" : "mute") + '">' + esc(g.t) + "</span>"; }).join("") + "</div>";
+  openSheet(html);
+  if (!canGuess) return;
+  setTimeout(function () { try { $("#gs-in").focus(); } catch (e) {} }, 250);
+  $("#gs-form").onsubmit = function (e) {
+    e.preventDefault(); var t = $("#gs-in").value.trim(); if (!t) return;
+    var ok = guessOk(t, d.word);
+    write("games/draw/" + id + "/guesses/" + rid(), { t: t, ok: ok, by: me(), at: Date.now() });
+    if (ok) { write("games/draw/" + id + "/status", "solved"); write("games/draw/" + id + "/solvedBy", me()); write("games/draw/" + id + "/solvedAt", Date.now()); closeSheet(); toast("Richtig! Es war „" + d.word + "“"); }
+    else { $("#gs-in").value = ""; $("#gs-msg").innerHTML = '<div class="conf">„' + esc(t) + "“ ist es nicht. Nochmal!</div>"; }
+  };
+  $("#gs-give").onclick = function () { ask("Aufgeben? Dann siehst du den Begriff.", function () { write("games/draw/" + id + "/status", "given_up"); closeSheet(); toast("Es war: " + d.word); }, "Auflösen"); };
+}
+
+/* --- Glücksrad --- */
+var WCOL = ["#2F5BD8", "#B9470B", "#157347", "#7B1FA2", "#C2185B", "#00796B", "#A15C00", "#1B1E2B"];
+function renderRad() {
+  var lists = Object.keys(wheelLists()).map(function (id) { var v = Object.assign({}, wheelLists()[id]); v.id = id; return v; }).sort(function (a, b) { return (a.at || 0) - (b.at || 0); });
+  var last = wheelLast(), h = "";
+  if (last) h += '<section class="card" style="gap:6px"><span class="muted">Zuletzt gedreht · ' + esc(last.name) + "</span><span style=\"font-size:22px;font-weight:800\">" + esc(last.result) + '</span><span class="muted">' + esc(nm(last.by)) + " · " + when(last.at) + "</span></section>";
+  if (!lists.length) h += '<div class="empty-hint">Leg eine Liste an, z. B. „Was essen wir?“ mit euren Lieblingsgerichten. Dann entscheidet das Rad, und ihr seht beide dasselbe Ergebnis.</div>';
+  else h += '<div style="display:flex;flex-direction:column;gap:10px">' + lists.map(function (l) { return '<button class="tile" data-wl="' + l.id + '" style="flex-direction:row;align-items:center;gap:12px;width:100%"><span class="wheelmini" aria-hidden="true"></span><span style="flex:1;display:flex;flex-direction:column;gap:2px"><span class="t">' + esc(l.name) + '</span><span class="muted" style="font-weight:600">' + (l.items || []).length + " Möglichkeiten</span></span></button>"; }).join("") + "</div>";
+  h += '<button class="btn sec" id="wl-new">Neue Liste</button>';
+  $("#g-body").innerHTML = h;
+  $$("#g-body [data-wl]").forEach(function (b) { b.onclick = function () { openWheel(b.getAttribute("data-wl")); }; });
+  $("#wl-new").onclick = function () { openWheelEdit(null); };
+}
+function openWheelEdit(id) {
+  var l = id ? wheelLists()[id] : null;
+  var html = '<div class="grab"></div><div class="ph"><h2>' + (l ? "Liste bearbeiten" : "Neue Liste") + '</h2><button class="icon" data-close aria-label="Schließen">' + ICON_X + "</button></div>";
+  html += '<div class="fl"><label for="wl-name">Name</label><input class="f" id="wl-name" value="' + esc(l ? l.name : "") + '" placeholder="z. B. Was essen wir?"></div>';
+  html += '<div class="fl"><label for="wl-items">Möglichkeiten (eine pro Zeile)</label><textarea class="f" id="wl-items" style="height:180px" placeholder="Pizza&#10;Sushi&#10;Döner">' + esc(l ? (l.items || []).join("\n") : "") + "</textarea></div>";
+  html += '<div class="actions' + (l ? "" : " one") + '">' + (l ? '<button class="btn danger" id="wl-del">Löschen</button>' : "") + '<button class="btn" id="wl-save">Speichern</button></div>';
+  openSheet(html);
+  $("#wl-save").onclick = function () {
+    var name = $("#wl-name").value.trim(), items = $("#wl-items").value.split("\n").map(function (s) { return s.trim(); }).filter(Boolean);
+    if (!name) { toast("Bitte einen Namen eintragen"); return; } if (items.length < 2) { toast("Mindestens zwei Möglichkeiten eintragen"); return; }
+    var nid = id || rid(); write("games/wheel/lists/" + nid, { name: name, items: items.slice(0, 24), by: l ? l.by : me(), at: l ? l.at : Date.now() });
+    openWheel(nid);
+  };
+  if (l) $("#wl-del").onclick = function () { ask("Liste „" + l.name + "“ löschen?", function () { write("games/wheel/lists/" + id, null); closeSheet(); }, "Löschen"); };
+}
+var wheelState = null;
+function openWheel(id) {
+  var l = wheelLists()[id]; if (!l) return;
+  var html = '<div class="grab"></div><div class="ph"><h2>' + esc(l.name) + '</h2><button class="icon" data-close aria-label="Schließen">' + ICON_X + "</button></div>";
+  html += '<div class="wheelwrap"><div class="pointer" aria-hidden="true"></div><canvas id="wh-cv" aria-hidden="true"></canvas></div>';
+  html += '<div id="wh-res" class="wheelres" aria-live="polite">&nbsp;</div>';
+  html += '<button class="btn big" id="wh-spin">Drehen</button><button class="link" id="wh-edit" style="align-self:center">Liste bearbeiten</button>';
+  openSheet(html);
+  $("#panel").setAttribute("data-wheel", id);
+  var cv = $("#wh-cv"), size = Math.min(cv.parentNode.clientWidth, 340), dpr = window.devicePixelRatio || 1;
+  cv.style.width = cv.style.height = size + "px"; cv.width = cv.height = Math.round(size * dpr);
+  wheelState = { id: id, items: l.items.slice(), rot: 0, spinning: false, cv: cv };
+  drawWheel();
+  var last = wheelLast(); if (last && last.listId === id) $("#wh-res").textContent = "Zuletzt: " + last.result;
+  $("#wh-spin").onclick = function () {
+    if (wheelState.spinning) return;
+    var n = wheelState.items.length, idx = Math.floor(Math.random() * n), at = Date.now();
+    write("games/wheel/last", { by: me(), listId: id, name: l.name, result: wheelState.items[idx], idx: idx, n: n, at: at });
+    spinTo(idx, at);
+  };
+  $("#wh-edit").onclick = function () { openWheelEdit(id); };
+}
+function drawWheel() {
+  var s = wheelState; if (!s) return; var c = s.cv.getContext("2d"), W = s.cv.width, r = W / 2, n = s.items.length, seg = Math.PI * 2 / n;
+  c.clearRect(0, 0, W, W);
+  for (var i = 0; i < n; i++) {
+    var a0 = s.rot + i * seg; c.beginPath(); c.moveTo(r, r); c.arc(r, r, r - 2, a0, a0 + seg); c.closePath();
+    c.fillStyle = WCOL[(n % WCOL.length === 1 && i === n - 1) ? 2 : i % WCOL.length]; c.fill(); c.strokeStyle = "#fff"; c.lineWidth = 2 * W / 340; c.stroke();
+    c.save(); c.translate(r, r); c.rotate(a0 + seg / 2); c.fillStyle = "#fff"; c.font = "700 " + Math.round((n > 12 ? 11 : 14) * W / 340) + "px 'Plus Jakarta Sans', system-ui, sans-serif"; c.textAlign = "right"; c.textBaseline = "middle";
+    var t = s.items[i]; if (t.length > 16) t = t.slice(0, 15) + "…"; c.fillText(t, r - 14 * W / 340, 0); c.restore();
+  }
+  c.beginPath(); c.arc(r, r, 18 * W / 340, 0, Math.PI * 2); c.fillStyle = "#fff"; c.fill();
+}
+function spinTo(idx, at) {
+  var s = wheelState; if (!s || s.spinning) return;
+  var n = s.items.length, seg = Math.PI * 2 / n, jitter = ((hashStr(String(at)) % 1000) / 1000 - 0.5) * seg * 0.7;
+  var base = -Math.PI / 2 - (idx + 0.5) * seg + jitter, from = s.rot, target = base;
+  while (target < from + Math.PI * 2 * 5) target += Math.PI * 2;
+  var dur = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches ? 300 : 4200, t0 = performance.now();
+  s.spinning = true; $("#wh-res").innerHTML = "&nbsp;";
+  function step(now) {
+    if (wheelState !== s) return;
+    var k = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - k, 4);
+    s.rot = from + (target - from) * e; drawWheel();
+    if (k < 1) requestAnimationFrame(step); else { s.spinning = false; s.rot = target % (Math.PI * 2); var res = $("#wh-res"); if (res) res.textContent = s.items[idx]; }
+  }
+  requestAnimationFrame(step);
+}
+
 /* ---------- Sheet + Toast ---------- */
 var lastFocus = null;
 function openSheet(html) {
@@ -644,7 +1037,7 @@ function openSheet(html) {
   $$("#panel [data-close]").forEach(function (b) { b.onclick = closeSheet; });
   var f = $("#panel [data-close]"); if (f) f.focus();
 }
-function closeSheet() { $("#sheet").hidden = true; $("#panel").innerHTML = ""; document.body.style.overflow = ""; if (lastFocus && lastFocus.focus) try { lastFocus.focus(); } catch (e) {} }
+function closeSheet() { wheelState = null; $("#sheet").hidden = true; $("#panel").innerHTML = ""; document.body.style.overflow = ""; if (lastFocus && lastFocus.focus) try { lastFocus.focus(); } catch (e) {} }
 $("#sheet").addEventListener("click", function (e) { if (e.target === $("#sheet")) closeSheet(); });
 document.addEventListener("keydown", function (e) { if (e.key !== "Escape") return; if (!$("#ask").hidden) { $("#ask").hidden = true; return; } if (!$("#sheet").hidden) closeSheet(); });
 function ask(msg, yes, label) {
