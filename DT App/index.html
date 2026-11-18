@@ -117,6 +117,7 @@ nav.tabs button[aria-current=page] svg{stroke-width:2.3}
 details.card summary{font-weight:700;cursor:pointer}
 .score{display:flex;align-items:center;justify-content:center;gap:10px;background:var(--card);border-radius:16px;padding:10px}
 .score b{font-size:22px;font-weight:800;min-width:24px;text-align:center}
+.topicrow{flex-wrap:nowrap;overflow-x:auto;margin:0 -16px;padding:2px 16px;scrollbar-width:none}.topicrow::-webkit-scrollbar{display:none}.topicrow .chip{flex-shrink:0}
 .qopts{display:flex;flex-direction:column;gap:8px}
 .qopt{display:flex;justify-content:space-between;align-items:center;gap:10px;min-height:52px;padding:10px 14px;border-radius:14px;border:1px solid var(--line2);background:var(--card);font-size:15px;font-weight:600;text-align:left;color:var(--ink)}
 .qopt:disabled{cursor:default;opacity:1}
@@ -226,7 +227,7 @@ details.card summary{font-weight:700;cursor:pointer}
 
 <script>
 "use strict";
-var APP_VERSION = "1.3 · 18.11.2026";
+var APP_VERSION = "1.4 · 18.11.2026";
 /* Eure Datenbank. Neue App-Installationen verbinden sich automatisch damit. */
 var DEFAULT_DB = "https://theresdennis-default-rtdb.europe-west1.firebasedatabase.app";
 var $ = function (s, r) { return (r || document).querySelector(s); };
@@ -309,7 +310,7 @@ function connect() {
 function snapshotKeys() {
   var ds = {}; Object.keys(drawColl()).forEach(function (k) { ds[k] = drawColl()[k].status; });
   var wl = wheelLast();
-  return { log: Object.keys(coll("log")), shop: Object.keys(coll("shop")), events: Object.keys(coll("events")), draw: ds, wheelAt: wl ? wl.at : 0, quizOther: !!quizDay(iso(today()))[other()] };
+  return { log: Object.keys(coll("log")), shop: Object.keys(coll("shop")), events: Object.keys(coll("events")), draw: ds, wheelAt: wl ? wl.at : 0, quizOther: quizWaiting() };
 }
 function applyRemote(ops) {
   var before = snapshotKeys();
@@ -334,7 +335,7 @@ function notifyNew(before) {
   Object.keys(drawColl()).forEach(function (k) { var d = drawColl()[k]; if (!(k in before.draw) && d.by !== me()) msgs.push(o + " hat etwas gemalt. Rate mal!"); else if (before.draw[k] === "open" && d.status === "solved" && d.by === me()) msgs.push(o + " hat dein Bild erraten: „" + d.word + "“"); });
   var wl = wheelLast();
   if (wl && wl.at !== before.wheelAt && wl.by !== me()) { msgs.push(o + " hat am Glücksrad gedreht: " + wl.result); if (wheelState && wheelState.id === wl.listId && !$("#sheet").hidden) spinTo(wl.idx, wl.at); }
-  if (!before.quizOther && quizDay(iso(today()))[other()]) msgs.push(o + " hat die Frage des Tages beantwortet");
+  if (quizWaiting() > before.quizOther && !(tab === "spiele" && gameTab === "quiz")) msgs.push(o + " hat Quizfragen beantwortet. Du bist dran!");
   if (!msgs.length) return;
   toast(msgs[0]);
   try { if (document.hidden && "Notification" in window && Notification.permission === "granted") new Notification("Wir zwei", { body: msgs.join("\n"), icon: "icons/icon-192.png" }); } catch (e) {}
@@ -455,8 +456,8 @@ function renderHeute() {
   html += '<button class="tile" data-go="einkauf"><span class="num">' + openShop + '</span><span class="muted" style="font-weight:600">offen auf der Einkaufsliste</span></button>';
   html += '<button class="tile" data-go="events">' + (next ? '<span class="t">' + esc(relDay(next.date)) + " · " + esc(next.title) + '</span><span class="muted" style="font-weight:600">' + (next.time ? esc(next.time) + " Uhr" : "ganztägig") + "</span>" : '<span class="t">Kein Event</span><span class="muted" style="font-weight:600">Etwas zusammen planen</span>') + "</button>";
   html += "</div>";
-  var qd = quizDay(ts);
-  if (!qd[me()]) html += '<button class="tile" data-go="spiele" style="flex-direction:row;align-items:center;gap:12px;width:100%"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.5v.7M12 17h.01"/></svg><span style="display:flex;flex-direction:column"><span class="t">Frage des Tages</span><span class="muted" style="font-weight:600">' + (qd[other()] ? esc(person(other()).name) + " hat schon geantwortet" : "Noch nicht beantwortet") + "</span></span></button>";
+  var qw = quizWaiting();
+  html += '<button class="tile" data-go="spiele" style="flex-direction:row;align-items:center;gap:12px;width:100%"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.5v.7M12 17h.01"/></svg><span style="display:flex;flex-direction:column"><span class="t">Quiz</span><span class="muted" style="font-weight:600">' + (qw ? esc(person(other()).name) + " hat " + qw + " Frage" + (qw > 1 ? "n" : "") + " beantwortet, die du noch nicht hast" : "Ein paar Fragen zwischendurch?") + "</span></span></button>";
   if (openTodo) html += '<button class="tile" data-go="haushalt" style="flex-direction:row;align-items:center;gap:12px;width:100%"><span class="num">' + openTodo + '</span><span class="muted" style="font-weight:600">Aufgabe' + (openTodo > 1 ? "n" : "") + " im Haushalt eingetragen</span></button>";
   $("#h-body").innerHTML = html;
   bindCommon($("#h-body"));
@@ -795,7 +796,105 @@ var QZ = [
 ["90er Kinderserien","Wie heißt der Held von „Dragon Ball“?",["Son Goku","Vegeta","Krillin","Son Gohan"]],
 ["90er Kinderserien","Wie heißt das ängstliche Baby mit Brille bei den „Rugrats“?",["Chuckie","Tommy","Phil","Angelica"]],
 ["90er Kinderserien","Worin wohnte Peter Lustig bei „Löwenzahn“?",["In einem Bauwagen","In einem Leuchtturm","In einem Baumhaus","In einem Wohnmobil"]],
-["90er Kinderserien","Welches Pokémon bekommt Ash als erstes?",["Pikachu","Glumanda","Schiggy","Bisasam"]]
+["90er Kinderserien","Welches Pokémon bekommt Ash als erstes?",["Pikachu","Glumanda","Schiggy","Bisasam"]],
+["Filme","Wer ruft in „Der Herr der Ringe“: „Du kannst nicht vorbei!“?",["Gandalf","Saruman","Elrond","Aragorn"]],
+["Filme","Wer spielt Iron Man im Marvel-Kinouniversum?",["Robert Downey Jr.","Chris Evans","Chris Hemsworth","Mark Ruffalo"]],
+["Filme","Wie heißt Nemos Vater in „Findet Nemo“?",["Marlin","Gill","Crush","Bruce"]],
+["Filme","In welcher Stadt spielt „Die Monster AG“?",["Monstropolis","Monsterhausen","Gruselstadt","Schreckensburg"]],
+["Filme","Wer spielt die Hauptrolle in „Pretty Woman“?",["Julia Roberts","Meg Ryan","Sandra Bullock","Cameron Diaz"]],
+["Filme","Wie heißt Han Solos Raumschiff?",["Millennium Falke","Todesstern","X-Wing","Enterprise"]],
+["Filme","Welche Farbe hat Darth Vaders Lichtschwert?",["Rot","Blau","Grün","Lila"]],
+["Filme","Wie heißt Arielles Krabbenfreund in „Arielle, die Meerjungfrau“?",["Sebastian","Fabius","Scuttle","Ursula"]],
+["Filme","In welcher Stadt spielt „Kevin – Allein in New York“?",["New York","Chicago","Los Angeles","Boston"]],
+["Filme","Wie viele Zwerge begleiten Bilbo in „Der Hobbit“?",["13","7","12","9"]],
+["Filme","In welchem Pixar-Film kocht eine Ratte in Paris?",["Ratatouille","Coco","Oben","Cars"]],
+["Filme","Wie heißt der blaue Flaschengeist in Disneys „Aladdin“?",["Dschinni","Abu","Jafar","Jago"]],
+["Filme","Wie heißt das Hotel in „Shining“?",["Overlook Hotel","Bates Motel","Grand Budapest Hotel","Hotel California"]],
+["Videospiele","Wie heißt Marios Dinosaurier-Freund?",["Yoshi","Toad","Birdo","Koopa"]],
+["Videospiele","Welche Firma hat die PlayStation entwickelt?",["Sony","Nintendo","Microsoft","Sega"]],
+["Videospiele","Welches Pokémon hat die Nummer 1 im Pokédex?",["Bisasam","Glumanda","Schiggy","Pikachu"]],
+["Videospiele","Wie heißt die Hauptfigur der „Halo“-Reihe?",["Master Chief","Marcus Fenix","Doomguy","Commander Shepard"]],
+["Videospiele","Welche Sprache sprechen die Figuren in „Die Sims“?",["Simlisch","Englisch","Elbisch","Klingonisch"]],
+["Videospiele","Welche Farbe hat Pac-Man?",["Gelb","Rot","Blau","Grün"]],
+["Videospiele","Wie heißt der Affe, der im Nintendo-Klassiker von 1981 Fässer wirft?",["Donkey Kong","Diddy Kong","King K. Rool","Bowser"]],
+["Videospiele","Wie heißt der Spielmodus in „Fortnite“, in dem 100 Spieler gegeneinander kämpfen?",["Battle Royale","Rette die Welt","Kreativmodus","Deathmatch"]],
+["Videospiele","Wie heißt Kratos' Sohn in „God of War“ (2018)?",["Atreus","Ares","Baldur","Thor"]],
+["Videospiele","In welchem Spiel ist Arthur Morgan die Hauptfigur?",["Red Dead Redemption 2","GTA V","The Last of Us","Mafia"]],
+["Videospiele","Wie viele Münzen braucht Mario für ein Extraleben?",["100","50","10","1000"]],
+["Videospiele","Auf welcher Konsole erschien „Super Mario 64“?",["Nintendo 64","Super Nintendo","GameCube","Game Boy"]],
+["Harry Potter","Wie heißen Rons Zwillingsbrüder?",["Fred und George","Bill und Charlie","Percy und Ginny","Fred und Percy"]],
+["Harry Potter","Welche Gestalt hat Harrys Patronus?",["Hirsch","Otter","Phönix","Wolf"]],
+["Harry Potter","Was zeigt der Spiegel Nerhegeb?",["Die tiefsten Wünsche","Die Zukunft","Die Vergangenheit","Die Wahrheit"]],
+["Harry Potter","Wie heißt der Hausmeister von Hogwarts?",["Argus Filch","Rubeus Hagrid","Horace Slughorn","Gilderoy Lockhart"]],
+["Harry Potter","Wie heißt Filchs Katze?",["Mrs. Norris","Krummbein","Minerva","Mrs. Figg"]],
+["Harry Potter","Wie heißt Hermines Kater?",["Krummbein","Mrs. Norris","Krätze","Fang"]],
+["Harry Potter","Welches Fach unterrichtet Snape die meisten Jahre?",["Zaubertränke","Verteidigung gegen die dunklen Künste","Verwandlung","Kräuterkunde"]],
+["Harry Potter","Was ist ein Muggel?",["Ein Mensch ohne Zauberkräfte","Ein Hauself","Ein Zaubertrank","Ein Quidditch-Ball"]],
+["Harry Potter","Wie heißt das Zaubererdorf neben Hogwarts?",["Hogsmeade","Godric's Hollow","Little Whinging","Ottery St. Catchpole"]],
+["Harry Potter","Wie heißt die Bank der Zauberer?",["Gringotts","Ollivanders","Borgin & Burkes","Flourish & Blotts"]],
+["Harry Potter","Mit welchem Zauberspruch lässt man Dinge schweben?",["Wingardium Leviosa","Alohomora","Lumos","Riddikulus"]],
+["Harry Potter","Wie heißt Voldemorts Schlange?",["Nagini","Basilisk","Aragog","Seidenschnabel"]],
+["Harry Potter","Welchen Beruf ergreift Harry nach der Schule?",["Auror","Lehrer","Heiler","Zaubereiminister"]],
+["Fallout (Serie)","Wer spielt Lucy MacLean?",["Ella Purnell","Ella Hunt","Emma Mackey","Florence Pugh"]],
+["Fallout (Serie)","Wer spielt Lucys Vater Hank?",["Kyle MacLachlan","Walton Goggins","Aaron Moten","Michael Emerson"]],
+["Fallout (Serie)","Wer spielt Maximus?",["Aaron Moten","Moisés Arias","Walton Goggins","Kyle MacLachlan"]],
+["Fallout (Serie)","Welches Paar, bekannt durch „Westworld“, hat die Serie produziert?",["Jonathan Nolan und Lisa Joy","Joel und Ethan Coen","David Benioff und D. B. Weiss","Matt und Ross Duffer"]],
+["Fallout (Serie)","Welches Studio macht die Fallout-Spiele seit Teil 3?",["Bethesda","Rockstar","Ubisoft","BioWare"]],
+["Fallout (Serie)","Was ist ein Ghul in der Fallout-Welt?",["Ein durch Strahlung veränderter Mensch","Ein Roboter","Ein Zombie aus einem Labor","Ein Außerirdischer"]],
+["Fallout (Serie)","Was ist der Pip-Boy?",["Ein Computer am Handgelenk","Ein Roboterhund","Eine Waffe","Ein Getränk"]],
+["Fallout (Serie)","Womit bezahlt man im Ödland?",["Mit Kronkorken","Mit Dollar","Mit Patronen","Mit Goldmünzen"]],
+["Fallout (Serie)","Wie heißen die zweiköpfigen Kühe der Fallout-Welt?",["Brahmin","Yao Guai","Radhirsche","Molerats"]],
+["Grey's Anatomy","Wie heißt Merediths Vater?",["Thatcher Grey","Richard Webber","Derek Grey","Jackson Avery"]],
+["Grey's Anatomy","Welche Ärztin ist Merediths Halbschwester mütterlicherseits?",["Maggie Pierce","Lexie Grey","Amelia Shepherd","Jo Wilson"]],
+["Grey's Anatomy","Auf welches Fachgebiet ist Callie Torres spezialisiert?",["Orthopädie","Neurochirurgie","Herzchirurgie","Gynäkologie"]],
+["Grey's Anatomy","Auf welches Fachgebiet ist Arizona Robbins spezialisiert?",["Kinderchirurgie","Orthopädie","Plastische Chirurgie","Notfallmedizin"]],
+["Grey's Anatomy","Wie heißt der Ableger, in dem Addison nach Los Angeles geht?",["Private Practice","Station 19","Chicago Med","The Resident"]],
+["Grey's Anatomy","Wer ist in den ersten Staffeln Chef der Chirurgie?",["Richard Webber","Derek Shepherd","Owen Hunt","Preston Burke"]],
+["Grey's Anatomy","Wie heißt Izzies Verlobter, der an einem Herzleiden stirbt?",["Denny Duquette","Alex Karev","George O'Malley","Finn Dandridge"]],
+["Grey's Anatomy","Worauf schreiben Meredith und Derek ihr Eheversprechen?",["Auf ein Post-it","Auf eine Serviette","Auf ein Röntgenbild","In ein Krankenblatt"]],
+["Grey's Anatomy","Wer spielt Miranda Bailey?",["Chandra Wilson","Sandra Oh","Kate Walsh","Kim Raver"]],
+["Grey's Anatomy","Welcher Arzt kommt aus dem Irakkrieg ans Krankenhaus?",["Owen Hunt","Mark Sloan","Alex Karev","Jackson Avery"]],
+["Desperate Housewives","Wer spielt Susan Mayer?",["Teri Hatcher","Felicity Huffman","Marcia Cross","Eva Longoria"]],
+["Desperate Housewives","Wer spielt Lynette Scavo?",["Felicity Huffman","Teri Hatcher","Nicollette Sheridan","Dana Delany"]],
+["Desperate Housewives","Wie heißt Susans Tochter?",["Julie","Danielle","Penny","Celia"]],
+["Desperate Housewives","Wie heißt Brees Sohn?",["Andrew","Zach","Preston","Porter"]],
+["Desperate Housewives","In welcher Branche arbeitete Lynette, bevor sie Kinder bekam?",["Werbung","Medizin","Gastronomie","Mode"]],
+["Desperate Housewives","Wie heißt Brees zweiter Ehemann?",["Orson Hodge","Rex Van de Kamp","Karl Mayer","Chuck Vance"]],
+["Desperate Housewives","Was eröffnen Lynette und Tom zusammen?",["Eine Pizzeria","Ein Café","Eine Bäckerei","Einen Blumenladen"]],
+["Desperate Housewives","Wie viele Staffeln hat die Serie?",["8","6","10","5"]],
+["Desperate Housewives","Wie heißt die ältere Nachbarin, deren toter Ehemann in der Kühltruhe lag?",["Karen McCluskey","Edie Britt","Martha Huber","Ida Greenberg"]],
+["Bones","Wie heißt Booths Sohn?",["Parker","Hank","Ben","Christopher"]],
+["Bones","Wie heißt Brennans Vater?",["Max Keenan","Russ Brennan","Hank Booth","Gordon Wyatt"]],
+["Bones","Wie heißt Brennans Bruder?",["Russ","Jared","Max","Zack"]],
+["Bones","Wie heißt die Pathologin, die später das Labor leitet?",["Camille Saroyan","Angela Montenegro","Daisy Wick","Caroline Julian"]],
+["Bones","Wen heiratet Angela Montenegro?",["Jack Hodgins","Zack Addy","Lance Sweets","Seeley Booth"]],
+["Bones","Welcher junge Wissenschaftler wird zum Komplizen des Gormogon-Mörders?",["Zack Addy","Jack Hodgins","Lance Sweets","Clark Edison"]],
+["Bones","In welcher Stadt spielt die Serie?",["Washington, D.C.","New York","Chicago","Boston"]],
+["Bones","Wie viele Staffeln hat die Serie?",["12","8","10","15"]],
+["Bones","Mit welcher Sucht hatte Booth früher zu kämpfen?",["Glücksspiel","Alkohol","Rauchen","Kaufsucht"]],
+["SpongeBob","Was liebt Mr. Krabs über alles?",["Geld","Krabbenburger","Seefahrt","Seine Mutter"]],
+["SpongeBob","Wie heißt Planktons Restaurant?",["Abfalleimer","Krosse Krabbe","Muschelbar","Fischkopp"]],
+["SpongeBob","Was machen SpongeBob und Patrick am liebsten mit dem Netz?",["Quallen fischen","Schmetterlinge fangen","Muscheln sammeln","Krabben jagen"]],
+["SpongeBob","Als was arbeitet Thaddäus in der Krossen Krabbe?",["Kassierer","Koch","Putzmann","Kellner"]],
+["SpongeBob","Was trägt Sandy unter Wasser auf dem Kopf?",["Einen Taucherhelm","Eine Muschel","Eine Krone","Eine Mütze"]],
+["SpongeBob","Welche Kampfsportart macht Sandy?",["Karate","Boxen","Judo","Ringen"]],
+["SpongeBob","Wo wohnt Patrick?",["Unter einem Stein","In einer Ananas","In einer Osterinsel-Figur","In einer Muschel"]],
+["SpongeBob","Wie heißt Patrick mit Nachnamen?",["Star","Seestern","Rock","Pink"]],
+["SpongeBob","Wie heißt der Geisterpirat, der SpongeBob erschreckt?",["Der Fliegende Holländer","Käpt'n Blaubär","Kapitän Haken","Painty der Pirat"]],
+["SpongeBob","Was ist SpongeBob von Beruf?",["Burgerbrater","Kassierer","Rettungsschwimmer","Fahrlehrer"]],
+["90er Kinderserien","Welche Ninja Turtle trägt eine rote Maske?",["Raphael","Leonardo","Donatello","Michelangelo"]],
+["90er Kinderserien","Wie heißt Ashs Rivale in „Pokémon“?",["Gary","Rocko","Misty","James"]],
+["90er Kinderserien","Wie heißt das Gaunertrio aus Jessie, James und Mauzi?",["Team Rocket","Team Aqua","Team Magma","Team Galaktik"]],
+["90er Kinderserien","Welcher Professor gibt Ash sein erstes Pokémon?",["Professor Eich","Professor Lind","Professor Birk","Professor Esche"]],
+["90er Kinderserien","Wie heißt Bibi Blocksbergs Besen?",["Kartoffelbrei","Besenstiel","Flitzer","Sausewind"]],
+["90er Kinderserien","Wie heißt Tinas Pferd bei „Bibi und Tina“?",["Amadeus","Sabrina","Max","Blitz"]],
+["90er Kinderserien","Wie heißt das gemeine ältere Mädchen bei den „Rugrats“?",["Angelica","Susie","Lil","Didi"]],
+["90er Kinderserien","Welches Tier ist Darkwing Duck?",["Eine Ente","Ein Adler","Eine Fledermaus","Ein Pinguin"]],
+["90er Kinderserien","Was lässt die Gummibären so hoch hüpfen?",["Gummibärensaft","Zaubertrank","Honig","Federn"]],
+["90er Kinderserien","Wie heißt der reiche Onkel in „DuckTales“?",["Dagobert Duck","Donald Duck","Gustav Gans","Daniel Düsentrieb"]],
+["90er Kinderserien","Tick, Trick und …?",["Track","Truck","Trick","Tack"]],
+["90er Kinderserien","Welches Element steuert Wheeler bei „Captain Planet“?",["Feuer","Wasser","Wind","Erde"]],
+["90er Kinderserien","Wie heißt Bunny aus „Sailor Moon“ im japanischen Original?",["Usagi","Rei","Ami","Makoto"]]
 ];
 function hashStr(s) { var h = 2166136261; for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
 function rng(seed) { return function () { seed |= 0; seed = seed + 0x6D2B79F5 | 0; var t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
@@ -807,19 +906,32 @@ function qFor(ds) {
   var q = QZ[QORDER[((n % L) + L) % L]];
   return { topic: q[0], q: q[1], opts: shuffled(q[2], hashStr(ds)), right: q[2][0] };
 }
+function qid(q) { return hashStr(q[0] + "|" + q[1]).toString(36); }
+var QBY = {}; QZ.forEach(function (q) { QBY[qid(q)] = q; });
+var QSEQ = QZ.map(qid).sort(function (a, b) { return hashStr(a + "#seq") - hashStr(b + "#seq"); });
+function qaColl() { return G().qa || {}; }
+function qInfo(id) { var q = QBY[id]; return { id: id, topic: q[0], q: q[1], opts: shuffled(q[2], hashStr(id)), right: q[2][0] }; }
+var quizTopic = LS.get("gqtopic", "Alle"), quizShow = null;
+function quizWaiting() { var qa = qaColl(), n = 0; Object.keys(qa).forEach(function (id) { if (QBY[id] && qa[id][other()] && !qa[id][me()]) n++; }); return n; }
+function nextQ() {
+  var qa = qaColl(), ok = function (id) { return quizTopic === "Alle" || QBY[id][0] === quizTopic; };
+  for (var i = 0; i < QSEQ.length; i++) { var id = QSEQ[i]; if (ok(id) && qa[id] && qa[id][other()] && !qa[id][me()]) return id; }
+  for (i = 0; i < QSEQ.length; i++) { id = QSEQ[i]; if (ok(id) && !(qa[id] && qa[id][me()])) return id; }
+  return null;
+}
 function quizScore() {
-  var s = { p1: 0, p2: 0 }, ts = iso(today()), all = G().quiz || {};
+  var s = { p1: 0, p2: 0 }, ts = iso(today()), all = G().quiz || {}, qa = qaColl();
   Object.keys(all).forEach(function (ds) {
     var d = all[ds], q = qFor(ds), both = d.p1 && d.p2;
     if (!both && ds >= ts) return;
     ["p1", "p2"].forEach(function (p) { if (d[p] && d[p].a === q.right) s[p]++; });
   });
+  Object.keys(qa).forEach(function (id) { var d = qa[id], q = QBY[id]; if (!q || !(d.p1 && d.p2)) return; ["p1", "p2"].forEach(function (p) { if (d[p].a === q[2][0]) s[p]++; }); });
   return s;
 }
 function drawScore() { var s = { p1: 0, p2: 0 }; Object.keys(drawColl()).forEach(function (id) { var d = drawColl()[id]; if (d.status === "solved" && d.solvedBy) s[d.solvedBy]++; }); return s; }
 function gamesTodo() {
-  var n = 0, ts = iso(today()), d = quizDay(ts);
-  if (!d[me()]) n++;
+  var n = Math.min(quizWaiting(), 9);
   Object.keys(drawColl()).forEach(function (id) { var x = drawColl()[id]; if (x.by !== me() && x.status === "open") n++; });
   return n;
 }
@@ -833,40 +945,44 @@ function renderSpiele() {
 $$("#g-seg button").forEach(function (b) { b.onclick = function () { gameTab = b.getAttribute("data-g"); LS.set("gtab", gameTab); renderSpiele(); }; });
 function scoreLine(s, label) { return '<div class="score">' + av("p1") + '<b>' + s.p1 + '</b><span class="muted">' + esc(label) + '</span><b>' + s.p2 + "</b>" + av("p2") + "</div>"; }
 
-/* --- Frage des Tages --- */
+/* --- Quiz --- */
 function renderQuiz() {
-  var ts = iso(today()), q = qFor(ts), d = quizDay(ts), mine = d[me()], his = d[other()], both = mine && his;
+  var qa = qaColl(), on = person(other()).name;
+  var topics = ["Alle"].concat(QZ.map(function (q) { return q[0]; }).filter(function (t, i, a) { return a.indexOf(t) === i; }));
+  var mineN = 0, hisN = 0; Object.keys(qa).forEach(function (id) { if (!QBY[id]) return; if (qa[id][me()]) mineN++; if (qa[id][other()]) hisN++; });
   var h = scoreLine(quizScore(), "Punkte");
-  h += '<section class="card"><div class="card-h"><span class="pill mute">' + esc(q.topic) + '</span><span class="muted">Frage des Tages</span></div><h2 style="font-size:19px;line-height:1.35">' + esc(q.q) + "</h2>";
-  h += '<div class="qopts">' + q.opts.map(function (o) {
-    var cls = "qopt", marks = "";
-    if (mine && mine.a === o) cls += " mine";
-    if (both) { if (o === q.right) cls += " right"; else if ((mine && mine.a === o) || (his && his.a === o)) cls += " wrong"; }
-    if (both) ["p1", "p2"].forEach(function (p) { if (d[p] && d[p].a === o) marks += av(p); });
-    else if (mine && mine.a === o) marks = av(me());
-    return '<button class="' + cls + '" data-qa="' + esc(o) + '"' + (mine ? " disabled" : "") + '><span>' + esc(o) + '</span><span class="marks">' + marks + "</span></button>";
-  }).join("") + "</div>";
-  if (!mine) h += '<p class="help">' + (his ? esc(person(other()).name) + " hat schon geantwortet. Du bist dran!" : "Antworte, dann ist " + esc(person(other()).name) + " dran. Die Auflösung gibt es, wenn ihr beide geantwortet habt.") + "</p>";
-  else if (!his) h += '<div class="status local"><i></i>Warte auf ' + esc(person(other()).name) + ". Dann gibt's die Auflösung.</div>";
+  h += '<div class="chips topicrow">' + topics.map(function (t) { return '<button class="chip" data-tp="' + esc(t) + '" aria-pressed="' + (t === quizTopic) + '">' + esc(t) + "</button>"; }).join("") + "</div>";
+  var id = quizShow || nextQ();
+  if (!id) h += '<div class="empty-hint">Du hast ' + (quizTopic === "Alle" ? "alle Fragen" : "alle Fragen zu „" + esc(quizTopic) + "“") + " beantwortet. Neue Fragen kommen mit dem nächsten Update.</div>";
   else {
-    var r1 = mine.a === q.right, r2 = his.a === q.right;
-    h += '<div class="status ' + (r1 && r2 ? "ok" : "off") + '"><i></i>' + (r1 && r2 ? "Beide richtig!" : r1 ? "Punkt für dich!" : r2 ? "Punkt für " + esc(person(other()).name) + "!" : "Beide daneben. Richtig wäre: " + esc(q.right)) + "</div>";
+    var q = qInfo(id), d = qa[id] || {}, mine = d[me()], his = d[other()];
+    h += '<section class="card"><div class="card-h"><span class="pill mute">' + esc(q.topic) + '</span><span class="muted">' + (his && !mine ? esc(on) + " hat schon geantwortet" : "Frage " + (mineN + (mine ? 0 : 1)) + " von " + QZ.length) + '</span></div><h2 style="font-size:19px;line-height:1.35">' + esc(q.q) + "</h2>";
+    h += '<div class="qopts">' + q.opts.map(function (o) {
+      var cls = "qopt", marks = "";
+      if (mine) { if (o === q.right) cls += " right"; else if (mine.a === o || (his && his.a === o)) cls += " wrong"; if (mine.a === o) cls += " mine"; ["p1", "p2"].forEach(function (p) { if (d[p] && d[p].a === o) marks += av(p); }); }
+      return '<button class="' + cls + '" data-qa="' + esc(o) + '"' + (mine ? " disabled" : "") + "><span>" + esc(o) + '</span><span class="marks">' + marks + "</span></button>";
+    }).join("") + "</div>";
+    if (mine) {
+      var r1 = mine.a === q.right;
+      h += '<div class="status ' + (r1 ? "ok" : "off") + '"><i></i>' + (r1 ? "Richtig!" : "Leider falsch. Richtig ist: " + esc(q.right)) + (his ? " · " + esc(on) + (his.a === q.right ? " lag richtig" : " lag falsch") : " · " + esc(on) + " hat noch nicht geantwortet") + "</div>";
+      h += '<button class="btn" id="qz-next">Nächste Frage</button>';
+    }
+    h += "</section>";
   }
-  h += "</section>";
-  // Verlauf
-  var past = [];
-  for (var i = 1; i <= 7; i++) { var ds = iso(addDays(today(), -i)), dd = quizDay(ds); if (dd.p1 || dd.p2) past.push(ds); }
-  if (past.length) {
-    h += '<p class="label">Die letzten Tage</p><div class="list">' + past.map(function (ds) {
-      var qq = qFor(ds), dd = quizDay(ds);
-      var who = ["p1", "p2"].map(function (p) { return dd[p] ? '<span class="res ' + (dd[p].a === qq.right ? "y" : "n") + '">' + esc(person(p).name.charAt(0)) + (dd[p].a === qq.right ? " ✓" : " ✗") + "</span>" : ""; }).join("");
-      return '<div class="logitem" style="align-items:flex-start"><span class="txt">' + esc(qq.q) + "<small>" + esc(relDay(ds)) + " · " + esc(qq.right) + '</small></span><span style="display:flex;gap:4px;flex-shrink:0">' + who + "</span></div>";
+  h += '<div class="muted" style="text-align:center">Beantwortet: du ' + mineN + " · " + esc(on) + " " + hisN + (quizWaiting() ? " · " + quizWaiting() + " warten auf dich" : "") + "</div>";
+  var done = Object.keys(qa).filter(function (k) { return QBY[k] && qa[k].p1 && qa[k].p2; }).sort(function (a, b) { return Math.max(qa[b].p1.at, qa[b].p2.at) - Math.max(qa[a].p1.at, qa[a].p2.at); }).slice(0, 10);
+  if (done.length) {
+    h += '<p class="label">Zuletzt von euch beiden beantwortet</p><div class="list">' + done.map(function (k) {
+      var q = QBY[k], d = qa[k];
+      var who = ["p1", "p2"].map(function (p) { var ok = d[p].a === q[2][0]; return '<span class="res ' + (ok ? "y" : "n") + '">' + esc(person(p).name.charAt(0)) + (ok ? " ✓" : " ✗") + "</span>"; }).join("");
+      return '<div class="logitem" style="align-items:flex-start"><span class="txt">' + esc(q[1]) + "<small>" + esc(q[0]) + " · " + esc(q[2][0]) + '</small></span><span style="display:flex;gap:4px;flex-shrink:0">' + who + "</span></div>";
     }).join("") + "</div>";
   }
   $("#g-body").innerHTML = h;
-  $$("#g-body [data-qa]").forEach(function (b) { b.onclick = function () { if (quizDay(ts)[me()]) return; write("games/quiz/" + ts + "/" + me(), { a: b.getAttribute("data-qa"), at: Date.now(), by: me() }); }; });
+  $$("#g-body [data-tp]").forEach(function (b) { b.onclick = function () { quizTopic = b.getAttribute("data-tp"); LS.set("gqtopic", quizTopic); quizShow = null; renderQuiz(); }; });
+  $$("#g-body [data-qa]").forEach(function (b) { b.onclick = function () { if ((qaColl()[id] || {})[me()]) return; quizShow = id; write("games/qa/" + id + "/" + me(), { a: b.getAttribute("data-qa"), at: Date.now() }); }; });
+  var nx = $("#qz-next"); if (nx) nx.onclick = function () { quizShow = null; renderQuiz(); var c = $("#g-body .card"); if (c) c.scrollIntoView({ block: "center" }); };
 }
-
 /* --- Montagsmaler --- */
 var WORDS = ["Katze","Hund","Haus","Pizza","Fahrrad","Sonne","Regenbogen","Geschirrspüler","Zahnbürste","Kaffee","Einhorn","Rakete","Schneemann","Gitarre","Brille","Banane","Krankenhaus","Spritze","Zug","Flugzeug","Baum","Pilz","Schnecke","Ananas","Zauberstab","Besen","Eule","Drache","Krone","Schatzkiste","Leuchtturm","Burger","Eis","Kuchen","Geschenk","Weihnachtsbaum","Kerze","Regenschirm","Schlüssel","Handy","Fernseher","Sofa","Bett","Badewanne","Wecker","Fußball","Gameboy","Controller","Kamera","Mikrofon","Bühne","Koffer","Auto","Ampel","Brücke","Berg","Insel","Wal","Krake","Qualle","Hai","Pinguin","Giraffe","Elefant","Schmetterling","Biene","Spinne","Skelett","Knochen","Lupe","Herz","Ring","Hochzeitstorte","Feuerwerk","Zelt","Lagerfeuer","Mond","Stern","Wolke","Blitz","Schneeflocke","Kaktus","Blume","Erdbeere","Brezel","Pommes","Sushi","Waschmaschine","Staubsauger","Mainz","Dom","Riesenrad","Karussell","Bowling","Popcorn","Kinokarte","Krabbenburger","Pikachu","Sprechender Hut","Vault","Atombombe","Stethoskop"];
 function normWord(s) { return String(s || "").toLowerCase().replace(/ä/g, "ae").replace(/ö/g, "oe").replace(/ü/g, "ue").replace(/ß/g, "ss").replace(/[^a-z0-9]/g, ""); }
