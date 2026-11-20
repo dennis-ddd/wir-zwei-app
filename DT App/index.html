@@ -102,6 +102,7 @@ nav.tabs{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-to
 nav.tabs button{border:0;background:none;color:var(--mute);display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11px;font-weight:600;min-width:52px;flex:1;max-width:80px;min-height:52px;justify-content:center;position:relative}
 nav.tabs button[aria-current=page]{color:var(--ink);font-weight:800}
 nav.tabs button[aria-current=page] svg{stroke-width:2.3}
+.navlong{font-size:9.5px;line-height:1.1;text-align:center;hyphens:manual;max-width:72px}
 .badge{position:absolute;top:2px;right:8px;min-width:18px;height:18px;border-radius:9px;background:var(--b);color:#fff;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;padding:0 5px}
 /* Sheet */
 .sheet{position:fixed;inset:0;z-index:30;display:flex;align-items:flex-end;justify-content:center;background:rgba(15,17,26,.45)}
@@ -250,11 +251,12 @@ details.more summary::before{content:"▸";display:inline-block;transition:trans
 <!-- ========== EVENTS ========== -->
 <main class="view" id="v-events" data-view="events" hidden>
   <div class="top"><h1 id="evh-title">Events</h1><button class="icon dark" id="e-add" aria-label="Event hinzufügen"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div>
-  <div class="chips topicrow" id="ev-seg"><button type="button" class="chip" data-e="termine">Termine</button><button type="button" class="chip" data-e="wunsch">Wunschliste</button><button type="button" class="chip" data-e="ideen">Ideen</button><button type="button" class="chip" data-e="serien">Serien</button><button type="button" class="chip" data-e="wuensche">Geschenke</button></div>
+  <div class="chips topicrow" id="ev-seg"><button type="button" class="chip" data-e="termine">Termine</button><button type="button" class="chip" data-e="irgendwann">Irgendwann</button><button type="button" class="chip" data-e="serien">Serien</button><button type="button" class="chip" data-e="wuensche">Geschenke</button></div>
   <div id="ev-termine" style="display:flex;flex-direction:column;gap:14px">
   <div id="e-free"></div>
   <div id="e-list"></div>
   </div>
+  <div class="seg" id="irg-seg" hidden><button type="button" data-i="wunsch">Wunschliste</button><button type="button" data-i="ideen">Ideen</button></div>
   <div id="ev-body" style="display:flex;flex-direction:column;gap:12px" hidden></div>
 </main>
 
@@ -275,7 +277,7 @@ details.more summary::before{content:"▸";display:inline-block;transition:trans
 
 <!-- ========== SPIELE ========== -->
 <main class="view" id="v-spiele" data-view="spiele" hidden>
-  <h1>Spiele</h1>
+  <h1>Zeitverschwendung</h1>
   <div class="seg four" id="g-seg"><button type="button" data-g="quiz">Quiz</button><button type="button" data-g="malen">Malen</button><button type="button" data-g="rad">Rad</button><button type="button" data-g="story">Story</button></div>
   <div id="g-body" style="display:flex;flex-direction:column;gap:14px"></div>
 </main>
@@ -287,7 +289,7 @@ details.more summary::before{content:"▸";display:inline-block;transition:trans
   <button data-tab="einkauf"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h2l2.4 11h11l2-8H6.2"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Einkauf<span class="badge" hidden></span></button>
   <button data-tab="events"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>Events<span class="badge" hidden></span></button>
   <button data-tab="haushalt"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 6h10M10 12h10M10 18h10"/><path d="M3.5 6l1.2 1.2L7 5M3.5 12l1.2 1.2L7 11M3.5 18l1.2 1.2L7 17"/></svg>Haushalt<span class="badge" hidden></span></button>
-  <button data-tab="spiele"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="7" width="20" height="12" rx="6"/><path d="M7 11v4M5 13h4"/><circle cx="15.5" cy="12" r=".9" fill="currentColor"/><circle cx="17.5" cy="14.5" r=".9" fill="currentColor"/></svg>Spiele<span class="badge" hidden></span></button>
+  <button data-tab="spiele"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="7" width="20" height="12" rx="6"/><path d="M7 11v4M5 13h4"/><circle cx="15.5" cy="12" r=".9" fill="currentColor"/><circle cx="17.5" cy="14.5" r=".9" fill="currentColor"/></svg><span class="navlong">Zeitver&shy;schwendung</span><span class="badge" hidden></span></button>
 </nav>
 
 <div class="sheet" id="sheet" hidden><div class="panel" role="dialog" aria-modal="true" id="panel"></div></div>
@@ -297,7 +299,7 @@ details.more summary::before{content:"▸";display:inline-block;transition:trans
 
 <script>
 "use strict";
-var APP_VER = "2.4";
+var APP_VER = "2.5";
 var APP_VERSION = APP_VER + " · 20.11.2026";
 /* Eure Datenbank. Neue App-Installationen verbinden sich automatisch damit. */
 var DEFAULT_DB = "https://theresdennis-default-rtdb.europe-west1.firebasedatabase.app";
@@ -683,8 +685,9 @@ function conflicts(ev) {
 function renderEvents() {
   paintSeg("#ev-seg", "data-e", eTab);
   $("#ev-termine").hidden = eTab !== "termine"; $("#ev-body").hidden = eTab === "termine"; $("#e-add").hidden = eTab !== "termine";
-  $("#evh-title").textContent = { termine: "Events", wunsch: "Wunschliste", ideen: "Ideen", serien: "Watchlist", wuensche: "Geschenke" }[eTab];
-  if (eTab === "wunsch") return renderBucket();
+  $("#evh-title").textContent = { termine: "Events", irgendwann: "Irgendwann", serien: "Watchlist", wuensche: "Geschenke" }[eTab] || "Events";
+  $("#irg-seg").hidden = eTab !== "irgendwann"; paintSeg("#irg-seg", "data-i", iTab);
+  if (eTab === "irgendwann") return iTab === "ideen" ? renderIdeen() : renderBucket();
   if (eTab === "ideen") return renderIdeen();
   if (eTab === "serien") return renderWatch();
   if (eTab === "wuensche") return renderWuensche();
@@ -1479,7 +1482,9 @@ function openOwnStatus() {
 }
 
 /* ---------- Unter-Reiter (Einkauf, Events) ---------- */
-var kTab = LS.get("ktab", "liste"), eTab = LS.get("etab", "termine");
+var kTab = LS.get("ktab", "liste"), eTab = LS.get("etab", "termine"), iTab = LS.get("itab", "wunsch");
+if (eTab === "wunsch" || eTab === "ideen") { iTab = eTab; eTab = "irgendwann"; }
+$$("#irg-seg button").forEach(function (b) { b.onclick = function () { iTab = b.getAttribute("data-i"); LS.set("itab", iTab); renderEvents(); }; });
 function paintSeg(sel, attr, val) { $$(sel + " button").forEach(function (b) { b.setAttribute("aria-pressed", b.getAttribute(attr) === val); }); }
 $$("#k-seg button").forEach(function (b) { b.onclick = function () { kTab = b.getAttribute("data-k"); LS.set("ktab", kTab); renderEinkauf(); }; });
 $$("#ev-seg button").forEach(function (b) { b.onclick = function () { eTab = b.getAttribute("data-e"); LS.set("etab", eTab); renderEvents(); }; });
@@ -1964,6 +1969,7 @@ function openStoryRead(id) {
 /* ---------- UPDATES + FEEDBACK ---------- */
 /* Bei jedem Update: APP_VER erhöhen und oben in CHANGES eintragen, was neu ist. */
 var CHANGES = {
+  "2.5": ["Wunschliste und Ideen stehen jetzt zusammen unter „Irgendwann“", "Spiele heißen jetzt „Zeitverschwendung“"],
   "2.4": ["Ganz oben auf „Heute“: Feierabend-Countdown, sonst der Countdown zum nächsten Highlight, sonst ein Spruch des Tages", "„Wo seid ihr?“ ist raus, steht ja eh im Dienstplan"],
   "2.3": ["Neue Wunschliste unter Events: Sachen, die ihr unbedingt mal machen wollt", "Auf „Heute“ fragt die App, ob ihr nicht wisst, was ihr essen sollt, und schlägt Gerichte vor, für die alles da ist. Eure eigenen Rezepte zuerst", "Vorräte: angebrochene oder fast leere Packungen direkt so eintragen", "Update-Übersicht nach Versionen sortiert", "„Wünsche“ heißt jetzt „Geschenke“"],
   "2.2": ["250 einfache Rezepte, abgeglichen mit euren Vorräten (zu finden auf „Heute“)", "Fehlendes mit einem Tipp auf die Einkaufsliste, Lieblinge zu euren Rezepten übernehmen"],
