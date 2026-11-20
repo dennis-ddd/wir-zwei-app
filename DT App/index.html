@@ -141,6 +141,26 @@ details.card summary{font-weight:700;cursor:pointer}
 .pointer{position:absolute;top:0;left:50%;transform:translateX(-50%);width:0;height:0;border-left:14px solid transparent;border-right:14px solid transparent;border-top:24px solid var(--ink);z-index:2}
 .wheelres{text-align:center;font-size:26px;font-weight:800;min-height:36px}
 .wheelmini{width:40px;height:40px;border-radius:50%;flex-shrink:0;background:conic-gradient(#2F5BD8 0 25%,#B9470B 0 50%,#157347 0 75%,#7B1FA2 0)}
+.seg.four{grid-template-columns:repeat(4,minmax(0,1fr))}.seg.four button{font-size:13px}
+.statchips{gap:6px}.statchips .chip{height:38px;padding:0 12px;font-size:13px}
+.stockgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.stock{display:flex;align-items:stretch;background:var(--card);border-radius:12px;border-left:0;overflow:hidden;min-height:50px}
+.stmain{flex:1;min-width:0;border:0;background:none;text-align:left;padding:7px 4px 7px 12px;display:flex;flex-direction:column;justify-content:center;gap:2px}
+.stmain .sn{font-size:14px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.stmain .sl{font-size:11px;font-weight:700;display:flex;align-items:center;gap:5px}
+.stmain .sl i{width:8px;height:8px;border-radius:50%;background:currentColor;display:inline-block}
+.lv2 .sl{color:var(--oki)}.lv1 .sl{color:var(--warn)}.lv0 .sl{color:var(--danger)}
+.lv0{background:#FDF1F1}.lv1{background:#FFF7E6}
+.stmore{width:38px;border:0;background:none;color:var(--mute);display:flex;align-items:center;justify-content:center}
+.rzicon{width:44px;height:44px;border-radius:12px;background:var(--bt);color:var(--bi);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ingrow{display:flex;align-items:center;gap:12px;min-height:44px;font-size:15px;font-weight:600;border-bottom:1px solid #F0F1F5}
+.ingrow input{width:22px;height:22px;accent-color:var(--ink);flex-shrink:0}
+.pillbtn{border:1px solid var(--line2);background:var(--card);border-radius:999px;height:36px;padding:0 12px;font-size:13px;font-weight:700;flex-shrink:0}
+.card.secret{background:#F3EEFB}
+.lastline{display:flex;gap:10px;align-items:flex-start;font-size:17px;font-weight:600;line-height:1.45;background:#F7F8FB;border-radius:14px;padding:12px}
+.hiddenlines{display:flex;flex-direction:column;gap:6px}.hiddenlines span{height:10px;border-radius:5px;background:#E3E6EE}.hiddenlines span:nth-child(odd){width:85%}.hiddenlines span:nth-child(even){width:70%}
+.storytext{font-size:17px;line-height:1.7;background:var(--card);border-radius:16px;padding:16px}
+.storytext .sp-p1{color:var(--ai)}.storytext .sp-p2{color:var(--bi)}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 </style>
 </head>
@@ -173,20 +193,28 @@ details.card summary{font-weight:700;cursor:pointer}
 
 <!-- ========== EINKAUF ========== -->
 <main class="view" id="v-einkauf" data-view="einkauf" hidden>
-  <div class="top"><h1>Einkaufsliste</h1><span class="kicker" id="s-count"></span></div>
+  <div class="top"><h1 id="k-title">Einkaufsliste</h1><span class="kicker" id="s-count"></span></div>
+  <div class="seg three" id="k-seg"><button type="button" data-k="liste">Liste</button><button type="button" data-k="vorrat">Vorräte</button><button type="button" data-k="rezepte">Rezepte</button></div>
+  <div id="k-liste" style="display:flex;flex-direction:column;gap:14px">
   <form class="addrow" id="shop-form" autocomplete="off">
     <label for="shop-in" class="sr">Artikel hinzufügen</label>
     <input class="f" id="shop-in" placeholder="Artikel hinzufügen …" enterkeyhint="done">
     <button class="icon dark" style="width:48px;height:48px;border-radius:14px" aria-label="Hinzufügen"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
   </form>
   <div id="s-list"></div>
+  </div>
+  <div id="k-body" style="display:flex;flex-direction:column;gap:12px" hidden></div>
 </main>
 
 <!-- ========== EVENTS ========== -->
 <main class="view" id="v-events" data-view="events" hidden>
-  <div class="top"><h1>Events</h1><button class="icon dark" id="e-add" aria-label="Event hinzufügen"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div>
+  <div class="top"><h1 id="evh-title">Events</h1><button class="icon dark" id="e-add" aria-label="Event hinzufügen"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div>
+  <div class="seg four" id="ev-seg"><button type="button" data-e="termine">Termine</button><button type="button" data-e="ideen">Ideen</button><button type="button" data-e="serien">Serien</button><button type="button" data-e="wuensche">Wünsche</button></div>
+  <div id="ev-termine" style="display:flex;flex-direction:column;gap:14px">
   <div id="e-free"></div>
   <div id="e-list"></div>
+  </div>
+  <div id="ev-body" style="display:flex;flex-direction:column;gap:12px" hidden></div>
 </main>
 
 <!-- ========== HAUSHALT ========== -->
@@ -207,7 +235,7 @@ details.card summary{font-weight:700;cursor:pointer}
 <!-- ========== SPIELE ========== -->
 <main class="view" id="v-spiele" data-view="spiele" hidden>
   <h1>Spiele</h1>
-  <div class="seg three" id="g-seg"><button type="button" data-g="quiz">Quiz</button><button type="button" data-g="malen">Malen</button><button type="button" data-g="rad">Glücksrad</button></div>
+  <div class="seg four" id="g-seg"><button type="button" data-g="quiz">Quiz</button><button type="button" data-g="malen">Malen</button><button type="button" data-g="rad">Rad</button><button type="button" data-g="story">Story</button></div>
   <div id="g-body" style="display:flex;flex-direction:column;gap:14px"></div>
 </main>
 
@@ -227,7 +255,7 @@ details.card summary{font-weight:700;cursor:pointer}
 
 <script>
 "use strict";
-var APP_VERSION = "1.5 · 18.11.2026";
+var APP_VERSION = "1.6 · 20.11.2026";
 /* Eure Datenbank. Neue App-Installationen verbinden sich automatisch damit. */
 var DEFAULT_DB = "https://theresdennis-default-rtdb.europe-west1.firebasedatabase.app";
 var $ = function (s, r) { return (r || document).querySelector(s); };
@@ -310,7 +338,8 @@ function connect() {
 function snapshotKeys() {
   var ds = {}; Object.keys(drawColl()).forEach(function (k) { ds[k] = drawColl()[k].status; });
   var wl = wheelLast();
-  return { log: Object.keys(coll("log")), shop: Object.keys(coll("shop")), events: Object.keys(coll("events")), draw: ds, wheelAt: wl ? wl.at : 0, quizOther: quizWaiting() };
+  var so = statusOf(other());
+  return { stAt: so ? so.at : 0, story: storyMyTurn(), ideas: Object.keys(coll("ideas")), wishes: Object.keys(((tree.wishes || {})[other()]) || {}), log: Object.keys(coll("log")), shop: Object.keys(coll("shop")), events: Object.keys(coll("events")), draw: ds, wheelAt: wl ? wl.at : 0, quizOther: quizWaiting() };
 }
 function applyRemote(ops) {
   var before = snapshotKeys();
@@ -336,6 +365,10 @@ function notifyNew(before) {
   var wl = wheelLast();
   if (wl && wl.at !== before.wheelAt && wl.by !== me()) { msgs.push(o + " hat am Glücksrad gedreht: " + wl.result); if (wheelState && wheelState.id === wl.listId && !$("#sheet").hidden) spinTo(wl.idx, wl.at); }
   if (quizWaiting() > before.quizOther && !(tab === "spiele" && gameTab === "quiz")) msgs.push(o + " hat Quizfragen beantwortet. Du bist dran!");
+  var so = statusOf(other()); if (so && so.at !== before.stAt) msgs.unshift(o + ": " + statusText(so));
+  if (storyMyTurn() && !before.story) msgs.push(o + " hat die Geschichte weitergeschrieben. Du bist dran!");
+  entries("ideas").forEach(function (v) { if (before.ideas.indexOf(v.id) < 0 && v.by !== me()) msgs.push(o + " hat eine Idee notiert: " + v.t); });
+  Object.keys(((tree.wishes || {})[other()]) || {}).forEach(function (k) { if (before.wishes.indexOf(k) < 0) msgs.push(o + " hat einen neuen Wunsch eingetragen"); });
   if (!msgs.length) return;
   toast(msgs[0]);
   try { if (document.hidden && "Notification" in window && Notification.permission === "granted") new Notification("Wir zwei", { body: msgs.join("\n"), icon: "icons/icon-192.png" }); } catch (e) {}
@@ -395,20 +428,31 @@ function show(t) {
 function markSeen(t) { seen[t] = Date.now(); LS.set("seen", seen); }
 $$("nav.tabs button").forEach(function (b) { b.addEventListener("click", function () { show(b.getAttribute("data-tab")); }); });
 
+/* Eingaben und Fokus behalten, wenn die Ansicht neu gezeichnet wird (z. B. wenn der andere gerade etwas ändert) */
+function keepInputs(el, build) {
+  var vals = {}, act = document.activeElement, aid = act && el && el.contains(act) ? act.id : null, ss = null, se = null;
+  if (el) $$("input,select,textarea", el).forEach(function (i) { if (i.id && i.type !== "checkbox" && i.type !== "file") vals[i.id] = i.value; });
+  try { if (aid && act.selectionStart != null) { ss = act.selectionStart; se = act.selectionEnd; } } catch (e) {}
+  build();
+  Object.keys(vals).forEach(function (id) { var i = document.getElementById(id); if (i && vals[id] !== "" && i.value !== vals[id]) i.value = vals[id]; });
+  if (aid) { var n = document.getElementById(aid); if (n && n !== document.activeElement) { n.focus(); try { if (ss != null) n.setSelectionRange(ss, se); } catch (e) {} } }
+}
 function render() {
   try {
-    if (tab === "heute") renderHeute();
-    if (tab === "dienste") renderDienste();
-    if (tab === "einkauf") renderEinkauf();
-    if (tab === "events") renderEvents();
-    if (tab === "haushalt") renderHaushalt();
-    if (tab === "spiele") renderSpiele();
+    keepInputs($("#v-" + tab), function () {
+      if (tab === "heute") renderHeute();
+      if (tab === "dienste") renderDienste();
+      if (tab === "einkauf") renderEinkauf();
+      if (tab === "events") renderEvents();
+      if (tab === "haushalt") renderHaushalt();
+      if (tab === "spiele") renderSpiele();
+    });
   } catch (e) { console.error(e); }
   renderBadges(); updateStatus();
 }
 function partnerNewer(k, area) { var since = seen[area] || 0; return entries(k).filter(function (v) { return v.by && v.by !== me() && (v.at || 0) > since; }).length; }
 function renderBadges() {
-  var c = { dienste: partnerNewer("shifts", "dienste"), einkauf: partnerNewer("shop", "einkauf"), events: partnerNewer("events", "events"), haushalt: partnerNewer("log", "haushalt") + partnerNewer("todos", "haushalt"), spiele: gamesTodo() };
+  var c = { dienste: partnerNewer("shifts", "dienste"), einkauf: partnerNewer("shop", "einkauf"), events: partnerNewer("events", "events") + partnerNewer("ideas", "events"), haushalt: partnerNewer("log", "haushalt") + partnerNewer("todos", "haushalt"), spiele: gamesTodo() + (storyMyTurn() ? 1 : 0) };
   Object.keys(c).forEach(function (k) {
     var b = $('nav.tabs button[data-tab="' + k + '"] .badge'); if (!b) return;
     var n = (k === tab && k !== "spiele") ? 0 : c[k]; b.hidden = !n; b.textContent = n > 9 ? "9+" : n;
@@ -432,7 +476,7 @@ function renderHeute() {
   var h = new Date().getHours();
   $("#h-date").textContent = WDL[t.getDay()] + ", " + t.getDate() + ". " + MONL[t.getMonth()];
   $("#h-hello").textContent = (h < 11 ? "Guten Morgen" : h < 18 ? "Hallo" : "Guten Abend") + ", " + person(me()).name;
-  var html = "";
+  var html = statusCard();
   // Dienste heute
   html += '<section class="card"><div class="card-h"><h2>Heute</h2><button class="link" data-go="dienste">Dienstplan</button></div>';
   ["p1", "p2"].forEach(function (p) {
@@ -460,7 +504,7 @@ function renderHeute() {
   html += '<button class="tile" data-go="spiele" style="flex-direction:row;align-items:center;gap:12px;width:100%"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.5v.7M12 17h.01"/></svg><span style="display:flex;flex-direction:column"><span class="t">Quiz</span><span class="muted" style="font-weight:600">' + (qw ? esc(person(other()).name) + " hat " + qw + " Frage" + (qw > 1 ? "n" : "") + " beantwortet, die du noch nicht hast" : "Ein paar Fragen zwischendurch?") + "</span></span></button>";
   if (openTodo) html += '<button class="tile" data-go="haushalt" style="flex-direction:row;align-items:center;gap:12px;width:100%"><span class="num">' + openTodo + '</span><span class="muted" style="font-weight:600">Aufgabe' + (openTodo > 1 ? "n" : "") + " im Haushalt eingetragen</span></button>";
   $("#h-body").innerHTML = html;
-  bindCommon($("#h-body"));
+  bindCommon($("#h-body")); bindStatus($("#h-body"));
 }
 function bindCommon(root) {
   $$("[data-go]", root).forEach(function (b) { b.onclick = function () { var g = b.getAttribute("data-go"); if (g === "spiele") { gameTab = "quiz"; LS.set("gtab", gameTab); } show(g); }; });
@@ -541,6 +585,14 @@ function openShift(p, date) {
 
 /* ---------- EINKAUF ---------- */
 function renderEinkauf() {
+  paintSeg("#k-seg", "data-k", kTab);
+  $("#k-liste").hidden = kTab !== "liste"; $("#k-body").hidden = kTab === "liste";
+  $("#k-title").textContent = kTab === "liste" ? "Einkaufsliste" : kTab === "vorrat" ? "Vorräte" : "Rezepte";
+  if (kTab === "vorrat") { $("#s-count").textContent = entries("stock").filter(function (v) { return v.lvl < 2; }).length + " knapp"; return renderVorrat(); }
+  if (kTab === "rezepte") { $("#s-count").textContent = entries("recipes").length + " Rezepte"; return renderRezepte(); }
+  renderListe();
+}
+function renderListe() {
   var all = entries("shop"), open = all.filter(function (v) { return !v.done; }).sort(function (a, b) { return a.at - b.at; }), done = all.filter(function (v) { return v.done; }).sort(function (a, b) { return (b.doneAt || 0) - (a.doneAt || 0); });
   $("#s-count").textContent = open.length + " offen";
   var html = "";
@@ -551,7 +603,7 @@ function renderEinkauf() {
     html += '<div class="list">' + done.map(shopItem).join("") + "</div>";
   }
   $("#s-list").innerHTML = html;
-  $$("#s-list [data-toggle]").forEach(function (b) { b.onclick = function () { var id = b.getAttribute("data-toggle"), v = coll("shop")[id]; if (!v) return; var n = Object.assign({}, v, { done: !v.done, doneBy: !v.done ? me() : null, doneAt: !v.done ? Date.now() : null }); write("shop/" + id, n); }; });
+  $$("#s-list [data-toggle]").forEach(function (b) { b.onclick = function () { var id = b.getAttribute("data-toggle"), v = coll("shop")[id]; if (!v) return; var n = Object.assign({}, v, { done: !v.done, doneBy: !v.done ? me() : null, doneAt: !v.done ? Date.now() : null }); write("shop/" + id, n); var st = stockByName(v.name); if (n.done && st && st.lvl < 2) write("stock/" + st.id + "/lvl", 2); }; });
   $$("#s-list [data-del]").forEach(function (b) { b.onclick = function () { write("shop/" + b.getAttribute("data-del"), null); }; });
   var c = $("#s-clear"); if (c) c.onclick = function () { ask("Alle abgehakten Artikel löschen?", function () { done.forEach(function (v) { write("shop/" + v.id, null); }); }, "Löschen"); };
 }
@@ -581,6 +633,15 @@ function conflicts(ev) {
   return out;
 }
 function renderEvents() {
+  paintSeg("#ev-seg", "data-e", eTab);
+  $("#ev-termine").hidden = eTab !== "termine"; $("#ev-body").hidden = eTab === "termine"; $("#e-add").hidden = eTab !== "termine";
+  $("#evh-title").textContent = { termine: "Events", ideen: "Ideen", serien: "Watchlist", wuensche: "Wünsche" }[eTab];
+  if (eTab === "ideen") return renderIdeen();
+  if (eTab === "serien") return renderWatch();
+  if (eTab === "wuensche") return renderWuensche();
+  renderTermine();
+}
+function renderTermine() {
   var t = today(), free = [];
   for (var i = 0; i < 28 && free.length < 6; i++) { var ds = iso(addDays(t, i)), a = shift("p1", ds), b = shift("p2", ds); if (a && b && !isWork(a.type) && !isWork(b.type)) free.push(ds); }
   var fh = '<section class="freebox"><span class="label" style="color:var(--oki);margin:0">Gemeinsam frei</span>';
@@ -1051,6 +1112,7 @@ function renderSpiele() {
   $$("#g-seg button").forEach(function (b) { b.setAttribute("aria-pressed", b.getAttribute("data-g") === gameTab); });
   if (gameTab === "quiz") renderQuiz();
   else if (gameTab === "malen") renderMalen();
+  else if (gameTab === "story") renderStory();
   else renderRad();
 }
 $$("#g-seg button").forEach(function (b) { b.onclick = function () { gameTab = b.getAttribute("data-g"); LS.set("gtab", gameTab); renderSpiele(); }; });
@@ -1254,6 +1316,283 @@ function spinTo(idx, at) {
     if (k < 1) requestAnimationFrame(step); else { s.spinning = false; s.rot = target % (Math.PI * 2); var res = $("#wh-res"); if (res) res.textContent = s.items[idx]; }
   }
   requestAnimationFrame(step);
+}
+
+/* ---------- UNTERWEGS-STATUS ---------- */
+var STAT = [["home", "Zuhause"], ["way", "Auf dem Heimweg"], ["late", "Komme später"], ["work", "Bei der Arbeit"], ["out", "Unterwegs"], ["sleep", "Schlafe"]];
+function statusOf(p) { return (tree.status || {})[p] || null; }
+function statLabel(k) { for (var i = 0; i < STAT.length; i++) if (STAT[i][0] === k) return STAT[i][1]; return ""; }
+function statusText(st) { var t = st.text || statLabel(st.key); if (st.eta && st.eta > Date.now() - 36e5) t += " · ca. " + hm(st.eta) + " da"; return t; }
+function statusFresh(st) { return st && Date.now() - st.at < 12 * 36e5; }
+function statusCard() {
+  var o = other(), so = statusOf(o), sm = statusOf(me()), h = '<section class="card" style="gap:10px"><h2>Wo seid ihr?</h2>';
+  h += '<div class="row">' + av(o) + '<span style="flex:1;font-size:15px;font-weight:700">' + esc(person(o).name) + ": " + (so ? '<span style="' + (statusFresh(so) ? "" : "color:var(--mute)") + '">' + esc(statusText(so)) + "</span>" : '<span class="muted">noch kein Status</span>') + "</span>" + (so ? '<span class="muted">' + when(so.at) + "</span>" : "") + "</div>";
+  h += '<div class="chips statchips">' + STAT.map(function (s) { return '<button class="chip" data-st="' + s[0] + '" aria-pressed="' + !!(sm && statusFresh(sm) && sm.key === s[0]) + '">' + s[1] + "</button>"; }).join("") + '<button class="chip" data-st="own" aria-pressed="' + !!(sm && statusFresh(sm) && sm.key === "own") + '">Eigener Text</button></div>';
+  if (sm && statusFresh(sm)) h += '<div class="muted">Du: ' + esc(statusText(sm)) + "</div>";
+  return h + "</section>";
+}
+function bindStatus(root) {
+  $$("[data-st]", root).forEach(function (b) {
+    b.onclick = function () {
+      var k = b.getAttribute("data-st");
+      if (k === "way" || k === "late") return openEta(k);
+      if (k === "own") return openOwnStatus();
+      write("status/" + me(), { key: k, at: Date.now(), by: me() }); toast(person(other()).name + " sieht jetzt: " + statLabel(k));
+    };
+  });
+}
+function openEta(k) {
+  var html = '<div class="grab"></div><div class="ph"><h2>' + statLabel(k) + '</h2><button class="icon" data-close aria-label="Schließen">' + ICON_X + '</button></div><p class="help">Wann bist du ungefähr da?</p><div class="grid3">' + [10, 20, 30, 45, 60, 90].map(function (m) { return '<button class="chip" data-m="' + m + '">' + (m < 60 ? m + " Min" : m === 60 ? "1 Std" : "1½ Std") + "</button>"; }).join("") + '</div><button class="btn sec" data-m="0">Ohne Zeit</button>';
+  openSheet(html);
+  $$("#panel [data-m]").forEach(function (b) { b.onclick = function () { var m = +b.getAttribute("data-m"), st = { key: k, at: Date.now(), by: me() }; if (m) st.eta = Date.now() + m * 6e4; write("status/" + me(), st); closeSheet(); toast(person(other()).name + " sieht jetzt: " + statusText(st)); }; });
+}
+function openOwnStatus() {
+  openSheet('<div class="grab"></div><div class="ph"><h2>Eigener Status</h2><button class="icon" data-close aria-label="Schließen">' + ICON_X + '</button></div><div class="fl"><label for="os-in">Was machst du gerade?</label><input class="f" id="os-in" maxlength="60" placeholder="z. B. Probe bis 21 Uhr"></div><button class="btn" id="os-ok">Speichern</button>');
+  $("#os-ok").onclick = function () { var t = $("#os-in").value.trim(); if (!t) return; write("status/" + me(), { key: "own", text: t, at: Date.now(), by: me() }); closeSheet(); };
+}
+
+/* ---------- Unter-Reiter (Einkauf, Events) ---------- */
+var kTab = LS.get("ktab", "liste"), eTab = LS.get("etab", "termine");
+function paintSeg(sel, attr, val) { $$(sel + " button").forEach(function (b) { b.setAttribute("aria-pressed", b.getAttribute(attr) === val); }); }
+$$("#k-seg button").forEach(function (b) { b.onclick = function () { kTab = b.getAttribute("data-k"); LS.set("ktab", kTab); renderEinkauf(); }; });
+$$("#ev-seg button").forEach(function (b) { b.onclick = function () { eTab = b.getAttribute("data-e"); LS.set("etab", eTab); renderEvents(); }; });
+function addRow(id, ph, extra) { return '<form class="addrow" id="' + id + '" autocomplete="off"><label for="' + id + '-in" class="sr">' + esc(ph) + '</label><input class="f" id="' + id + '-in" placeholder="' + esc(ph) + '" enterkeyhint="done">' + (extra || "") + '<button class="icon dark" style="width:48px;height:48px;border-radius:14px" aria-label="Hinzufügen"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></form>'; }
+function onAdd(id, fn) { var f = $("#" + id); if (!f) return; f.onsubmit = function (e) { e.preventDefault(); var i = $("#" + id + "-in"), v = i.value.trim(); if (!v) return; i.value = ""; fn(v); }; }
+function addToShop(name) { var n = normWord(name), exists = entries("shop").some(function (v) { return !v.done && normWord(v.name) === n; }); if (!exists) write("shop/" + rid(), { name: name, by: me(), at: Date.now(), done: false }); return !exists; }
+
+/* ---------- VORRÄTE ---------- */
+var PLACES = [["kuehl", "Kühlschrank"], ["tk", "Gefrierfach"], ["schrank", "Vorratsschrank"]];
+var LVL = [["Leer", "lv0"], ["Wenig", "lv1"], ["Genug", "lv2"]];
+var stockFilter = LS.get("sfilter", "alle");
+function stockByName(name) { var n = normWord(name); return entries("stock").filter(function (v) { return normWord(v.name) === n; })[0] || null; }
+function renderVorrat() {
+  var all = entries("stock").sort(function (a, b) { return a.name.localeCompare(b.name, "de"); });
+  var low = all.filter(function (v) { return v.lvl < 2; }).length;
+  var h = addRow("st-form", "Vorrat hinzufügen …", '<label for="st-place" class="sr">Ort</label><select class="f" id="st-place" style="width:auto;padding:0 8px">' + PLACES.map(function (p) { return '<option value="' + p[0] + '"' + (LS.get("splace", "kuehl") === p[0] ? " selected" : "") + ">" + p[1] + "</option>"; }).join("") + "</select>");
+  h += '<div class="chips topicrow">' + [["alle", "Alle"], ["knapp", "Knapp (" + low + ")"]].concat(PLACES).map(function (f) { return '<button class="chip" data-sf="' + f[0] + '" aria-pressed="' + (stockFilter === f[0]) + '">' + f[1] + "</button>"; }).join("") + "</div>";
+  if (!all.length) h += '<div class="empty-hint">Tragt ein, was ihr zu Hause habt. Ein Tipp auf einen Vorrat schaltet zwischen Genug, Wenig und Leer um.</div>';
+  PLACES.forEach(function (p) {
+    if (stockFilter !== "alle" && stockFilter !== "knapp" && stockFilter !== p[0]) return;
+    var items = all.filter(function (v) { return v.place === p[0] && (stockFilter !== "knapp" || v.lvl < 2); });
+    if (!items.length) return;
+    h += '<p class="label">' + p[1] + '</p><div class="stockgrid">' + items.map(function (v) {
+      var onList = entries("shop").some(function (s) { return !s.done && normWord(s.name) === normWord(v.name); });
+      return '<div class="stock ' + LVL[v.lvl][1] + '"><button class="stmain" data-lv="' + v.id + '" aria-label="' + esc(v.name) + ": " + LVL[v.lvl][0] + ', tippen zum Ändern"><span class="sn">' + esc(v.name) + '</span><span class="sl"><i></i>' + LVL[v.lvl][0] + (onList ? " · auf der Liste" : "") + '</span></button><button class="stmore" data-sm="' + v.id + '" aria-label="Mehr zu ' + esc(v.name) + '"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/></svg></button></div>';
+    }).join("") + "</div>";
+  });
+  if (low) h += '<button class="btn sec" id="st-low">Alles Knappe auf die Einkaufsliste</button>';
+  $("#k-body").innerHTML = h;
+  onAdd("st-form", function (v) { var pl = $("#st-place").value; LS.set("splace", pl); v.split(/\s*,\s*/).filter(Boolean).forEach(function (n) { if (!stockByName(n)) write("stock/" + rid(), { name: n, place: pl, lvl: 2, by: me(), at: Date.now() }); }); });
+  $$("#k-body [data-sf]").forEach(function (b) { b.onclick = function () { stockFilter = b.getAttribute("data-sf"); LS.set("sfilter", stockFilter); renderVorrat(); }; });
+  $$("#k-body [data-lv]").forEach(function (b) { b.onclick = function () { var id = b.getAttribute("data-lv"), v = coll("stock")[id]; if (!v) return; var nl = v.lvl === 0 ? 2 : v.lvl - 1; write("stock/" + id + "/lvl", nl); write("stock/" + id + "/at", Date.now()); write("stock/" + id + "/by", me()); if (nl === 0 && addToShop(v.name)) toast(v.name + " ist leer und steht jetzt auf der Einkaufsliste"); }; });
+  $$("#k-body [data-sm]").forEach(function (b) { b.onclick = function () { openStock(b.getAttribute("data-sm")); }; });
+  var lw = $("#st-low"); if (lw) lw.onclick = function () { var n = 0; all.forEach(function (v) { if (v.lvl < 2 && addToShop(v.name)) n++; }); toast(n ? n + " Sachen auf die Einkaufsliste gesetzt" : "Steht schon alles drauf"); };
+}
+function openStock(id) {
+  var v = coll("stock")[id]; if (!v) return;
+  var html = '<div class="grab"></div><div class="ph"><h2>' + esc(v.name) + '</h2><button class="icon" data-close aria-label="Schließen">' + ICON_X + "</button></div>";
+  html += '<div class="fl"><label for="sx-name">Name</label><input class="f" id="sx-name" value="' + esc(v.name) + '"></div>';
+  html += '<div class="fl"><span class="lab">Wo?</span><div class="seg three" id="sx-pl">' + PLACES.map(function (p) { return '<button type="button" data-p="' + p[0] + '" aria-pressed="' + (v.place === p[0]) + '">' + p[1].replace("Vorratsschrank", "Schrank").replace("Kühlschrank", "Kühlschr.") + "</button>"; }).join("") + "</div></div>";
+  html += '<div class="fl"><span class="lab">Wie viel ist da?</span><div class="seg three" id="sx-lv">' + LVL.map(function (l, i) { return '<button type="button" data-l="' + i + '" aria-pressed="' + (v.lvl === i) + '">' + l[0] + "</button>"; }).join("") + "</div></div>";
+  html += '<button class="btn sec" id="sx-shop">Auf die Einkaufsliste</button><div class="actions"><button class="btn danger" id="sx-del">Löschen</button><button class="btn" id="sx-save">Speichern</button></div>';
+  openSheet(html);
+  var pl = v.place, lv = v.lvl;
+  $$("#sx-pl button").forEach(function (b) { b.onclick = function () { pl = b.getAttribute("data-p"); paintSeg("#sx-pl", "data-p", pl); }; });
+  $$("#sx-lv button").forEach(function (b) { b.onclick = function () { lv = +b.getAttribute("data-l"); paintSeg("#sx-lv", "data-l", String(lv)); }; });
+  $("#sx-shop").onclick = function () { toast(addToShop(v.name) ? v.name + " steht jetzt auf der Einkaufsliste" : "Steht schon drauf"); };
+  $("#sx-save").onclick = function () { var n = $("#sx-name").value.trim() || v.name; write("stock/" + id, Object.assign({}, v, { name: n, place: pl, lvl: lv, at: Date.now(), by: me() })); closeSheet(); };
+  $("#sx-del").onclick = function () { ask(v.name + " aus den Vorräten löschen?", function () { write("stock/" + id, null); closeSheet(); }, "Löschen"); };
+}
+
+/* ---------- REZEPTE ---------- */
+var SEED_RECIPES = {
+  "seed-nudeln-garnelen": { name: "Nudeln & Garnelen", ing: ["Nudeln", "Tomaten", "Knoblauch", "Garnelen", "Zwiebeln", "Etwas Wasser", "Salz", "Pfeffer", "Paprika oder Brokkoli (wahlweise)"], steps: "Nudeln kochen.\nZwiebeln und Knoblauch klein schneiden und in der Pfanne anbraten.\nGarnelen dazugeben und kurz mitbraten.\nTomaten und etwas Wasser dazu, einköcheln lassen. Wer mag: Paprika oder Brokkoli mitgaren.\nMit Salz und Pfeffer abschmecken und die Nudeln unterheben." },
+  "seed-theres": { name: "Theres' Leibspeise", ing: ["Nudeln von gestern", "Eier", "Salz", "Pfeffer", "Cherrytomaten", "Gewürze nach Laune"], steps: "Die Nudeln von gestern in der Pfanne anbraten, gern bis sie etwas knusprig sind.\nEi dazugeben und unterrühren, bis es stockt.\nEin paar Cherrytomaten halbieren und kurz mitbraten.\nMit Salz, Pfeffer und Gewürzen nach Laune abschmecken." }
+};
+var recipeSearch = "";
+function seedRecipes() {
+  if ((tree.flags || {}).recipesSeeded) return;
+  if (synced() && !gotInitial) return;
+  Object.keys(SEED_RECIPES).forEach(function (id) { if (!coll("recipes")[id]) write("recipes/" + id, Object.assign({ by: me(), at: Date.now() }, SEED_RECIPES[id])); });
+  write("flags/recipesSeeded", true);
+}
+function renderRezepte() {
+  seedRecipes();
+  var list = entries("recipes").sort(function (a, b) { return a.name.localeCompare(b.name, "de"); });
+  var q = normWord(recipeSearch);
+  var shown = list.filter(function (r) { return !q || normWord(r.name + " " + (r.ing || []).join(" ")).indexOf(q) >= 0; });
+  var h = '<div class="row"><label for="rz-q" class="sr">Rezept suchen</label><input class="f" id="rz-q" type="search" placeholder="Suchen, z. B. Garnelen" value="' + esc(recipeSearch) + '"><button class="icon dark" id="rz-new" style="width:48px;height:48px;border-radius:14px" aria-label="Neues Rezept"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div>';
+  h += '<div id="rz-list">' + recipeCards(shown, list.length) + "</div>";
+  $("#k-body").innerHTML = h;
+  $("#rz-q").oninput = function () { recipeSearch = this.value; var qq = normWord(recipeSearch); $("#rz-list").innerHTML = recipeCards(list.filter(function (r) { return !qq || normWord(r.name + " " + (r.ing || []).join(" ")).indexOf(qq) >= 0; }), list.length); bindRecipeCards(); };
+  $("#rz-new").onclick = function () { openRecipeEdit(null); };
+  bindRecipeCards();
+}
+function recipeCards(shown, total) {
+  if (!total) return '<div class="empty-hint">Noch keine Rezepte. Mit + das erste eintragen.</div>';
+  if (!shown.length) return '<div class="empty-hint">Nichts gefunden.</div>';
+  return '<div style="display:flex;flex-direction:column;gap:10px">' + shown.map(function (r) {
+    var have = (r.ing || []).filter(function (i) { var s = stockByName(i); return s && s.lvl > 0; }).length;
+    return '<button class="tile" data-rz="' + r.id + '" style="flex-direction:row;align-items:center;gap:12px;width:100%"><span class="rzicon" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11h18a9 9 0 0 1-18 0z"/><path d="M8 7c0-2 2-2 2-4M13 7c0-2 2-2 2-4"/></svg></span><span style="flex:1;display:flex;flex-direction:column;gap:2px;min-width:0"><span class="t">' + esc(r.name) + '</span><span class="muted" style="font-weight:600">' + (r.ing || []).length + " Zutaten" + (have ? " · " + have + " im Vorrat" : "") + "</span></span></button>";
+  }).join("") + "</div>";
+}
+function bindRecipeCards() { $$("#k-body [data-rz]").forEach(function (b) { b.onclick = function () { openRecipe(b.getAttribute("data-rz")); }; }); }
+function openRecipe(id) {
+  var r = coll("recipes")[id]; if (!r) return;
+  var html = '<div class="grab"></div><div class="ph"><h2>' + esc(r.name) + '</h2><button class="icon" data-close aria-label="Schließen">' + ICON_X + "</button></div>";
+  html += '<section class="card" style="gap:4px"><h2 style="margin-bottom:4px">Zutaten</h2><p class="help" style="margin-bottom:6px">Antippen, was fehlt. Dann auf „Auf die Einkaufsliste“.</p>' + (r.ing || []).map(function (i, k) {
+    var s = stockByName(i), tag = s ? (s.lvl > 0 ? '<span class="pill ok">im Vorrat</span>' : '<span class="pill warn">leer</span>') : "";
+    return '<label class="ingrow"><input type="checkbox" data-ing="' + k + '"' + (s && s.lvl === 0 ? " checked" : "") + '><span style="flex:1">' + esc(i) + "</span>" + tag + "</label>";
+  }).join("") + '<button class="btn" id="rv-shop" style="margin-top:8px">Auf die Einkaufsliste</button></section>';
+  if (r.steps) html += '<section class="card"><h2>Zubereitung</h2><div style="white-space:pre-line;font-size:15px;line-height:1.55">' + esc(r.steps) + "</div></section>";
+  html += '<div class="muted">Eingetragen von ' + esc(von(r.by)) + "</div>";
+  html += '<div class="actions"><button class="btn danger" id="rv-del">Löschen</button><button class="btn sec" id="rv-edit">Bearbeiten</button></div>';
+  openSheet(html);
+  $("#rv-shop").onclick = function () { var n = 0; $$("#panel [data-ing]").forEach(function (c) { if (c.checked && addToShop(r.ing[+c.getAttribute("data-ing")])) n++; }); if (!$$("#panel [data-ing]").some(function (c) { return c.checked; })) { toast("Erst die fehlenden Zutaten antippen"); return; } toast(n ? n + " Zutat" + (n > 1 ? "en" : "") + " auf die Einkaufsliste gesetzt" : "Steht schon alles drauf"); closeSheet(); };
+  $("#rv-edit").onclick = function () { openRecipeEdit(id); };
+  $("#rv-del").onclick = function () { ask("Rezept „" + r.name + "“ löschen?", function () { write("recipes/" + id, null); closeSheet(); }, "Löschen"); };
+}
+function openRecipeEdit(id) {
+  var r = id ? coll("recipes")[id] : null;
+  var html = '<div class="grab"></div><div class="ph"><h2>' + (r ? "Rezept bearbeiten" : "Neues Rezept") + '</h2><button class="icon" data-close aria-label="Schließen">' + ICON_X + "</button></div>";
+  html += '<div class="fl"><label for="re-name">Name</label><input class="f" id="re-name" value="' + esc(r ? r.name : "") + '" placeholder="z. B. Omas Gulasch"></div>';
+  html += '<div class="fl"><label for="re-ing">Zutaten (eine pro Zeile)</label><textarea class="f" id="re-ing" style="height:150px" placeholder="Nudeln&#10;Tomaten&#10;Knoblauch">' + esc(r ? (r.ing || []).join("\n") : "") + "</textarea></div>";
+  html += '<div class="fl"><label for="re-steps">Zubereitung (optional)</label><textarea class="f" id="re-steps" style="height:150px">' + esc(r ? r.steps || "" : "") + "</textarea></div>";
+  html += '<button class="btn" id="re-save">Speichern</button>';
+  openSheet(html);
+  $("#re-save").onclick = function () {
+    var name = $("#re-name").value.trim(), ing = $("#re-ing").value.split("\n").map(function (s) { return s.replace(/^[-•*\s]+/, "").trim(); }).filter(Boolean);
+    if (!name) { toast("Bitte einen Namen eintragen"); return; }
+    var nid = id || rid(); write("recipes/" + nid, { name: name, ing: ing, steps: $("#re-steps").value.trim(), by: r ? r.by : me(), at: r ? r.at : Date.now(), editedBy: me() });
+    openRecipe(nid); toast("Rezept gespeichert");
+  };
+}
+
+/* ---------- IDEEN ---------- */
+var IDEA_CATS = ["Date", "Ausflug", "Urlaub", "Wohnung", "Kaufen", "Essen", "Sonstiges"];
+var ideaFilter = LS.get("ifilter", "Alle");
+function ideaCats() { var c = IDEA_CATS.slice(); entries("ideas").forEach(function (v) { if (v.cat && c.indexOf(v.cat) < 0) c.push(v.cat); }); return c; }
+function renderIdeen() {
+  var cats = ideaCats(), all = entries("ideas"), f = ideaFilter;
+  var open = all.filter(function (v) { return !v.done && (f === "Alle" || v.cat === f); }).sort(function (a, b) { return b.at - a.at; });
+  var done = all.filter(function (v) { return v.done && (f === "Alle" || v.cat === f); }).sort(function (a, b) { return (b.doneAt || 0) - (a.doneAt || 0); });
+  var h = addRow("id-form", "Idee eintragen …", '<label for="id-cat" class="sr">Kategorie</label><select class="f" id="id-cat" style="width:auto;padding:0 8px">' + cats.map(function (c) { return '<option' + ((f !== "Alle" ? f : "Date") === c ? " selected" : "") + ">" + esc(c) + "</option>"; }).join("") + '<option value="__new">+ Neue …</option></select>');
+  h += '<div class="chips topicrow">' + ["Alle"].concat(cats.filter(function (c) { return all.some(function (v) { return v.cat === c; }); })).map(function (c) { return '<button class="chip" data-if="' + esc(c) + '" aria-pressed="' + (f === c) + '">' + esc(c) + "</button>"; }).join("") + "</div>";
+  if (!open.length && !done.length) h += '<div class="empty-hint">Sammelt hier alles, was ihr mal machen, kaufen oder ausprobieren wollt. Egal ob Date, Ausflug oder Wohnung.</div>';
+  if (open.length) h += '<div class="list">' + open.map(function (v) { var nw = isNew(v, "events") ? ' <span class="new">NEU</span>' : ""; return '<div class="item"><button class="main" data-idone="' + v.id + '" aria-label="' + esc(v.t) + ' als gemacht markieren"><span class="box"></span><span class="txt">' + esc(v.t) + nw + '<span class="sub">' + esc(v.cat || "") + " · von " + esc(von(v.by)) + '</span></span></button><button class="x" data-idel="' + v.id + '" aria-label="' + esc(v.t) + ' löschen">' + ICON_X + "</button></div>"; }).join("") + "</div>";
+  if (open.length >= 2) h += '<button class="btn sec" id="id-wheel">Unentschlossen? Ab ins Glücksrad</button>';
+  if (done.length) h += '<p class="label">Schon gemacht (' + done.length + ')</p><div class="list">' + done.slice(0, 15).map(function (v) { return '<div class="item done"><button class="main" data-idone="' + v.id + '" aria-label="' + esc(v.t) + ' wieder öffnen"><span class="box">' + ICON_CHECK + '</span><span class="txt">' + esc(v.t) + '<span class="sub" style="text-decoration:none">' + esc(v.cat || "") + (v.doneAt ? " · " + esc(relDay(iso(new Date(v.doneAt)))) : "") + "</span></span></button></div>"; }).join("") + "</div>";
+  $("#ev-body").innerHTML = h;
+  $("#id-cat").onchange = function () { if (this.value !== "__new") return; var sel = this; openSheet('<div class="grab"></div><div class="ph"><h2>Neue Kategorie</h2><button class="icon" data-close aria-label="Schließen">' + ICON_X + '</button></div><div class="fl"><label for="nc-in">Name</label><input class="f" id="nc-in" maxlength="20" placeholder="z. B. Mainz"></div><button class="btn" id="nc-ok">Übernehmen</button>'); $("#nc-ok").onclick = function () { var c = $("#nc-in").value.trim(); if (!c) return; var o = document.createElement("option"); o.textContent = c; sel.insertBefore(o, sel.lastChild); sel.value = c; closeSheet(); }; };
+  onAdd("id-form", function (t) { var c = $("#id-cat").value; if (c === "__new") c = "Sonstiges"; write("ideas/" + rid(), { t: t, cat: c, by: me(), at: Date.now(), done: false }); });
+  $$("#ev-body [data-if]").forEach(function (b) { b.onclick = function () { ideaFilter = b.getAttribute("data-if"); LS.set("ifilter", ideaFilter); renderIdeen(); }; });
+  $$("#ev-body [data-idone]").forEach(function (b) { b.onclick = function () { var id = b.getAttribute("data-idone"), v = coll("ideas")[id]; if (!v) return; write("ideas/" + id, Object.assign({}, v, { done: !v.done, doneAt: !v.done ? Date.now() : null })); if (!v.done) toast("Schön! „" + v.t + "“ ist erledigt"); }; });
+  $$("#ev-body [data-idel]").forEach(function (b) { b.onclick = function () { ask("Diese Idee löschen?", function () { write("ideas/" + b.getAttribute("data-idel"), null); }, "Löschen"); }; });
+  var wb = $("#id-wheel"); if (wb) wb.onclick = function () {
+    var lid = "ideen-" + normWord(f), name = f === "Alle" ? "Unsere Ideen" : "Ideen: " + f;
+    write("games/wheel/lists/" + lid, { name: name, items: open.slice(0, 24).map(function (v) { return v.t; }), by: me(), at: Date.now() });
+    gameTab = "rad"; LS.set("gtab", gameTab); show("spiele"); openWheel(lid);
+  };
+}
+
+/* ---------- WATCHLIST ---------- */
+function renderWatch() {
+  var all = entries("watch"), open = all.filter(function (v) { return !v.done; }).sort(function (a, b) { return (b.upd || b.at) - (a.upd || a.at); }), done = all.filter(function (v) { return v.done; });
+  var h = addRow("wa-form", "Serie oder Film eintragen …");
+  if (!open.length) h += '<div class="empty-hint">Was schaut ihr gerade zusammen? Eintragen, dann wisst ihr immer, bei welcher Folge ihr seid.</div>';
+  else h += '<div class="list">' + open.map(function (v) {
+    var pos = v.film ? "Film" : "Staffel " + (v.s || 1) + " · Folge " + (v.e || 0);
+    return '<div class="item"><button class="main" data-wa="' + v.id + '"><span class="txt">' + esc(v.title) + '<span class="sub">' + pos + (v.upd ? " · " + when(v.upd) : "") + "</span></span></button>" + (v.film ? "" : '<button class="pillbtn" data-wp="' + v.id + '" aria-label="Eine Folge weiter bei ' + esc(v.title) + '">+1 Folge</button>') + '<button class="x" data-wd="' + v.id + '" aria-label="' + esc(v.title) + ' als gesehen markieren"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg></button></div>';
+  }).join("") + "</div>";
+  if (done.length) h += '<details class="card"><summary>Gesehen (' + done.length + ")</summary>" + done.map(function (v) { return '<button class="link" style="text-align:left" data-wa="' + v.id + '">' + esc(v.title) + "</button>"; }).join("") + "</details>";
+  $("#ev-body").innerHTML = h;
+  onAdd("wa-form", function (t) { write("watch/" + rid(), { title: t, s: 1, e: 0, by: me(), at: Date.now() }); });
+  $$("#ev-body [data-wp]").forEach(function (b) { b.onclick = function () { var id = b.getAttribute("data-wp"), v = coll("watch")[id]; if (!v) return; write("watch/" + id, Object.assign({}, v, { e: (v.e || 0) + 1, upd: Date.now(), by: me() })); }; });
+  $$("#ev-body [data-wd]").forEach(function (b) { b.onclick = function () { var id = b.getAttribute("data-wd"), v = coll("watch")[id]; if (!v) return; write("watch/" + id, Object.assign({}, v, { done: true, upd: Date.now() })); toast("„" + v.title + "“ ist durch!"); }; });
+  $$("#ev-body [data-wa]").forEach(function (b) { b.onclick = function () { openWatch(b.getAttribute("data-wa")); }; });
+}
+function openWatch(id) {
+  var v = coll("watch")[id]; if (!v) return;
+  var html = '<div class="grab"></div><div class="ph"><h2>' + esc(v.title) + '</h2><button class="icon" data-close aria-label="Schließen">' + ICON_X + "</button></div>";
+  html += '<div class="fl"><label for="wx-t">Titel</label><input class="f" id="wx-t" value="' + esc(v.title) + '"></div>';
+  html += '<label class="ingrow" style="background:var(--card);border-radius:12px;padding:12px"><input type="checkbox" id="wx-film"' + (v.film ? " checked" : "") + '><span>Ist ein Film</span></label>';
+  html += '<div class="grid2" id="wx-pos"' + (v.film ? " hidden" : "") + '><div class="fl"><label for="wx-s">Staffel</label><input class="f" id="wx-s" type="number" min="1" inputmode="numeric" value="' + (v.s || 1) + '"></div><div class="fl"><label for="wx-e">Folge</label><input class="f" id="wx-e" type="number" min="0" inputmode="numeric" value="' + (v.e || 0) + '"></div></div>';
+  html += '<label class="ingrow" style="background:var(--card);border-radius:12px;padding:12px"><input type="checkbox" id="wx-done"' + (v.done ? " checked" : "") + "><span>Fertig geschaut</span></label>";
+  html += '<div class="actions"><button class="btn danger" id="wx-del">Löschen</button><button class="btn" id="wx-save">Speichern</button></div>';
+  openSheet(html);
+  $("#wx-film").onchange = function () { $("#wx-pos").hidden = this.checked; };
+  $("#wx-save").onclick = function () { write("watch/" + id, Object.assign({}, v, { title: $("#wx-t").value.trim() || v.title, film: $("#wx-film").checked, s: Math.max(1, +$("#wx-s").value || 1), e: Math.max(0, +$("#wx-e").value || 0), done: $("#wx-done").checked, upd: Date.now(), by: me() })); closeSheet(); };
+  $("#wx-del").onclick = function () { ask("„" + v.title + "“ löschen?", function () { write("watch/" + id, null); closeSheet(); }, "Löschen"); };
+}
+
+/* ---------- WÜNSCHE ---------- */
+function renderWuensche() {
+  var o = other(), on = person(o).name;
+  var mine = Object.keys((tree.wishes || {})[me()] || {}).map(function (k) { var v = Object.assign({}, tree.wishes[me()][k]); v.id = k; return v; }).sort(function (a, b) { return b.at - a.at; });
+  var his = Object.keys((tree.wishes || {})[o] || {}).map(function (k) { var v = Object.assign({}, tree.wishes[o][k]); v.id = k; return v; }).sort(function (a, b) { return b.at - a.at; });
+  var gifts = Object.keys((tree.gifts || {})[me()] || {}).map(function (k) { var v = Object.assign({}, tree.gifts[me()][k]); v.id = k; return v; }).sort(function (a, b) { return (a.done ? 1 : 0) - (b.done ? 1 : 0) || b.at - a.at; });
+  var h = '<section class="card secret"><div class="card-h"><h2>Geschenkideen für ' + esc(on) + '</h2><span class="pill mute">nur du siehst das</span></div>' + addRow("gf-form", "Idee für " + on + " …");
+  h += gifts.length ? '<div class="list" style="border:1px solid var(--line)">' + gifts.map(function (v) { return '<div class="item' + (v.done ? " done" : "") + '"><button class="main" data-gd="' + v.id + '" aria-label="' + esc(v.t) + (v.done ? " wieder offen" : " als besorgt markieren") + '"><span class="box">' + (v.done ? ICON_CHECK : "") + '</span><span class="txt">' + esc(v.t) + (v.done ? '<span class="sub">besorgt</span>' : "") + '</span></button><button class="x" data-gx="' + v.id + '" aria-label="Löschen">' + ICON_X + "</button></div>"; }).join("") + "</div>" : '<p class="help">Wenn ' + esc(on) + " mal etwas erwähnt, schnell hier notieren. Abhaken, wenn du es besorgt hast.</p>";
+  h += "</section>";
+  h += '<section class="card"><div class="card-h"><h2>Wünsche von ' + esc(on) + "</h2></div>";
+  h += his.length ? '<div class="list" style="border:1px solid var(--line)">' + his.map(function (v) { return '<div class="item"><span class="txt" style="padding:10px 0">' + esc(v.t) + '</span><button class="pillbtn" data-gm="' + v.id + '">Merken</button></div>'; }).join("") + "</div>" : '<p class="help">' + esc(on) + " hat noch keine Wünsche eingetragen.</p>";
+  h += "</section>";
+  h += '<section class="card"><div class="card-h"><h2>Meine Wünsche</h2><span class="pill mute">' + esc(on) + " sieht das</span></div>" + addRow("mw-form", "Ich wünsche mir …");
+  if (mine.length) h += '<div class="list" style="border:1px solid var(--line)">' + mine.map(function (v) { return '<div class="item"><span class="txt" style="padding:10px 0">' + esc(v.t) + '</span><button class="x" data-mx="' + v.id + '" aria-label="Wunsch löschen">' + ICON_X + "</button></div>"; }).join("") + "</div>";
+  h += "</section>";
+  $("#ev-body").innerHTML = h;
+  onAdd("gf-form", function (t) { write("gifts/" + me() + "/" + rid(), { t: t, at: Date.now() }); });
+  onAdd("mw-form", function (t) { write("wishes/" + me() + "/" + rid(), { t: t, at: Date.now(), by: me() }); });
+  $$("#ev-body [data-gd]").forEach(function (b) { b.onclick = function () { var id = b.getAttribute("data-gd"), v = ((tree.gifts || {})[me()] || {})[id]; if (v) write("gifts/" + me() + "/" + id + "/done", !v.done); }; });
+  $$("#ev-body [data-gx]").forEach(function (b) { b.onclick = function () { ask("Geschenkidee löschen?", function () { write("gifts/" + me() + "/" + b.getAttribute("data-gx"), null); }, "Löschen"); }; });
+  $$("#ev-body [data-mx]").forEach(function (b) { b.onclick = function () { write("wishes/" + me() + "/" + b.getAttribute("data-mx"), null); }; });
+  $$("#ev-body [data-gm]").forEach(function (b) { b.onclick = function () { var v = ((tree.wishes || {})[o] || {})[b.getAttribute("data-gm")]; if (!v) return; write("gifts/" + me() + "/" + rid(), { t: v.t, at: Date.now() }); toast("In deine geheimen Geschenkideen übernommen"); }; });
+}
+
+/* ---------- SATZ WEITERSCHREIBEN ---------- */
+var STARTERS = ["Es war ein ganz normaler Dienstag, bis plötzlich der Geschirrspüler zu sprechen begann.", "Als Dennis und Theres in Mainz aus dem Zug stiegen, stand dort ein Lama mit einem Schild.", "Mitten in der Nachtschicht klingelte das Telefon, und eine Stimme flüsterte: „Die Pizza ist bereit.“", "Niemand wusste, warum im Kühlschrank auf einmal ein Brief von Hogwarts lag.", "Der Vault-Boy winkte aus dem Fernseher und sagte: „Ihr müsst mir helfen.“", "Auf dem Weg zum Auftritt verschwand die Gitarre spurlos.", "Im Urlaub fanden sie in einer Flaschenpost eine Schatzkarte mit ihren Namen darauf.", "SpongeBob stand vor der Tür und wollte nur kurz eine Tasse Zucker leihen.", "Der Einkaufszettel bestand heute nur aus einem einzigen Wort: „Flucht“.", "Seit heute Morgen konnte die Katze der Nachbarn sprechen, und sie hatte Beschwerden."];
+function storyColl() { return G().story || {}; }
+function storyLines(s) { return Object.keys(s.lines || {}).map(function (k) { return s.lines[k]; }).sort(function (a, b) { return a.at - b.at; }); }
+function activeStory() { var ids = Object.keys(storyColl()).filter(function (k) { return storyColl()[k].status === "open"; }).sort(function (a, b) { return storyColl()[b].at - storyColl()[a].at; }); return ids.length ? ids[0] : null; }
+function storyMyTurn() { var id = activeStory(); if (!id) return false; var l = storyLines(storyColl()[id]); return !!l.length && l[l.length - 1].by !== me(); }
+function renderStory() {
+  var id = activeStory(), on = person(other()).name, h = "";
+  if (!id) {
+    h += '<section class="card"><h2>Neue Geschichte</h2><p class="help">Ihr schreibt abwechselnd je einen Satz. Dabei seht ihr immer nur den letzten Satz des anderen. Die ganze Geschichte gibt es erst am Ende, deshalb wird es meistens herrlich absurd.</p><button class="btn" id="sy-new">Geschichte starten</button></section>';
+  } else {
+    var s = storyColl()[id], L = storyLines(s), last = L[L.length - 1], my = last.by !== me();
+    h += '<section class="card"><div class="card-h"><h2>Eure Geschichte</h2><span class="muted">' + L.length + " Sätze</span></div>";
+    if (L.length > 1) h += '<div class="hiddenlines" aria-hidden="true">' + L.slice(0, -1).map(function () { return "<span></span>"; }).join("") + "</div>";
+    h += '<div class="lastline">' + av(last.by) + "<span>„" + esc(last.t) + "“</span></div>";
+    if (my) h += '<button class="btn" id="sy-write">Weiterschreiben</button>';
+    else h += '<div class="status local"><i></i>' + esc(on) + " ist dran.</div>";
+    if (L.length >= 6) h += '<button class="btn sec" id="sy-end">Geschichte beenden und alles lesen</button>';
+    else h += '<p class="help">Ab 6 Sätzen könnt ihr die Geschichte beenden und ganz lesen.</p>';
+    h += "</section>";
+  }
+  var done = Object.keys(storyColl()).filter(function (k) { return storyColl()[k].status === "done"; }).sort(function (a, b) { return (storyColl()[b].endAt || 0) - (storyColl()[a].endAt || 0); });
+  if (done.length) h += '<p class="label">Fertige Geschichten</p><div class="list">' + done.map(function (k) { var s = storyColl()[k], L = storyLines(s); return '<button class="item" style="border:0;background:none;text-align:left;width:100%" data-sr="' + k + '"><span class="txt">' + esc(L.length ? L[0].t : "") + '<span class="sub">' + L.length + " Sätze · " + esc(relDay(iso(new Date(s.endAt || s.at)))) + "</span></span></button>"; }).join("") + "</div>";
+  $("#g-body").innerHTML = h;
+  var nb = $("#sy-new"); if (nb) nb.onclick = openStoryStart;
+  var wb = $("#sy-write"); if (wb) wb.onclick = function () { openStoryWrite(id); };
+  var eb = $("#sy-end"); if (eb) eb.onclick = function () { ask("Geschichte beenden? Danach könnt ihr sie beide ganz lesen.", function () { write("games/story/" + id + "/status", "done"); write("games/story/" + id + "/endAt", Date.now()); openStoryRead(id); }, "Beenden"); };
+  $$("#g-body [data-sr]").forEach(function (b) { b.onclick = function () { openStoryRead(b.getAttribute("data-sr")); }; });
+}
+function openStoryStart() {
+  var st = STARTERS[Math.floor(Math.random() * STARTERS.length)];
+  openSheet('<div class="grab"></div><div class="ph"><h2>Erster Satz</h2><button class="icon" data-close aria-label="Schließen">' + ICON_X + '</button></div><div class="fl"><label for="sy-in">Schreib selbst einen Anfang oder nimm den Vorschlag</label><textarea class="f" id="sy-in" style="height:110px">' + esc(st) + '</textarea></div><button class="link" id="sy-other" style="align-self:center">Anderer Vorschlag</button><button class="btn" id="sy-go">Losschicken</button>');
+  $("#sy-other").onclick = function () { $("#sy-in").value = STARTERS[Math.floor(Math.random() * STARTERS.length)]; };
+  $("#sy-go").onclick = function () { var t = $("#sy-in").value.trim(); if (!t) return; var id = rid(); write("games/story/" + id, { by: me(), at: Date.now(), status: "open", lines: {} }); write("games/story/" + id + "/lines/" + rid(), { t: t, by: me(), at: Date.now() }); closeSheet(); toast(person(other()).name + " ist dran"); };
+}
+function openStoryWrite(id) {
+  var s = storyColl()[id]; if (!s) return; var L = storyLines(s), last = L[L.length - 1];
+  openSheet('<div class="grab"></div><div class="ph"><h2>Dein Satz</h2><button class="icon" data-close aria-label="Schließen">' + ICON_X + '</button></div><div class="lastline">' + av(last.by) + "<span>„" + esc(last.t) + '“</span></div><div class="fl"><label for="sw-in">Wie geht es weiter?</label><textarea class="f" id="sw-in" style="height:110px" maxlength="300"></textarea></div><button class="btn" id="sw-go">Abschicken</button>');
+  setTimeout(function () { try { $("#sw-in").focus(); } catch (e) {} }, 250);
+  $("#sw-go").onclick = function () { var t = $("#sw-in").value.trim(); if (!t) return; write("games/story/" + id + "/lines/" + rid(), { t: t, by: me(), at: Date.now() }); closeSheet(); toast(person(other()).name + " ist dran"); };
+}
+function openStoryRead(id) {
+  var s = storyColl()[id]; if (!s) return;
+  openSheet('<div class="grab"></div><div class="ph"><h2>Eure Geschichte</h2><button class="icon" data-close aria-label="Schließen">' + ICON_X + '</button></div><div class="storytext">' + storyLines(s).map(function (l) { return '<span class="sp-' + l.by + '">' + esc(l.t) + "</span>"; }).join(" ") + '</div><p class="help"><span class="dot" style="background:var(--a)"></span> ' + esc(person("p1").name) + ' &nbsp; <span class="dot" style="background:var(--b)"></span> ' + esc(person("p2").name) + "</p>");
 }
 
 /* ---------- Sheet + Toast ---------- */
