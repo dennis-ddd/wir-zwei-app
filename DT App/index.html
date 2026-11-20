@@ -161,6 +161,16 @@ details.card summary{font-weight:700;cursor:pointer}
 .hiddenlines{display:flex;flex-direction:column;gap:6px}.hiddenlines span{height:10px;border-radius:5px;background:#E3E6EE}.hiddenlines span:nth-child(odd){width:85%}.hiddenlines span:nth-child(even){width:70%}
 .storytext{font-size:17px;line-height:1.7;background:var(--card);border-radius:16px;padding:16px}
 .storytext .sp-p1{color:var(--ai)}.storytext .sp-p2{color:var(--bi)}
+.updline{font-size:20px;font-weight:800;line-height:1.35;background:var(--ink);color:#fff;border-radius:18px;padding:18px}
+.newsrow{display:flex;gap:10px;align-items:flex-start;font-size:15px;font-weight:600;line-height:1.4}
+.newsdot{width:8px;height:8px;border-radius:50%;background:var(--b);margin-top:7px;flex-shrink:0}
+.stars{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+.stars button{border:1px solid var(--line2);background:var(--card);border-radius:14px;padding:10px 2px;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11px;font-weight:700;color:var(--mute)}
+.stars .st{font-size:28px;line-height:1;color:#C9CCD6}
+.stars button.on{border-color:#E8A100;background:#FFF7E0;color:var(--ink)}.stars button.on .st{color:#E8A100}
+.updbanner{position:fixed;left:12px;right:12px;bottom:calc(var(--safe-b) + 78px);z-index:20;background:var(--ink);color:#fff;border-radius:16px;padding:10px 10px 10px 16px;display:flex;align-items:center;gap:10px;font-size:14px;font-weight:600;box-shadow:0 6px 20px rgba(0,0,0,.25);max-width:536px;margin:0 auto}
+.updbanner span{flex:1}.updbanner button{border:0;background:#fff;color:var(--ink);border-radius:10px;height:40px;padding:0 14px;font-weight:800;flex-shrink:0}
+.fbrow{display:flex;flex-direction:column;gap:4px;padding:10px 0;border-top:1px solid #F0F1F5}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 </style>
 </head>
@@ -239,6 +249,7 @@ details.card summary{font-weight:700;cursor:pointer}
   <div id="g-body" style="display:flex;flex-direction:column;gap:14px"></div>
 </main>
 
+<div id="upd-banner" class="updbanner" role="status" hidden><span id="upd-text"></span><button id="upd-go">Neu laden</button></div>
 <nav class="tabs" aria-label="Hauptmenü">
   <button data-tab="heute" aria-current="page"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg>Heute</button>
   <button data-tab="dienste"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Dienste<span class="badge" hidden></span></button>
@@ -255,7 +266,8 @@ details.card summary{font-weight:700;cursor:pointer}
 
 <script>
 "use strict";
-var APP_VERSION = "1.6 · 20.11.2026";
+var APP_VER = "1.7";
+var APP_VERSION = APP_VER + " · 20.11.2026";
 /* Eure Datenbank. Neue App-Installationen verbinden sich automatisch damit. */
 var DEFAULT_DB = "https://theresdennis-default-rtdb.europe-west1.firebasedatabase.app";
 var $ = function (s, r) { return (r || document).querySelector(s); };
@@ -339,7 +351,7 @@ function snapshotKeys() {
   var ds = {}; Object.keys(drawColl()).forEach(function (k) { ds[k] = drawColl()[k].status; });
   var wl = wheelLast();
   var so = statusOf(other());
-  return { stAt: so ? so.at : 0, story: storyMyTurn(), ideas: Object.keys(coll("ideas")), wishes: Object.keys(((tree.wishes || {})[other()]) || {}), log: Object.keys(coll("log")), shop: Object.keys(coll("shop")), events: Object.keys(coll("events")), draw: ds, wheelAt: wl ? wl.at : 0, quizOther: quizWaiting() };
+  return { fb: feedbackList().map(function (f) { return f.key + f.at; }), stAt: so ? so.at : 0, story: storyMyTurn(), ideas: Object.keys(coll("ideas")), wishes: Object.keys(((tree.wishes || {})[other()]) || {}), log: Object.keys(coll("log")), shop: Object.keys(coll("shop")), events: Object.keys(coll("events")), draw: ds, wheelAt: wl ? wl.at : 0, quizOther: quizWaiting() };
 }
 function applyRemote(ops) {
   var before = snapshotKeys();
@@ -366,6 +378,7 @@ function notifyNew(before) {
   if (wl && wl.at !== before.wheelAt && wl.by !== me()) { msgs.push(o + " hat am Glücksrad gedreht: " + wl.result); if (wheelState && wheelState.id === wl.listId && !$("#sheet").hidden) spinTo(wl.idx, wl.at); }
   if (quizWaiting() > before.quizOther && !(tab === "spiele" && gameTab === "quiz")) msgs.push(o + " hat Quizfragen beantwortet. Du bist dran!");
   var so = statusOf(other()); if (so && so.at !== before.stAt) msgs.unshift(o + ": " + statusText(so));
+  feedbackList().forEach(function (f) { if (f.by !== me() && before.fb.indexOf(f.key + f.at) < 0) msgs.unshift(o + " hat Update " + (f.v || "") + " bewertet: " + starStr(f.stars) + (f.text ? " „" + f.text + "“" : "")); });
   if (storyMyTurn() && !before.story) msgs.push(o + " hat die Geschichte weitergeschrieben. Du bist dran!");
   entries("ideas").forEach(function (v) { if (before.ideas.indexOf(v.id) < 0 && v.by !== me()) msgs.push(o + " hat eine Idee notiert: " + v.t); });
   Object.keys(((tree.wishes || {})[other()]) || {}).forEach(function (k) { if (before.wishes.indexOf(k) < 0) msgs.push(o + " hat einen neuen Wunsch eingetragen"); });
@@ -1595,6 +1608,99 @@ function openStoryRead(id) {
   openSheet('<div class="grab"></div><div class="ph"><h2>Eure Geschichte</h2><button class="icon" data-close aria-label="Schließen">' + ICON_X + '</button></div><div class="storytext">' + storyLines(s).map(function (l) { return '<span class="sp-' + l.by + '">' + esc(l.t) + "</span>"; }).join(" ") + '</div><p class="help"><span class="dot" style="background:var(--a)"></span> ' + esc(person("p1").name) + ' &nbsp; <span class="dot" style="background:var(--b)"></span> ' + esc(person("p2").name) + "</p>");
 }
 
+/* ---------- UPDATES + FEEDBACK ---------- */
+/* Bei jedem Update: APP_VER erhöhen und oben in CHANGES eintragen, was neu ist. */
+var CHANGES = {
+  "1.7": ["Nach einem Update erscheint diese Übersicht", "Nach 3 Minuten wird gefragt, wie das Update ist. Das Feedback landet beim anderen", "Hinweis, sobald ein neues Update bereitliegt"],
+  "1.6": ["„Wo seid ihr?“ auf der Startseite: Heimweg, Komme später und mehr", "Vorräte und Rezepte unter Einkauf", "Ideen, Watchlist und Wünsche unter Events", "Neues Spiel: Story, abwechselnd Sätze schreiben"],
+  "1.5": ["Neue Quiz-Themen: Dexter, Lost, The Office, Community, Disney, Better Call Saul"],
+  "1.4": ["Quiz: beliebig viele Fragen hintereinander und Themenfilter"]
+};
+var UPD_LINES = [
+  "{n} hat was Neues dazugebastelt.",
+  "Mal schauen, ob der Bums jetzt funktioniert.",
+  "Frisch aus {n}s Bastelkeller.",
+  "{n} hat wieder am Code geschraubt. Daumen drücken!",
+  "Neues Update! Garantiert zu 87 % fehlerfrei.",
+  "Achtung, frisch gestrichen: {n} hat umgebaut.",
+  "Update ist drin. Wenn was explodiert, war's {n}.",
+  "Neue Knöpfe, neues Glück.",
+  "Es wurde gebastelt, geklebt und ganz fest gehofft.",
+  "Version {v} ist da. Bitte nicht füttern.",
+  "{n} hat am Bums gedreht. Mal gucken, was passiert.",
+  "Heimwerker-King {n} hat wieder zugeschlagen.",
+  "Frisch aus dem Ofen: Version {v}. Vorsicht, heiß!",
+  "Keine Panik, das soll so aussehen. Glaubt {n} zumindest."
+];
+var FB_LINES = [
+  "Und? Funktioniert der Bums?",
+  "Ehrliche Meinung: Hat {n} gut gebastelt?",
+  "3 Minuten überlebt! Wie findest du das Update?",
+  "Kurzer Check: Daumen hoch oder runter?",
+  "Sag's {n} ehrlich: Wie ist das Update?",
+  "Ist was kaputt gegangen oder ist alles schick?",
+  "Bewerte {n}s Bastelstunde!",
+  "Hat sich das Rumgeschraube gelohnt?"
+];
+var STARS = ["Kaputt", "Naja", "Geht klar", "Gut", "Mega"];
+function verCmp(a, b) { var x = String(a).split("."), y = String(b).split("."); for (var i = 0; i < Math.max(x.length, y.length); i++) { var d = (+x[i] || 0) - (+y[i] || 0); if (d) return d; } return 0; }
+function builder() { return person("p1").name; }
+function fill(t) { return t.replace(/\{n\}/g, builder()).replace(/\{v\}/g, APP_VER); }
+function pick(arr) { return fill(arr[Math.floor(Math.random() * arr.length)]); }
+function askFeedbackOn() { var v = LS.get("askfb", null); return v === null ? me() !== "p1" : v; }
+
+function checkNewVersion() {
+  if (!cfg.me) { LS.set("lastver", APP_VER); return; }
+  var last = LS.get("lastver", "1.5");
+  if (verCmp(APP_VER, last) <= 0) return;
+  LS.set("lastver", APP_VER);
+  var news = Object.keys(CHANGES).filter(function (v) { return verCmp(v, last) > 0 && verCmp(v, APP_VER) <= 0; }).sort(function (a, b) { return verCmp(b, a); });
+  var html = '<div class="grab"></div><div class="ph"><h2>Update ' + APP_VER + '</h2><button class="icon" data-close aria-label="Schließen">' + ICON_X + '</button></div>';
+  html += '<div class="updline">' + esc(pick(UPD_LINES)) + "</div>";
+  html += '<section class="card" style="gap:8px"><h2>Was ist neu?</h2>' + news.map(function (v) { return CHANGES[v].map(function (c) { return '<div class="newsrow"><span class="newsdot" aria-hidden="true"></span><span>' + esc(c) + "</span></div>"; }).join(""); }).join("") + "</section>";
+  html += '<button class="btn" data-close>Alles klar, zeig her!</button>';
+  setTimeout(function () { if ($("#sheet").hidden && $("#setup").hidden) openSheet(html); }, 600);
+}
+/* Nutzungszeit seit dem Update zählen, nach 3 Minuten fragen */
+var fbTimer = setInterval(function () {
+  if (!cfg.me || document.hidden || !askFeedbackOn()) return;
+  var done = LS.get("fbdone", {}); if (done[APP_VER]) return;
+  var used = LS.get("fbused", {}); used[APP_VER] = (used[APP_VER] || 0) + 10; LS.set("fbused", used);
+  if (used[APP_VER] >= 180 && $("#sheet").hidden && $("#setup").hidden && $("#ask").hidden) openFeedback();
+}, 10000);
+function openFeedback() {
+  var html = '<div class="grab"></div><div class="ph"><h2>Kurze Frage</h2><button class="icon" data-close aria-label="Später">' + ICON_X + '</button></div>';
+  html += '<div class="updline">' + esc(pick(FB_LINES)) + '</div><p class="help">Update ' + APP_VER + ". " + esc(builder()) + " bekommt deine Antwort.</p>";
+  html += '<div class="stars" role="radiogroup" aria-label="Bewertung">' + STARS.map(function (s, i) { return '<button type="button" role="radio" aria-checked="false" data-star="' + (i + 1) + '" aria-label="' + (i + 1) + " Sterne: " + s + '"><span class="st" aria-hidden="true">★</span><span>' + s + "</span></button>"; }).join("") + "</div>";
+  html += '<div class="fl"><label for="fb-text">Noch was sagen? (optional)</label><textarea class="f" id="fb-text" maxlength="500" placeholder="Was ist super, was nervt, was fehlt?"></textarea></div>';
+  html += '<div class="actions"><button class="btn sec" id="fb-later">Später</button><button class="btn" id="fb-send">Abschicken</button></div>';
+  openSheet(html);
+  var stars = 0;
+  $$("#panel [data-star]").forEach(function (b) { b.onclick = function () { stars = +b.getAttribute("data-star"); $$("#panel [data-star]").forEach(function (x) { var on = +x.getAttribute("data-star") <= stars; x.classList.toggle("on", on); x.setAttribute("aria-checked", +x.getAttribute("data-star") === stars); }); }; });
+  $("#fb-later").onclick = function () { var used = LS.get("fbused", {}); used[APP_VER] = 0; LS.set("fbused", used); closeSheet(); };
+  $("#fb-send").onclick = function () {
+    if (!stars) { toast("Tipp erst auf die Sterne"); return; }
+    write("feedback/" + APP_VER.replace(/\./g, "_") + "/" + me(), { stars: stars, text: $("#fb-text").value.trim(), at: Date.now(), by: me(), v: APP_VER });
+    var done = LS.get("fbdone", {}); done[APP_VER] = true; LS.set("fbdone", done);
+    closeSheet(); toast(stars >= 4 ? "Danke! " + builder() + " freut sich." : "Danke für die Ehrlichkeit! " + builder() + " schraubt weiter.");
+  };
+}
+function feedbackList() { var out = []; var f = tree.feedback || {}; Object.keys(f).forEach(function (v) { Object.keys(f[v] || {}).forEach(function (p) { var x = Object.assign({}, f[v][p]); x.key = v + "/" + p; out.push(x); }); }); return out.sort(function (a, b) { return b.at - a.at; }); }
+function starStr(n) { var s = ""; for (var i = 1; i <= 5; i++) s += i <= n ? "★" : "☆"; return s; }
+
+/* Prüfen, ob auf GitHub schon eine neuere Version liegt */
+var updShown = false;
+function checkRemoteUpdate() {
+  if (updShown || !navigator.onLine || location.protocol !== "https:") return;
+  fetch("index.html?check=" + Date.now(), { cache: "no-store" }).then(function (r) { return r.ok ? r.text() : ""; }).then(function (t) {
+    var m = t.match(/var APP_VER = "([\d.]+)"/); if (!m || verCmp(m[1], APP_VER) <= 0) return;
+    updShown = true; var b = $("#upd-banner"); $("#upd-text").textContent = "Update " + m[1] + " ist da! " + pick(["Frisch gebastelt.", "Noch warm.", "Jetzt mit noch mehr Bums."]); b.hidden = false;
+  }).catch(function () {});
+}
+$("#upd-go").onclick = function () { try { navigator.serviceWorker && navigator.serviceWorker.getRegistration().then(function (r) { if (r) r.update(); }); } catch (e) {} setTimeout(function () { location.reload(); }, 300); };
+document.addEventListener("visibilitychange", function () { if (!document.hidden) checkRemoteUpdate(); });
+setInterval(checkRemoteUpdate, 10 * 60000);
+
 /* ---------- Sheet + Toast ---------- */
 var lastFocus = null;
 function openSheet(html) {
@@ -1612,7 +1718,7 @@ function ask(msg, yes, label) {
   $("#ask-yes").onclick = function () { d.hidden = true; yes(); };
 }
 var toastT;
-function toast(msg) { var t = $("#toast"); t.textContent = msg; t.hidden = false; clearTimeout(toastT); toastT = setTimeout(function () { t.hidden = true; }, 3200); }
+function toast(msg) { var t = $("#toast"); t.textContent = msg; t.hidden = false; clearTimeout(toastT); toastT = setTimeout(function () { t.hidden = true; }, Math.min(9000, 3200 + msg.length * 40)); }
 
 /* ---------- Einstellungen + Verbinden ---------- */
 function inviteLink() { return location.origin + location.pathname + "#join=" + encodeURIComponent(btoa(JSON.stringify({ u: cfg.url, c: cfg.code }))); }
@@ -1635,6 +1741,8 @@ function openSettings() {
   }
   html += "</section>";
   html += '<section class="card"><h2>Benachrichtigungen</h2><p class="help">Solange die App offen ist oder im Hintergrund läuft, erscheint eine Meldung, wenn der andere etwas einträgt.</p><button class="btn sec" id="st-notif">Benachrichtigungen erlauben</button></section>';
+  var fbl = feedbackList();
+  html += '<section class="card"><h2>Feedback zu Updates</h2><label class="ingrow" style="border:0"><input type="checkbox" id="st-askfb"' + (askFeedbackOn() ? " checked" : "") + '><span>Mich nach Updates nach meiner Meinung fragen</span></label>' + (fbl.length ? fbl.slice(0, 20).map(function (f) { return '<div class="fbrow"><div class="row" style="justify-content:space-between"><span style="font-weight:700">' + av(f.by) + " " + esc(nm(f.by)) + ' · Update ' + esc(f.v || "") + '</span><span class="muted">' + when(f.at) + '</span></div><div style="color:#B07A00;font-size:18px;letter-spacing:2px" aria-label="' + f.stars + ' von 5 Sternen">' + starStr(f.stars) + "</div>" + (f.text ? '<div style="font-size:14px">„' + esc(f.text) + "“</div>" : "") + "</div>"; }).join("") : '<p class="help">Noch kein Feedback.</p>') + "</section>";
   html += '<section class="card"><h2>Sicherung</h2><div class="grid2"><button class="btn sec" id="st-exp">Exportieren</button><button class="btn sec" id="st-imp">Importieren</button></div><input type="file" id="st-file" accept="application/json" hidden></section>';
   html += '<p class="muted" style="text-align:center">Wir zwei · Version ' + APP_VERSION + "</p>";
   openSheet(html);
@@ -1656,6 +1764,7 @@ function openSettings() {
     $("#st-join").onclick = function () { var o = parseInvite($("#st-inv").value); if (!o) { toast("Das ist kein gültiger Einladungslink"); return; } closeSheet(); startJoin(o); };
   }
   $("#st-notif").onclick = function () { if (!("Notification" in window)) { toast("Dieses Handy unterstützt das hier nicht"); return; } Notification.requestPermission().then(function (p) { toast(p === "granted" ? "Benachrichtigungen sind an" : "Nicht erlaubt"); }); };
+  $("#st-askfb").onchange = function () { LS.set("askfb", this.checked); };
   $("#st-exp").onclick = function () { var a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([JSON.stringify(tree, null, 1)], { type: "application/json" })); a.download = "wir-zwei-sicherung-" + iso(today()) + ".json"; document.body.appendChild(a); a.click(); a.remove(); };
   $("#st-imp").onclick = function () { $("#st-file").click(); };
   $("#st-file").onchange = function () { var f = this.files[0]; if (!f) return; f.text().then(function (t) { var d = JSON.parse(t); ask("Sicherung einspielen? Die aktuellen Daten werden ersetzt.", function () { Object.keys(d).forEach(function (k) { write(k, d[k]); }); closeSheet(); toast("Sicherung eingespielt"); }, "Einspielen"); }).catch(function () { toast("Datei konnte nicht gelesen werden"); }); };
@@ -1703,6 +1812,7 @@ function startJoin(o) {
   else if (!cfg.me) showSetup();
   show("heute");
   connect(); flush();
+  checkNewVersion(); setTimeout(checkRemoteUpdate, 4000);
   setInterval(function () { if (tab === "heute") renderHeute(); }, 60000);
   if ("serviceWorker" in navigator && location.protocol === "https:") { try { navigator.serviceWorker.register("sw.js").catch(function () {}); } catch (e) {} }
 })();

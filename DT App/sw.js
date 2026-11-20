@@ -1,5 +1,5 @@
 /* Wir zwei – Service Worker. VERSION bei jeder neuen App-Version ändern. */
-var VERSION = "20261120-1300", SHELL = "wz-shell-" + VERSION, RUNTIME = "wz-runtime-v1";
+var VERSION = "20261120-1330", SHELL = "wz-shell-" + VERSION, RUNTIME = "wz-runtime-v1";
 var CORE = ["./", "./index.html", "./manifest.webmanifest", "./icons/icon-192.png", "./icons/icon-512.png", "./icons/icon-maskable-512.png", "./icons/apple-touch-icon.png"];
 self.addEventListener("install", function (e) { e.waitUntil(caches.open(SHELL).then(function (c) { return c.addAll(CORE); }).then(function () { return self.skipWaiting(); })); });
 self.addEventListener("activate", function (e) { e.waitUntil(caches.keys().then(function (ks) { return Promise.all(ks.filter(function (k) { return k.indexOf("wz-shell-") === 0 && k !== SHELL; }).map(function (k) { return caches.delete(k); })); }).then(function () { return self.clients.claim(); })); });
