@@ -267,7 +267,7 @@ details.card summary{font-weight:700;cursor:pointer}
 
 <script>
 "use strict";
-var APP_VER = "1.8";
+var APP_VER = "1.9";
 var APP_VERSION = APP_VER + " · 20.11.2026";
 /* Eure Datenbank. Neue App-Installationen verbinden sich automatisch damit. */
 var DEFAULT_DB = "https://theresdennis-default-rtdb.europe-west1.firebasedatabase.app";
@@ -1631,6 +1631,7 @@ function openStoryRead(id) {
 /* ---------- UPDATES + FEEDBACK ---------- */
 /* Bei jedem Update: APP_VER erhöhen und oben in CHANGES eintragen, was neu ist. */
 var CHANGES = {
+  "1.9": ["Updates kommen jetzt zuverlässiger an: Sobald eins bereitliegt, erscheint ein Fenster zum Aktualisieren", "In den Einstellungen steht ganz unten, welche Version gerade läuft"],
   "1.8": ["Vorräte mit Mengenangabe, z. B. „6 Stk“ oder „500 g“", "Mit „−“ direkt am Vorrat abziehen, was verbraucht ist. Bei 0 kommt es auf die Einkaufsliste", "Beim Eintragen geht auch „6 Eier“ oder „500 g Hack“"],
   "1.7": ["Nach einem Update erscheint diese Übersicht", "Nach 3 Minuten wird gefragt, wie das Update ist. Das Feedback landet beim anderen", "Hinweis, sobald ein neues Update bereitliegt"],
   "1.6": ["„Wo seid ihr?“ auf der Startseite: Heimweg, Komme später und mehr", "Vorräte und Rezepte unter Einkauf", "Ideen, Watchlist und Wünsche unter Events", "Neues Spiel: Story, abwechselnd Sätze schreiben"],
@@ -1712,15 +1713,27 @@ function starStr(n) { var s = ""; for (var i = 1; i <= 5; i++) s += i <= n ? "�
 /* Prüfen, ob auf GitHub schon eine neuere Version liegt */
 var updShown = false;
 function checkRemoteUpdate() {
-  if (updShown || !navigator.onLine || location.protocol !== "https:") return;
+  if (updShown || !navigator.onLine || !(location.protocol === "https:" || location.hostname === "localhost")) return;
   fetch("index.html?check=" + Date.now(), { cache: "no-store" }).then(function (r) { return r.ok ? r.text() : ""; }).then(function (t) {
     var m = t.match(/var APP_VER = "([\d.]+)"/); if (!m || verCmp(m[1], APP_VER) <= 0) return;
     updShown = true; var b = $("#upd-banner"); $("#upd-text").textContent = "Update " + m[1] + " ist da! " + pick(["Frisch gebastelt.", "Noch warm.", "Jetzt mit noch mehr Bums."]); b.hidden = false;
+    if ($("#sheet").hidden && $("#setup").hidden && $("#ask").hidden) {
+      openSheet('<div class="grab"></div><div class="ph"><h2>Update ' + esc(m[1]) + ' ist da</h2><button class="icon" data-close aria-label="Später">' + ICON_X + '</button></div><div class="updline">' + esc(pick(UPD_LINES).replace(APP_VER, m[1])) + '</div><p class="help">Ein Tipp, dann lädt die App neu. Eure Daten bleiben, wie sie sind.</p><button class="btn" id="upd-now">Jetzt aktualisieren</button>');
+      $("#upd-now").onclick = doUpdate;
+    }
   }).catch(function () {});
 }
-$("#upd-go").onclick = function () { try { navigator.serviceWorker && navigator.serviceWorker.getRegistration().then(function (r) { if (r) r.update(); }); } catch (e) {} setTimeout(function () { location.reload(); }, 300); };
+function doUpdate() {
+  var go = function () { location.replace(location.pathname + "?v=" + Date.now()); };
+  try { if (navigator.serviceWorker) { navigator.serviceWorker.getRegistration().then(function (r) { if (r) r.update().catch(function () {}); setTimeout(go, 400); }).catch(go); return; } } catch (e) {}
+  go();
+}
+$("#upd-go").onclick = doUpdate;
 document.addEventListener("visibilitychange", function () { if (!document.hidden) checkRemoteUpdate(); });
-setInterval(checkRemoteUpdate, 10 * 60000);
+window.addEventListener("pageshow", function () { checkRemoteUpdate(); });
+window.addEventListener("focus", function () { checkRemoteUpdate(); });
+window.addEventListener("online", function () { checkRemoteUpdate(); });
+setInterval(checkRemoteUpdate, 5 * 60000);
 
 /* ---------- Sheet + Toast ---------- */
 var lastFocus = null;
@@ -1765,7 +1778,7 @@ function openSettings() {
   var fbl = feedbackList();
   html += '<section class="card"><h2>Feedback zu Updates</h2><label class="ingrow" style="border:0"><input type="checkbox" id="st-askfb"' + (askFeedbackOn() ? " checked" : "") + '><span>Mich nach Updates nach meiner Meinung fragen</span></label>' + (fbl.length ? fbl.slice(0, 20).map(function (f) { return '<div class="fbrow"><div class="row" style="justify-content:space-between"><span style="font-weight:700">' + av(f.by) + " " + esc(nm(f.by)) + ' · Update ' + esc(f.v || "") + '</span><span class="muted">' + when(f.at) + '</span></div><div style="color:#B07A00;font-size:18px;letter-spacing:2px" aria-label="' + f.stars + ' von 5 Sternen">' + starStr(f.stars) + "</div>" + (f.text ? '<div style="font-size:14px">„' + esc(f.text) + "“</div>" : "") + "</div>"; }).join("") : '<p class="help">Noch kein Feedback.</p>') + "</section>";
   html += '<section class="card"><h2>Sicherung</h2><div class="grid2"><button class="btn sec" id="st-exp">Exportieren</button><button class="btn sec" id="st-imp">Importieren</button></div><input type="file" id="st-file" accept="application/json" hidden></section>';
-  html += '<p class="muted" style="text-align:center">Wir zwei · Version ' + APP_VERSION + "</p>";
+  html += '<p class="muted" style="text-align:center">Wir zwei · Version ' + APP_VERSION + '</p><button class="link" id="st-upd" style="align-self:center">Nach Updates suchen</button>';
   openSheet(html);
   var meSel = me();
   $$("#st-me button").forEach(function (b) { b.onclick = function () { meSel = b.getAttribute("data-p"); $$("#st-me button").forEach(function (x) { x.setAttribute("aria-pressed", x === b); }); }; });
@@ -1785,6 +1798,7 @@ function openSettings() {
     $("#st-join").onclick = function () { var o = parseInvite($("#st-inv").value); if (!o) { toast("Das ist kein gültiger Einladungslink"); return; } closeSheet(); startJoin(o); };
   }
   $("#st-notif").onclick = function () { if (!("Notification" in window)) { toast("Dieses Handy unterstützt das hier nicht"); return; } Notification.requestPermission().then(function (p) { toast(p === "granted" ? "Benachrichtigungen sind an" : "Nicht erlaubt"); }); };
+  $("#st-upd").onclick = function () { updShown = false; closeSheet(); toast("Suche nach Updates …"); checkRemoteUpdate(); setTimeout(function () { if (!updShown) toast("Du hast schon die neueste Version " + APP_VER); }, 2500); };
   $("#st-askfb").onchange = function () { LS.set("askfb", this.checked); };
   $("#st-exp").onclick = function () { var a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([JSON.stringify(tree, null, 1)], { type: "application/json" })); a.download = "wir-zwei-sicherung-" + iso(today()) + ".json"; document.body.appendChild(a); a.click(); a.remove(); };
   $("#st-imp").onclick = function () { $("#st-file").click(); };
@@ -1835,7 +1849,7 @@ function startJoin(o) {
   connect(); flush();
   checkNewVersion(); setTimeout(checkRemoteUpdate, 4000);
   setInterval(function () { if (tab === "heute") renderHeute(); }, 60000);
-  if ("serviceWorker" in navigator && location.protocol === "https:") { try { navigator.serviceWorker.register("sw.js").catch(function () {}); } catch (e) {} }
+  if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost")) { try { navigator.serviceWorker.register("sw.js", { updateViaCache: "none" }).then(function (r) { r.update().catch(function () {}); }).catch(function () {}); } catch (e) {} }
 })();
 </script>
 </body>
