@@ -167,7 +167,12 @@ details.more summary::-webkit-details-marker{display:none}
 details.more summary::before{content:"▸";display:inline-block;transition:transform .15s}details.more[open] summary::before{transform:rotate(90deg)}
 .amounts{display:flex;flex-direction:column;gap:2px;margin:6px 0 10px;font-size:14px}.amounts div{display:flex;justify-content:space-between;gap:10px;border-bottom:1px dashed #E3E6EE;padding:4px 0}.amounts b{font-weight:700;text-align:right}
 .steps{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:8px;font-size:15px;line-height:1.5}
+.bkprog{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:700;color:var(--mute)}.bkbar{flex:1;height:8px;border-radius:4px;background:#E3E6EE;overflow:hidden}.bkbar i{display:block;height:100%;background:var(--b);border-radius:4px}
+.bkcard{background:var(--card);border-radius:16px;padding:12px 14px;display:flex;flex-direction:column;gap:6px}.bkt{display:flex;gap:10px;align-items:flex-start;font-size:16px;font-weight:700;line-height:1.35}.bkt svg{flex-shrink:0;margin-top:1px}
+#ev-seg .chip{height:40px;padding:0 14px;font-size:14px}
+.foodcard .rvcard{background:#F7F8FB}
 .qaskrow{display:flex;flex-direction:column;gap:6px;background:var(--card);border-radius:14px;padding:10px 12px}.qaskname{font-size:15px;font-weight:700}
+.qastate{margin-top:6px}.qastate button{font-size:12px;height:40px}
 .qtyrow{display:grid;grid-template-columns:44px minmax(0,1fr) 44px minmax(0,1.3fr);gap:8px;align-items:center}.qtyrow input{text-align:center;font-weight:700}
 .stmore{width:34px;border:0;background:none;color:var(--mute);display:flex;align-items:center;justify-content:center}
 .rzicon{width:44px;height:44px;border-radius:12px;background:var(--bt);color:var(--bi);display:flex;align-items:center;justify-content:center;flex-shrink:0}
@@ -179,6 +184,7 @@ details.more summary::before{content:"▸";display:inline-block;transition:trans
 .hiddenlines{display:flex;flex-direction:column;gap:6px}.hiddenlines span{height:10px;border-radius:5px;background:#E3E6EE}.hiddenlines span:nth-child(odd){width:85%}.hiddenlines span:nth-child(even){width:70%}
 .storytext{font-size:17px;line-height:1.7;background:var(--card);border-radius:16px;padding:16px}
 .storytext .sp-p1{color:var(--ai)}.storytext .sp-p2{color:var(--bi)}
+.longwarn{font-size:15px;font-weight:800;background:var(--warnt);color:var(--warn);border-radius:14px;padding:10px 14px;text-align:center}
 .updline{font-size:20px;font-weight:800;line-height:1.35;background:var(--ink);color:#fff;border-radius:18px;padding:18px}
 .newsrow{display:flex;gap:10px;align-items:flex-start;font-size:15px;font-weight:600;line-height:1.4}
 .newsdot{width:8px;height:8px;border-radius:50%;background:var(--b);margin-top:7px;flex-shrink:0}
@@ -237,7 +243,7 @@ details.more summary::before{content:"▸";display:inline-block;transition:trans
 <!-- ========== EVENTS ========== -->
 <main class="view" id="v-events" data-view="events" hidden>
   <div class="top"><h1 id="evh-title">Events</h1><button class="icon dark" id="e-add" aria-label="Event hinzufügen"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div>
-  <div class="seg four" id="ev-seg"><button type="button" data-e="termine">Termine</button><button type="button" data-e="ideen">Ideen</button><button type="button" data-e="serien">Serien</button><button type="button" data-e="wuensche">Wünsche</button></div>
+  <div class="chips topicrow" id="ev-seg"><button type="button" class="chip" data-e="termine">Termine</button><button type="button" class="chip" data-e="wunsch">Wunschliste</button><button type="button" class="chip" data-e="ideen">Ideen</button><button type="button" class="chip" data-e="serien">Serien</button><button type="button" class="chip" data-e="wuensche">Geschenke</button></div>
   <div id="ev-termine" style="display:flex;flex-direction:column;gap:14px">
   <div id="e-free"></div>
   <div id="e-list"></div>
@@ -284,7 +290,7 @@ details.more summary::before{content:"▸";display:inline-block;transition:trans
 
 <script>
 "use strict";
-var APP_VER = "2.2";
+var APP_VER = "2.3";
 var APP_VERSION = APP_VER + " · 20.11.2026";
 /* Eure Datenbank. Neue App-Installationen verbinden sich automatisch damit. */
 var DEFAULT_DB = "https://theresdennis-default-rtdb.europe-west1.firebasedatabase.app";
@@ -370,7 +376,7 @@ function snapshotKeys() {
   var ds = {}; Object.keys(drawColl()).forEach(function (k) { ds[k] = drawColl()[k].status; });
   var wl = wheelLast();
   var so = statusOf(other());
-  return { fb: feedbackList().map(function (f) { return f.key + f.at; }), stAt: so ? so.at : 0, story: storyMyTurn(), ideas: Object.keys(coll("ideas")), wishes: Object.keys(((tree.wishes || {})[other()]) || {}), log: Object.keys(coll("log")), shop: Object.keys(coll("shop")), events: Object.keys(coll("events")), draw: ds, wheelAt: wl ? wl.at : 0, quizOther: quizWaiting() };
+  return { bucket: Object.keys(coll("bucket")), fb: feedbackList().map(function (f) { return f.key + f.at; }), stAt: so ? so.at : 0, story: storyMyTurn(), ideas: Object.keys(coll("ideas")), wishes: Object.keys(((tree.wishes || {})[other()]) || {}), log: Object.keys(coll("log")), shop: Object.keys(coll("shop")), events: Object.keys(coll("events")), draw: ds, wheelAt: wl ? wl.at : 0, quizOther: quizWaiting() };
 }
 function applyRemote(ops) {
   var before = snapshotKeys();
@@ -398,6 +404,7 @@ function notifyNew(before) {
   if (quizWaiting() > before.quizOther && !(tab === "spiele" && gameTab === "quiz")) msgs.push(o + " hat Quizfragen beantwortet. Du bist dran!");
   var so = statusOf(other()); if (so && so.at !== before.stAt) msgs.unshift(o + ": " + statusText(so));
   feedbackList().forEach(function (f) { if (f.by !== me() && before.fb.indexOf(f.key + f.at) < 0) msgs.unshift(o + " hat Update " + (f.v || "") + " bewertet: " + starStr(f.stars) + (f.text ? " „" + f.text + "“" : "")); });
+  entries("bucket").forEach(function (v) { if (before.bucket.indexOf(v.id) < 0 && v.by !== me()) msgs.push(o + " hat etwas auf eure Wunschliste gesetzt: " + v.t); });
   if (storyMyTurn() && !before.story) msgs.push(o + " hat die Geschichte weitergeschrieben. Du bist dran!");
   entries("ideas").forEach(function (v) { if (before.ideas.indexOf(v.id) < 0 && v.by !== me()) msgs.push(o + " hat eine Idee notiert: " + v.t); });
   Object.keys(((tree.wishes || {})[other()]) || {}).forEach(function (k) { if (before.wishes.indexOf(k) < 0) msgs.push(o + " hat einen neuen Wunsch eingetragen"); });
@@ -484,7 +491,7 @@ function render() {
 }
 function partnerNewer(k, area) { var since = seen[area] || 0; return entries(k).filter(function (v) { return v.by && v.by !== me() && (v.at || 0) > since; }).length; }
 function renderBadges() {
-  var c = { dienste: partnerNewer("shifts", "dienste"), einkauf: partnerNewer("shop", "einkauf"), events: partnerNewer("events", "events") + partnerNewer("ideas", "events"), haushalt: partnerNewer("log", "haushalt") + partnerNewer("todos", "haushalt"), spiele: gamesTodo() + (storyMyTurn() ? 1 : 0) };
+  var c = { dienste: partnerNewer("shifts", "dienste"), einkauf: partnerNewer("shop", "einkauf"), events: partnerNewer("events", "events") + partnerNewer("ideas", "events") + partnerNewer("bucket", "events"), haushalt: partnerNewer("log", "haushalt") + partnerNewer("todos", "haushalt"), spiele: gamesTodo() + (storyMyTurn() ? 1 : 0) };
   Object.keys(c).forEach(function (k) {
     var b = $('nav.tabs button[data-tab="' + k + '"] .badge'); if (!b) return;
     var n = (k === tab && k !== "spiele") ? 0 : c[k]; b.hidden = !n; b.textContent = n > 9 ? "9+" : n;
@@ -509,6 +516,7 @@ function renderHeute() {
   $("#h-date").textContent = WDL[t.getDay()] + ", " + t.getDate() + ". " + MONL[t.getMonth()];
   $("#h-hello").textContent = (h < 11 ? "Guten Morgen" : h < 18 ? "Hallo" : "Guten Abend") + ", " + person(me()).name;
   var html = statusCard();
+  var fc = foodCard();
   // Dienste heute
   html += '<section class="card"><div class="card-h"><h2>Heute</h2><button class="link" data-go="dienste">Dienstplan</button></div>';
   ["p1", "p2"].forEach(function (p) {
@@ -519,6 +527,7 @@ function renderHeute() {
   var tomorrow = ["p1", "p2"].map(function (p) { var s = shift(p, tm); return esc(nm(p)) + " " + (s ? esc(LONG[s.type]) + (shiftTime(s) ? " " + shiftTime(s) : "") : "–"); }).join(" · ");
   html += '<div class="muted">Morgen: ' + tomorrow + "</div></section>";
   // Haushalt zuletzt
+  html += fc;
   var logs = entries("log").sort(function (a, b) { return b.at - a.at; }).slice(0, 3);
   html += '<section class="card"><div class="card-h"><h2>Zuletzt erledigt</h2><button class="link" data-go="haushalt">Haushalt</button></div>';
   if (!logs.length) html += '<div class="muted">Hier erscheint, was ihr im Haushalt erledigt habt.</div>';
@@ -536,7 +545,7 @@ function renderHeute() {
   html += '<button class="tile" data-go="spiele" style="flex-direction:row;align-items:center;gap:12px;width:100%"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.5v.7M12 17h.01"/></svg><span style="display:flex;flex-direction:column"><span class="t">Quiz</span><span class="muted" style="font-weight:600">' + (qw ? esc(person(other()).name) + " hat " + qw + " Frage" + (qw > 1 ? "n" : "") + " beantwortet, die du noch nicht hast" : "Ein paar Fragen zwischendurch?") + "</span></span></button>";
   if (openTodo) html += '<button class="tile" data-go="haushalt" style="flex-direction:row;align-items:center;gap:12px;width:100%"><span class="num">' + openTodo + '</span><span class="muted" style="font-weight:600">Aufgabe' + (openTodo > 1 ? "n" : "") + " im Haushalt eingetragen</span></button>";
   $("#h-body").innerHTML = html;
-  bindCommon($("#h-body")); bindStatus($("#h-body"));
+  bindCommon($("#h-body")); bindStatus($("#h-body")); bindFood($("#h-body"));
 }
 function bindCommon(root) {
   $$("[data-go]", root).forEach(function (b) { b.onclick = function () { var g = b.getAttribute("data-go"); if (g === "spiele") { gameTab = "quiz"; LS.set("gtab", gameTab); } show(g); }; });
@@ -635,7 +644,7 @@ function renderListe() {
     html += '<div class="list">' + done.map(shopItem).join("") + "</div>";
   }
   $("#s-list").innerHTML = html;
-  $$("#s-list [data-toggle]").forEach(function (b) { b.onclick = function () { var id = b.getAttribute("data-toggle"), v = coll("shop")[id]; if (!v) return; var n = Object.assign({}, v, { done: !v.done, doneBy: !v.done ? me() : null, doneAt: !v.done ? Date.now() : null }); write("shop/" + id, n); var st = stockByName(v.name); if (n.done && st && st.lvl < 2) { write("stock/" + st.id + "/lvl", 2); if (st.qty === 0) write("stock/" + st.id + "/qty", null); } }; });
+  $$("#s-list [data-toggle]").forEach(function (b) { b.onclick = function () { var id = b.getAttribute("data-toggle"), v = coll("shop")[id]; if (!v) return; var n = Object.assign({}, v, { done: !v.done, doneBy: !v.done ? me() : null, doneAt: !v.done ? Date.now() : null }); write("shop/" + id, n); var st = stockByName(v.name); if (n.done && st && (st.lvl < 2 || st.ang)) { write("stock/" + st.id + "/lvl", 2); write("stock/" + st.id + "/ang", false); if (st.qty === 0) write("stock/" + st.id + "/qty", null); } }; });
   $$("#s-list [data-del]").forEach(function (b) { b.onclick = function () { write("shop/" + b.getAttribute("data-del"), null); }; });
   var c = $("#s-clear"); if (c) c.onclick = function () { ask("Alle abgehakten Artikel löschen?", function () { done.forEach(function (v) { write("shop/" + v.id, null); }); }, "Löschen"); };
 }
@@ -667,7 +676,8 @@ function conflicts(ev) {
 function renderEvents() {
   paintSeg("#ev-seg", "data-e", eTab);
   $("#ev-termine").hidden = eTab !== "termine"; $("#ev-body").hidden = eTab === "termine"; $("#e-add").hidden = eTab !== "termine";
-  $("#evh-title").textContent = { termine: "Events", ideen: "Ideen", serien: "Watchlist", wuensche: "Wünsche" }[eTab];
+  $("#evh-title").textContent = { termine: "Events", wunsch: "Wunschliste", ideen: "Ideen", serien: "Watchlist", wuensche: "Geschenke" }[eTab];
+  if (eTab === "wunsch") return renderBucket();
   if (eTab === "ideen") return renderIdeen();
   if (eTab === "serien") return renderWatch();
   if (eTab === "wuensche") return renderWuensche();
@@ -693,10 +703,10 @@ function renderTermine() {
   $$("#e-list [data-ev]").forEach(function (b) { b.onclick = function () { openEvent(b.getAttribute("data-ev")); }; });
 }
 $("#e-add").onclick = function () { openEvent(null); };
-function openEvent(id, date) {
+function openEvent(id, date, title) {
   var v = id ? coll("events")[id] : null, st = { who: v ? v.who || "both" : "both" };
   var html = '<div class="grab"></div><div class="ph"><h2>' + (v ? "Event bearbeiten" : "Neues Event") + '</h2><button class="icon" data-close aria-label="Schließen">' + ICON_X + "</button></div>";
-  html += '<div class="fl"><label for="ev-title">Was?</label><input class="f" id="ev-title" value="' + esc(v ? v.title : "") + '" placeholder="z. B. Kino, Essen gehen …"></div>';
+  html += '<div class="fl"><label for="ev-title">Was?</label><input class="f" id="ev-title" value="' + esc(v ? v.title : title || "") + '" placeholder="z. B. Kino, Essen gehen …"></div>';
   html += '<div class="grid2"><div class="fl"><label for="ev-date">Datum</label><input class="f" type="date" id="ev-date" value="' + (v ? v.date : date || iso(today())) + '"></div><div class="fl"><label for="ev-time">Uhrzeit (optional)</label><input class="f" type="time" id="ev-time" value="' + (v ? v.time || "" : "") + '"></div></div>';
   html += '<div class="fl"><span class="lab">Für wen?</span><div class="seg three" id="ev-who"><button type="button" data-w="both">Beide</button><button type="button" data-w="p1">' + esc(person("p1").name) + '</button><button type="button" data-w="p2">' + esc(person("p2").name) + "</button></div></div>";
   html += '<div class="fl"><label for="ev-note">Notiz (optional)</label><textarea class="f" id="ev-note" placeholder="Ort, Uhrzeit, wer kommt mit …">' + esc(v ? v.note || "" : "") + "</textarea></div>";
@@ -1396,7 +1406,7 @@ function addToShop(name) { var n = normWord(name), exists = entries("shop").some
 var PLACES = [["kuehl", "Kühlschrank"], ["tk", "Gefrierfach"], ["schrank", "Vorratsschrank"], ["backen", "Backzutaten"]];
 var PLACE_SHORT = { kuehl: "Kühlschr.", tk: "Gefrier", schrank: "Schrank", backen: "Backen" };
 var stockSearch = "";
-var LVL = [["Leer", "lv0"], ["Wenig", "lv1"], ["Genug", "lv2"]];
+var LVL = [["Leer", "lv0"], ["Fast leer", "lv1"], ["Genug", "lv2"]];
 var stockFilter = LS.get("sfilter", "alle");
 var UNITS = ["", "Stk", "Packung", "g", "kg", "ml", "l", "Dose", "Flasche", "Glas", "Beutel"];
 var UNIT_ALIAS = { "stk": "Stk", "stück": "Stk", "x": "Stk", "packung": "Packung", "packungen": "Packung", "pck": "Packung", "pack": "Packung", "g": "g", "gramm": "g", "kg": "kg", "ml": "ml", "l": "l", "liter": "l", "dose": "Dose", "dosen": "Dose", "flasche": "Flasche", "flaschen": "Flasche", "glas": "Glas", "gläser": "Glas", "beutel": "Beutel", "tüte": "Beutel" };
@@ -1416,7 +1426,7 @@ function stockByName(name) { var n = normWord(name); return entries("stock").fil
 function stockTile(v, showPlace) {
   var onList = entries("shop").some(function (s) { return !s.done && normWord(s.name) === normWord(v.name); });
   var pl = showPlace ? (PLACES.filter(function (p) { return p[0] === v.place; })[0] || ["", ""])[1] + " · " : "";
-  return '<div class="stock ' + LVL[v.lvl][1] + '"><button class="stmain" data-lv="' + v.id + '" aria-label="' + esc(v.name) + ": " + LVL[v.lvl][0] + ', tippen zum Ändern"><span class="sn">' + esc(v.name) + '</span><span class="sl"><i></i>' + esc(pl) + (fmtQty(v) ? esc(fmtQty(v)) + " · " : "") + LVL[v.lvl][0] + (onList ? " · auf der Liste" : "") + '</span></button>' + (v.qty > 0 ? '<button class="stmore" data-sminus="' + v.id + '" aria-label="' + esc(v.name) + ': eins weniger"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 12h12"/></svg></button>' : "") + '<button class="stmore" data-sm="' + v.id + '" aria-label="Mehr zu ' + esc(v.name) + '"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/></svg></button></div>';
+  return '<div class="stock ' + LVL[v.lvl][1] + '"><button class="stmain" data-lv="' + v.id + '" aria-label="' + esc(v.name) + ": " + LVL[v.lvl][0] + ', tippen zum Ändern"><span class="sn">' + esc(v.name) + '</span><span class="sl"><i></i>' + esc(pl) + (fmtQty(v) ? esc(fmtQty(v)) + " · " : "") + (v.ang && v.lvl === 2 ? "angebrochen" : LVL[v.lvl][0]) + (onList ? " · auf der Liste" : "") + '</span></button>' + (v.qty > 0 ? '<button class="stmore" data-sminus="' + v.id + '" aria-label="' + esc(v.name) + ': eins weniger"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 12h12"/></svg></button>' : "") + '<button class="stmore" data-sm="' + v.id + '" aria-label="Mehr zu ' + esc(v.name) + '"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/></svg></button></div>';
 }
 function stockSort(a, b) { return (a.lvl - b.lvl) || a.name.localeCompare(b.name, "de"); }
 function renderVorrat() {
@@ -1427,13 +1437,13 @@ function renderVorrat() {
   h += '<div id="st-res" style="display:flex;flex-direction:column;gap:10px"></div>';
   $("#k-body").innerHTML = h;
   fillStock();
-  onAdd("st-form", function (v) { var askIds = [], pl = $("#st-place").value; LS.set("splace", pl); v.split(/\s*,\s*/).filter(Boolean).forEach(function (t) { var q = parseQty(t), ex = stockByName(q.name); if (ex) { if (q.qty != null) write("stock/" + ex.id, Object.assign({}, ex, { qty: q.qty, unit: q.unit || ex.unit || "", lvl: q.qty > 0 ? 2 : 0, at: Date.now(), by: me() })); else toast(q.name + " gibt es schon"); return; } var nid = rid(); write("stock/" + nid, { name: q.name, place: pl, lvl: q.qty === 0 ? 0 : 2, qty: q.qty, unit: q.unit || (q.qty != null ? "Stk" : ""), by: me(), at: Date.now() }); if (q.qty == null) askIds.push(nid); }); if (askIds.length) openQtyAsk(askIds); });
+  onAdd("st-form", function (v) { var askIds = [], pl = $("#st-place").value; LS.set("splace", pl); v.split(/\s*,\s*/).filter(Boolean).forEach(function (t) { var st0 = stateWords(t); t = st0.text; var q = parseQty(t), ex = stockByName(q.name); if (ex) { if (q.qty != null) write("stock/" + ex.id, Object.assign({}, ex, { qty: q.qty, unit: q.unit || ex.unit || "", lvl: q.qty > 0 ? 2 : 0, at: Date.now(), by: me() })); else toast(q.name + " gibt es schon"); return; } var nid = rid(); write("stock/" + nid, { name: q.name, place: pl, lvl: q.qty === 0 ? 0 : st0.lvl, ang: st0.ang, qty: q.qty, unit: q.unit || (q.qty != null ? "Stk" : ""), by: me(), at: Date.now() }); askIds.push(nid); }); if (askIds.length) openQtyAsk(askIds); });
   $("#st-q").oninput = function () { stockSearch = this.value; fillStock(); };
   $$("#k-body [data-sf]").forEach(function (b) { b.onclick = function () { stockFilter = b.getAttribute("data-sf"); LS.set("sfilter", stockFilter); paintSeg("#st-chips", "data-sf", stockFilter); fillStock(); }; });
 }
 function fillStock() {
   var all = entries("stock"), q = normWord(stockSearch), col = LS.get("scol", {}), h = "";
-  if (!all.length) h = '<div class="empty-hint">Tragt ein, was ihr zu Hause habt, gern mit Menge wie „6 Eier“ oder „500 g Hack“. Ein Tipp auf einen Vorrat schaltet zwischen Genug, Wenig und Leer um, mit „−“ zieht ihr ab, was verbraucht ist.</div>';
+  if (!all.length) h = '<div class="empty-hint">Tragt ein, was ihr zu Hause habt, gern mit Menge wie „6 Eier“ oder „500 g Hack“. Ein Tipp auf einen Vorrat schaltet zwischen Genug, Fast leer und Leer um, mit „−“ zieht ihr ab, was verbraucht ist.</div>';
   else if (q) {
     var hits = all.filter(function (v) { return normWord(v.name).indexOf(q) >= 0; }).sort(stockSort);
     if (hits.length) h = '<p class="label">' + hits.length + " Treffer</p>" + '<div class="stockgrid">' + hits.map(function (v) { return stockTile(v, true); }).join("") + "</div>";
@@ -1452,7 +1462,7 @@ function fillStock() {
   }
   $("#st-res").innerHTML = h;
   $$("#st-res [data-col]").forEach(function (b) { b.onclick = function () { var c = LS.get("scol", {}), k = b.getAttribute("data-col"); if (stockFilter !== "alle") { stockFilter = "alle"; LS.set("sfilter", stockFilter); paintSeg("#st-chips", "data-sf", "alle"); } c[k] = !c[k]; LS.set("scol", c); fillStock(); }; });
-  $$("#st-res [data-lv]").forEach(function (b) { b.onclick = function () { var id = b.getAttribute("data-lv"), v = coll("stock")[id]; if (!v) return; var nl = v.lvl === 0 ? 2 : v.lvl - 1; write("stock/" + id + "/lvl", nl); write("stock/" + id + "/at", Date.now()); write("stock/" + id + "/by", me()); if (nl === 0 && addToShop(v.name)) toast(v.name + " ist leer und steht jetzt auf der Einkaufsliste"); }; });
+  $$("#st-res [data-lv]").forEach(function (b) { b.onclick = function () { var id = b.getAttribute("data-lv"), v = coll("stock")[id]; if (!v) return; var nl = v.lvl === 0 ? 2 : v.lvl - 1; write("stock/" + id + "/lvl", nl); if (nl === 2) write("stock/" + id + "/ang", false); if (nl === 1) write("stock/" + id + "/ang", true); write("stock/" + id + "/at", Date.now()); write("stock/" + id + "/by", me()); if (nl === 0 && addToShop(v.name)) toast(v.name + " ist leer und steht jetzt auf der Einkaufsliste"); }; });
   $$("#st-res [data-sm]").forEach(function (b) { b.onclick = function () { openStock(b.getAttribute("data-sm")); }; });
   $$("#st-res [data-sminus]").forEach(function (b) { b.onclick = function () { var id = b.getAttribute("data-sminus"), v = coll("stock")[id]; if (!v || !(v.qty > 0)) return; var nq = Math.max(0, Math.round((v.qty - unitStep(v.unit)) * 100) / 100), nv = Object.assign({}, v, { qty: nq, at: Date.now(), by: me() }); if (nq === 0) { nv.lvl = 0; if (addToShop(v.name)) toast(v.name + " ist alle und steht jetzt auf der Einkaufsliste"); } write("stock/" + id, nv); }; });
   var lb = $("#st-low"); if (lb) lb.onclick = function () { var n = 0; all.forEach(function (v) { if (v.lvl < 2 && addToShop(v.name)) n++; }); toast(n ? n + " Sachen auf die Einkaufsliste gesetzt" : "Steht schon alles drauf"); };
@@ -1460,25 +1470,37 @@ function fillStock() {
   var sq = $("#st-shopq"); if (sq) sq.onclick = function () { toast(addToShop(stockSearch.trim()) ? stockSearch.trim() + " steht jetzt auf der Einkaufsliste" : "Steht schon drauf"); };
 }
 /* Nach dem Hinzufügen direkt nach der Menge fragen */
+/* „angebrochen“ und „fast leer“ beim Eintippen erkennen */
+function stateWords(t) {
+  var lvl = 2, ang = false;
+  if (/\bfast\s+(leer|alle)\b/i.test(t)) { lvl = 1; ang = true; t = t.replace(/\bfast\s+(leer|alle)\b/i, " "); }
+  if (/\b(angebrochen|angefangen|offen)\b/i.test(t)) { ang = true; t = t.replace(/\b(angebrochen|angefangen|offen)\b/i, " "); }
+  return { text: t.replace(/\s+/g, " ").trim(), lvl: lvl, ang: ang };
+}
+var STATES = [["neu", "Neu / voll"], ["ang", "Angebrochen"], ["fast", "Fast leer"]];
+function stateOf(v) { return v.lvl === 1 ? "fast" : v.ang ? "ang" : "neu"; }
 function openQtyAsk(ids) {
   var items = ids.map(function (id) { var v = coll("stock")[id]; return v ? { id: id, v: v } : null; }).filter(Boolean); if (!items.length) return;
-  var html = '<div class="grab"></div><div class="ph"><h2>Wie viel ist da?</h2><button class="icon" data-close aria-label="Überspringen">' + ICON_X + '</button></div><p class="help">Leer lassen, wenn ihr es nicht genau wisst. Das geht auch später noch über die drei Punkte.</p>';
+  var html = '<div class="grab"></div><div class="ph"><h2>Wie viel ist da?</h2><button class="icon" data-close aria-label="Überspringen">' + ICON_X + '</button></div><p class="help">Menge leer lassen, wenn ihr es nicht genau wisst. Ist eine Packung schon angefangen oder fast leer, wählt das darunter.</p>';
   html += items.map(function (it, k) {
-    return '<div class="qaskrow"><label for="qa-q' + k + '" class="qaskname">' + esc(it.v.name) + '</label><div class="qtyrow"><button type="button" class="icon" data-qd="' + k + '" data-dir="-1" aria-label="' + esc(it.v.name) + ' weniger"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 12h12"/></svg></button><input class="f" id="qa-q' + k + '" inputmode="decimal" placeholder="–"><button type="button" class="icon" data-qd="' + k + '" data-dir="1" aria-label="' + esc(it.v.name) + ' mehr"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 6v12M6 12h12"/></svg></button><label for="qa-u' + k + '" class="sr">Einheit für ' + esc(it.v.name) + '</label><select class="f" id="qa-u' + k + '">' + UNITS.filter(Boolean).map(function (u) { return '<option value="' + u + '">' + u + "</option>"; }).join("") + "</select></div></div>";
+    return '<div class="qaskrow"><label for="qa-q' + k + '" class="qaskname">' + esc(it.v.name) + '</label><div class="qtyrow"><button type="button" class="icon" data-qd="' + k + '" data-dir="-1" aria-label="' + esc(it.v.name) + ' weniger"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 12h12"/></svg></button><input class="f" id="qa-q' + k + '" inputmode="decimal" placeholder="–" value="' + (it.v.qty != null ? fmtNum(it.v.qty) : "") + '"><button type="button" class="icon" data-qd="' + k + '" data-dir="1" aria-label="' + esc(it.v.name) + ' mehr"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 6v12M6 12h12"/></svg></button><label for="qa-u' + k + '" class="sr">Einheit für ' + esc(it.v.name) + '</label><select class="f" id="qa-u' + k + '">' + UNITS.filter(Boolean).map(function (u) { return '<option value="' + u + '"' + (it.v.unit === u ? " selected" : "") + ">" + u + "</option>"; }).join("") + '</select></div><div class="seg three qastate" id="qa-s' + k + '" role="group" aria-label="Zustand von ' + esc(it.v.name) + '">' + STATES.map(function (s) { return '<button type="button" data-s="' + s[0] + '" aria-pressed="' + (stateOf(it.v) === s[0]) + '">' + s[1] + "</button>"; }).join("") + "</div></div>";
   }).join("");
   html += '<div class="actions"><button class="btn sec" data-close>Später</button><button class="btn" id="qa-save">Speichern</button></div>';
   openSheet(html);
   setTimeout(function () { try { $("#qa-q0").focus(); } catch (e) {} }, 250);
+  $$("#panel .qastate button").forEach(function (b) { b.onclick = function () { paintSeg("#" + b.parentNode.id, "data-s", b.getAttribute("data-s")); }; });
   $$("#panel [data-qd]").forEach(function (b) { b.onclick = function () { var k = b.getAttribute("data-qd"), inp = $("#qa-q" + k), st = unitStep($("#qa-u" + k).value), q = parseFloat((inp.value || "0").replace(",", ".")) || 0; inp.value = fmtNum(Math.max(0, Math.round((q + st * +b.getAttribute("data-dir")) * 100) / 100)); }; });
   $("#qa-save").onclick = function () {
     var n = 0;
     items.forEach(function (it, k) {
-      var t = $("#qa-q" + k).value.trim().replace(",", "."); if (t === "") return;
-      var q = Math.max(0, parseFloat(t) || 0), v = coll("stock")[it.id]; if (!v) return;
-      write("stock/" + it.id, Object.assign({}, v, { qty: q, unit: $("#qa-u" + k).value, lvl: q === 0 ? 0 : v.lvl, at: Date.now(), by: me() }));
-      if (q === 0) addToShop(v.name); n++;
+      var v = coll("stock")[it.id]; if (!v) return;
+      var t = $("#qa-q" + k).value.trim().replace(",", "."), q = t === "" ? null : Math.max(0, parseFloat(t) || 0);
+      var sb = $("#qa-s" + k + " [aria-pressed=true]"), sv = sb ? sb.getAttribute("data-s") : "neu";
+      var lvl = q === 0 ? 0 : sv === "fast" ? 1 : 2;
+      write("stock/" + it.id, Object.assign({}, v, { qty: q, unit: q == null ? "" : $("#qa-u" + k).value, lvl: lvl, ang: sv !== "neu", at: Date.now(), by: me() }));
+      if (lvl === 0) addToShop(v.name); n++;
     });
-    closeSheet(); if (n) toast("Mengen gespeichert");
+    closeSheet(); if (n) toast("Gespeichert");
   };
 }
 function openStock(id) {
@@ -1487,6 +1509,7 @@ function openStock(id) {
   html += '<div class="fl"><label for="sx-name">Name</label><input class="f" id="sx-name" value="' + esc(v.name) + '"></div>';
   html += '<div class="fl"><span class="lab">Wo?</span><div class="seg four" id="sx-pl">' + PLACES.map(function (p) { return '<button type="button" data-p="' + p[0] + '" aria-pressed="' + (v.place === p[0]) + '">' + PLACE_SHORT[p[0]] + "</button>"; }).join("") + "</div></div>";
   html += '<div class="fl"><span class="lab">Menge (optional)</span><div class="qtyrow"><button type="button" class="icon" id="sx-minus" aria-label="Weniger"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 12h12"/></svg></button><label for="sx-qty" class="sr">Menge</label><input class="f" id="sx-qty" inputmode="decimal" placeholder="–" value="' + (v.qty != null ? fmtNum(v.qty) : "") + '"><button type="button" class="icon" id="sx-plus" aria-label="Mehr"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 6v12M6 12h12"/></svg></button><label for="sx-unit" class="sr">Einheit</label><select class="f" id="sx-unit">' + UNITS.map(function (u) { return '<option value="' + u + '"' + ((v.unit || "") === u ? " selected" : "") + ">" + (u || "Einheit") + "</option>"; }).join("") + "</select></div></div>";
+  html += '<label class="ingrow" style="background:var(--card);border-radius:12px;padding:0 12px;border:0"><input type="checkbox" id="sx-ang"' + (v.ang ? " checked" : "") + '><span>Packung ist angebrochen</span></label>';
   html += '<div class="fl"><span class="lab">Wie viel ist da?</span><div class="seg three" id="sx-lv">' + LVL.map(function (l, i) { return '<button type="button" data-l="' + i + '" aria-pressed="' + (v.lvl === i) + '">' + l[0] + "</button>"; }).join("") + "</div></div>";
   html += '<button class="btn sec" id="sx-shop">Auf die Einkaufsliste</button><div class="actions"><button class="btn danger" id="sx-del">Löschen</button><button class="btn" id="sx-save">Speichern</button></div>';
   openSheet(html);
@@ -1497,7 +1520,7 @@ function openStock(id) {
   function stepQ(d) { if (!$("#sx-unit").value) $("#sx-unit").value = "Stk"; var q = qv() || 0, st = unitStep($("#sx-unit").value), nq = Math.max(0, Math.round((q + d * st) * 100) / 100); $("#sx-qty").value = fmtNum(nq); if (nq === 0) { lv = 0; paintSeg("#sx-lv", "data-l", "0"); } else if (lv === 0) { lv = 2; paintSeg("#sx-lv", "data-l", "2"); } }
   $("#sx-minus").onclick = function () { stepQ(-1); }; $("#sx-plus").onclick = function () { stepQ(1); };
   $("#sx-shop").onclick = function () { toast(addToShop(v.name) ? v.name + " steht jetzt auf der Einkaufsliste" : "Steht schon drauf"); };
-  $("#sx-save").onclick = function () { var n = $("#sx-name").value.trim() || v.name; var q = qv(); if (q === 0) lv = 0; write("stock/" + id, Object.assign({}, v, { name: n, place: pl, lvl: lv, qty: q, unit: q == null ? "" : ($("#sx-unit").value || "Stk"), at: Date.now(), by: me() })); if (q === 0 && v.qty !== 0 && addToShop(n)) toast(n + " steht jetzt auf der Einkaufsliste"); closeSheet(); };
+  $("#sx-save").onclick = function () { var n = $("#sx-name").value.trim() || v.name; var q = qv(); if (q === 0) lv = 0; write("stock/" + id, Object.assign({}, v, { name: n, place: pl, lvl: lv, ang: $("#sx-ang").checked || lv === 1, qty: q, unit: q == null ? "" : ($("#sx-unit").value || "Stk"), at: Date.now(), by: me() })); if (q === 0 && v.qty !== 0 && addToShop(n)) toast(n + " steht jetzt auf der Einkaufsliste"); closeSheet(); };
   $("#sx-del").onclick = function () { ask(v.name + " aus den Vorräten löschen?", function () { write("stock/" + id, null); closeSheet(); }, "Löschen"); };
 }
 
@@ -1519,10 +1542,10 @@ var SYN = {
   milch: ["vollmilch", "hmilch", "frischmilch"], butter: ["margarine"], paprika: ["paprikaschote", "paprikaschoten"],
   tomaten: ["tomate"], champignons: ["pilze", "champignon", "grossechampignons"], joghurt: ["naturjoghurt", "joghurtgriechisch", "griechischerjoghurt"],
   schmand: ["sauerrahm", "sourcream", "cremefraiche", "schmandodercremefraiche"], wienerwuerstchen: ["wuerstchen", "wiener"],
-  thunfisch: ["thunfischdose"], mais: ["maisdose"], erbsen: ["erbsentiefgekuehlt"], kochschinken: ["schinken"]
+  thunfisch: ["thunfischdose"], kirschtomaten: ["cherrytomaten", "cocktailtomaten", "rispentomaten"], mais: ["maisdose"], erbsen: ["erbsentiefgekuehlt"], kochschinken: ["schinken"]
 };
 var SYN_IDX = {}; Object.keys(SYN).forEach(function (k) { SYN_IDX[k] = k; SYN[k].forEach(function (s) { SYN_IDX[s] = k; }); });
-var STOPW = /\b(tiefgekühlt|tk|gekocht|frisch|frische|große|kleine|kleiner|reife|altbackene|vom vortag|weiß|grüner|rote|aufschnitt|optional)\b/gi;
+var STOPW = /\b(tiefgekühlt|tk|gekocht|frisch|frische|große|kleine|kleiner|reife|altbackene|vom vortag|weiß|grüner|rote|aufschnitt|optional|wahlweise|etwas|bisschen|ein paar)\b/gi;
 var canonMemo = {};
 function canonList(name) {
   if (canonMemo[name]) return canonMemo[name];
@@ -1546,6 +1569,31 @@ function rzStatus(r) {
   var need = r.z.filter(function (z) { return !isBasic(z) && !isOptional(z); });
   var miss = need.filter(function (z) { var s = stockFor(z[0]); return !(s && s.lvl > 0); });
   return { need: need.length, miss: miss, have: need.length - miss.length };
+}
+/* Eigene Rezepte: Zutaten-Text in [Name, Hinweis] umwandeln */
+function ownZ(r) { return (r.ing || []).map(function (i) { return [i, /optional|wahlweise|nach laune|nach geschmack|nach wahl/i.test(i) ? "optional" : ""]; }); }
+var foodOpen = false, foodSeed = Math.floor(Math.random() * 1000);
+function compatibleFood() {
+  if (!entries("stock").length) return [];
+  var own = [], sug = [], names = ownNames();
+  entries("recipes").forEach(function (r) { var st = rzStatus({ z: ownZ(r) }); if (st.need > 0 && !st.miss.length) own.push({ own: true, id: r.id, n: r.name }); });
+  if (RZ_DATA) RZ_DATA.forEach(function (r, i) { if (names[normWord(r.n)]) return; var st = rzStatus(r); if (st.need > 0 && !st.miss.length) sug.push({ own: false, i: i, n: r.n, c: r.c, t: r.t }); });
+  return own.concat(shuffled(sug, foodSeed));
+}
+function foodCard() {
+  if (!RZ_DATA) { loadRz(function () { if (tab === "heute") render(); }); }
+  var list = compatibleFood(); if (!list.length) return "";
+  var h = '<section class="card foodcard"><div class="card-h"><h2>Keine Ahnung, was ihr essen wollt?</h2></div>';
+  if (!foodOpen) return h + '<p class="help" style="margin:0">Für ' + (list.length === 1 ? "ein Gericht" : list.length + " Gerichte") + " habt ihr gerade alles da.</p>" + '<button class="btn sec" id="fd-open">Zeig mal</button></section>';
+  var shown = list.filter(function (x) { return x.own; }).slice(0, 3); list.filter(function (x) { return !x.own; }).forEach(function (x) { if (shown.length < 3) shown.push(x); });
+  h += shown.map(function (x) { return '<button class="rvcard" data-fd="' + (x.own ? "o:" + x.id : "s:" + x.i) + '"><span class="rvn">' + esc(x.n) + '</span><span class="muted rvm">' + (x.own ? "Euer Rezept" : esc(x.c) + " · " + x.t + " Min") + '</span><span class="okline">Alles da!</span></button>'; }).join("");
+  if (list.length > 3) h += '<button class="btn sec" id="fd-more">Andere Vorschläge</button>';
+  return h + "</section>";
+}
+function bindFood(root) {
+  var o = $("#fd-open", root); if (o) o.onclick = function () { foodOpen = true; renderHeute(); };
+  var m = $("#fd-more", root); if (m) m.onclick = function () { foodSeed++; renderHeute(); };
+  $$("[data-fd]", root).forEach(function (b) { b.onclick = function () { var v = b.getAttribute("data-fd"); if (v.indexOf("o:") === 0) openRecipe(v.slice(2)); else openVorschlag(+v.slice(2)); }; });
 }
 function loadRz(cb) {
   if (RZ_DATA) return cb();
@@ -1613,7 +1661,7 @@ function openVorschlag(i) {
   $("#vz-own").onclick = function () {
     var id = rid();
     write("recipes/" + id, { name: r.n, ing: r.z.map(function (z) { return z[1] ? z[0] + " (" + z[1] + ")" : z[0]; }), steps: r.d.join("\n"), by: me(), at: Date.now(), from: "vorschlag" });
-    toast("„" + r.n + "“ steht jetzt bei euren Rezepten"); rzMode = "unsere"; LS.set("rzmode", rzMode); renderEinkauf(); openRecipe(id);
+    toast("„" + r.n + "“ steht jetzt bei euren Rezepten"); openRecipe(id);
   };
 }
 
@@ -1631,18 +1679,13 @@ function seedRecipes() {
 }
 function renderRezepte() {
   seedRecipes();
-  $("#k-body").innerHTML = '<div class="seg" id="rz-seg"><button type="button" data-rm="unsere">Unsere (' + entries("recipes").length + ')</button><button type="button" data-rm="ideen">Vorschläge (250)</button></div><div id="rz-wrap" style="display:flex;flex-direction:column;gap:12px"></div>';
-  paintSeg("#rz-seg", "data-rm", rzMode);
-  $$("#rz-seg button").forEach(function (b) { b.onclick = function () { rzMode = b.getAttribute("data-rm"); LS.set("rzmode", rzMode); renderRezepte(); }; });
-  if (rzMode === "ideen") return renderVorschlaege();
+  $("#k-body").innerHTML = '<div id="rz-wrap" style="display:flex;flex-direction:column;gap:12px"></div>';
   var list = entries("recipes").sort(function (a, b) { return a.name.localeCompare(b.name, "de"); });
   var q = normWord(recipeSearch);
   var shown = list.filter(function (r) { return !q || normWord(r.name + " " + (r.ing || []).join(" ")).indexOf(q) >= 0; });
   var h = '<div class="row"><label for="rz-q" class="sr">Rezept suchen</label><input class="f" id="rz-q" type="search" placeholder="Suchen, z. B. Garnelen" value="' + esc(recipeSearch) + '"><button class="icon dark" id="rz-new" style="width:48px;height:48px;border-radius:14px" aria-label="Neues Rezept"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div>';
   h += '<div id="rz-list">' + recipeCards(shown, list.length) + "</div>";
-  h += '<button class="btn sec" id="rz-toideas">Keine Idee? 250 Vorschläge ansehen</button>';
   $("#rz-wrap").innerHTML = h;
-  $("#rz-toideas").onclick = function () { rzMode = "ideen"; LS.set("rzmode", rzMode); renderRezepte(); };
   $("#rz-q").oninput = function () { recipeSearch = this.value; var qq = normWord(recipeSearch); $("#rz-list").innerHTML = recipeCards(list.filter(function (r) { return !qq || normWord(r.name + " " + (r.ing || []).join(" ")).indexOf(qq) >= 0; }), list.length); bindRecipeCards(); };
   $("#rz-new").onclick = function () { openRecipeEdit(null); };
   bindRecipeCards();
@@ -1712,6 +1755,25 @@ function renderIdeen() {
     write("games/wheel/lists/" + lid, { name: name, items: open.slice(0, 24).map(function (v) { return v.t; }), by: me(), at: Date.now() });
     gameTab = "rad"; LS.set("gtab", gameTab); show("spiele"); openWheel(lid);
   };
+}
+
+/* ---------- WUNSCHLISTE (Sachen, die wir unbedingt mal machen wollen) ---------- */
+function renderBucket() {
+  var all = entries("bucket"), open = all.filter(function (v) { return !v.done; }).sort(function (a, b) { return b.at - a.at; }), done = all.filter(function (v) { return v.done; }).sort(function (a, b) { return (b.doneAt || 0) - (a.doneAt || 0); });
+  var h = addRow("bk-form", "Was wollt ihr unbedingt mal machen?");
+  if (all.length) h += '<div class="bkprog"><div class="bkbar"><i style="width:' + Math.round(done.length / all.length * 100) + '%"></i></div><span>' + done.length + " von " + all.length + " erlebt</span></div>";
+  if (!all.length) h += '<div class="empty-hint">Eure gemeinsame Wunschliste: Nordlichter sehen, zusammen ein Konzert, eine Reise, ein Tanzkurs … Alles, was ihr unbedingt mal machen wollt.</div>';
+  h += open.map(function (v) {
+    var nw = isNew(v, "events") ? ' <span class="new">NEU</span>' : "";
+    return '<div class="bkcard"><div class="bkt"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--b)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l2.6 5.6 6.1.7-4.5 4.2 1.2 6L12 16.6 6.6 19.5l1.2-6L3.3 9.3l6.1-.7z"/></svg><span>' + esc(v.t) + nw + '</span></div><div class="muted">von ' + esc(von(v.by)) + " · " + esc(relDay(iso(new Date(v.at)))) + '</div><div class="row" style="flex-wrap:wrap"><button class="pillbtn" data-bkplan="' + v.id + '">Planen</button><button class="pillbtn" data-bkdone="' + v.id + '">Erlebt!</button><button class="x" data-bkdel="' + v.id + '" aria-label="' + esc(v.t) + ' löschen" style="margin-left:auto">' + ICON_X + "</button></div></div>";
+  }).join("");
+  if (done.length) h += '<p class="label">Schon erlebt</p><div class="list">' + done.map(function (v) { return '<div class="item done"><button class="main" data-bkundo="' + v.id + '" aria-label="' + esc(v.t) + ' wieder offen"><span class="box">' + ICON_CHECK + '</span><span class="txt">' + esc(v.t) + '<span class="sub" style="text-decoration:none">' + (v.doneAt ? esc(relDay(iso(new Date(v.doneAt)))) : "") + "</span></span></button></div>"; }).join("") + "</div>";
+  $("#ev-body").innerHTML = h;
+  onAdd("bk-form", function (t) { write("bucket/" + rid(), { t: t, by: me(), at: Date.now(), done: false }); });
+  $$("#ev-body [data-bkplan]").forEach(function (b) { b.onclick = function () { var v = coll("bucket")[b.getAttribute("data-bkplan")]; if (v) openEvent(null, null, v.t); }; });
+  $$("#ev-body [data-bkdone]").forEach(function (b) { b.onclick = function () { var id = b.getAttribute("data-bkdone"), v = coll("bucket")[id]; if (!v) return; write("bucket/" + id, Object.assign({}, v, { done: true, doneAt: Date.now(), doneBy: me() })); toast("Wieder ein Traum weniger auf der Liste!"); }; });
+  $$("#ev-body [data-bkundo]").forEach(function (b) { b.onclick = function () { var id = b.getAttribute("data-bkundo"), v = coll("bucket")[id]; if (v) write("bucket/" + id, Object.assign({}, v, { done: false, doneAt: null })); }; });
+  $$("#ev-body [data-bkdel]").forEach(function (b) { b.onclick = function () { ask("Von der Wunschliste löschen?", function () { write("bucket/" + b.getAttribute("data-bkdel"), null); }, "Löschen"); }; });
 }
 
 /* ---------- WATCHLIST ---------- */
@@ -1817,7 +1879,8 @@ function openStoryRead(id) {
 /* ---------- UPDATES + FEEDBACK ---------- */
 /* Bei jedem Update: APP_VER erhöhen und oben in CHANGES eintragen, was neu ist. */
 var CHANGES = {
-  "2.2": ["250 Rezeptvorschläge unter Einkauf › Rezepte › Vorschläge", "Die Vorschläge sind nach euren Vorräten sortiert: „Alles da!“ oder „Fehlt: …“", "Fehlendes mit einem Tipp auf die Einkaufsliste, Lieblinge zu euren Rezepten übernehmen"],
+  "2.3": ["Neue Wunschliste unter Events: Sachen, die ihr unbedingt mal machen wollt", "Auf „Heute“ fragt die App, ob ihr nicht wisst, was ihr essen sollt, und schlägt Gerichte vor, für die alles da ist. Eure eigenen Rezepte zuerst", "Vorräte: angebrochene oder fast leere Packungen direkt so eintragen", "Update-Übersicht nach Versionen sortiert", "„Wünsche“ heißt jetzt „Geschenke“"],
+  "2.2": ["250 einfache Rezepte, abgeglichen mit euren Vorräten (zu finden auf „Heute“)", "Fehlendes mit einem Tipp auf die Einkaufsliste, Lieblinge zu euren Rezepten übernehmen"],
   "2.1": ["Vorräte: neuer Bereich „Backzutaten“", "Suche in den Vorräten", "Bereiche lassen sich einklappen, Leeres und Knappes steht jeweils oben"],
   "2.0": ["Neue Vorräte: Die App fragt direkt, wie viel davon da ist"],
   "1.9": ["Updates kommen jetzt zuverlässiger an: Sobald eins bereitliegt, erscheint ein Fenster zum Aktualisieren", "In den Einstellungen steht ganz unten, welche Version gerade läuft"],
@@ -1868,7 +1931,10 @@ function checkNewVersion() {
   var news = Object.keys(CHANGES).filter(function (v) { return verCmp(v, last) > 0 && verCmp(v, APP_VER) <= 0; }).sort(function (a, b) { return verCmp(b, a); });
   var html = '<div class="grab"></div><div class="ph"><h2>Update ' + APP_VER + '</h2><button class="icon" data-close aria-label="Schließen">' + ICON_X + '</button></div>';
   html += '<div class="updline">' + esc(pick(UPD_LINES)) + "</div>";
-  html += '<section class="card" style="gap:8px"><h2>Was ist neu?</h2>' + news.map(function (v) { return CHANGES[v].map(function (c) { return '<div class="newsrow"><span class="newsdot" aria-hidden="true"></span><span>' + esc(c) + "</span></div>"; }).join(""); }).join("") + "</section>";
+  var lines = 0; news.forEach(function (v) { lines += CHANGES[v].length; });
+  if (lines > 50) html += '<div class="longwarn">' + esc(pick(["Halbe Bibel. Ganzer H*rensohn.", "Halbe Bibel, ganzer H*rensohn. Holt euch Snacks."])) + "</div>";
+  else if (lines > 10) html += '<div class="longwarn">' + esc(pick(["Arschlanger Text, sorry.", "Arschlanger Text. Holt euch nen Kaffee.", "Arschlanger Text. {n} war wohl fleißig.", "Arschlanger Text. Lesen auf eigene Gefahr."])) + "</div>";
+  html += news.map(function (v) { return '<section class="card" style="gap:8px"><div class="card-h"><h2>Version ' + esc(v) + "</h2>" + (v === APP_VER ? '<span class="pill ok">neu</span>' : "") + "</div>" + CHANGES[v].map(function (c) { return '<div class="newsrow"><span class="newsdot" aria-hidden="true"></span><span>' + esc(c) + "</span></div>"; }).join("") + "</section>"; }).join("");
   html += '<button class="btn" data-close>Alles klar, zeig her!</button>';
   setTimeout(function () { if ($("#sheet").hidden && $("#setup").hidden) openSheet(html); }, 600);
 }
