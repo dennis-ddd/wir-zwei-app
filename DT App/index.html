@@ -158,6 +158,15 @@ details.card summary{font-weight:700;cursor:pointer}
 .sthead{display:flex;align-items:center;gap:8px;border:0;background:none;padding:6px 2px;min-height:40px;text-align:left;color:var(--ink)}
 .sthead .stt{font-size:15px;font-weight:800;flex:1}.sthead .stc{font-size:13px;color:var(--mute);font-weight:600}.sthead .stc b{color:var(--warn)}
 .sthead .chev{color:var(--mute);transition:transform .15s}.sthead[aria-expanded=false] .chev{transform:rotate(-90deg)}
+.rvcard{background:var(--card);border:0;border-radius:14px;padding:12px 14px;display:flex;flex-direction:column;gap:3px;text-align:left;width:100%}
+.rvcard .rvn{font-size:16px;font-weight:700}.rvcard .rvm{font-size:12px;font-weight:600}
+.rzmiss{font-size:12px;font-weight:700;color:var(--warn)}
+details.more{margin-top:6px;border-top:1px solid #F0F1F5;padding-top:8px}
+details.more summary{font-weight:700;color:var(--a);cursor:pointer;min-height:40px;display:flex;align-items:center;gap:6px;list-style:none}
+details.more summary::-webkit-details-marker{display:none}
+details.more summary::before{content:"▸";display:inline-block;transition:transform .15s}details.more[open] summary::before{transform:rotate(90deg)}
+.amounts{display:flex;flex-direction:column;gap:2px;margin:6px 0 10px;font-size:14px}.amounts div{display:flex;justify-content:space-between;gap:10px;border-bottom:1px dashed #E3E6EE;padding:4px 0}.amounts b{font-weight:700;text-align:right}
+.steps{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:8px;font-size:15px;line-height:1.5}
 .qaskrow{display:flex;flex-direction:column;gap:6px;background:var(--card);border-radius:14px;padding:10px 12px}.qaskname{font-size:15px;font-weight:700}
 .qtyrow{display:grid;grid-template-columns:44px minmax(0,1fr) 44px minmax(0,1.3fr);gap:8px;align-items:center}.qtyrow input{text-align:center;font-weight:700}
 .stmore{width:34px;border:0;background:none;color:var(--mute);display:flex;align-items:center;justify-content:center}
@@ -275,7 +284,7 @@ details.card summary{font-weight:700;cursor:pointer}
 
 <script>
 "use strict";
-var APP_VER = "2.1";
+var APP_VER = "2.2";
 var APP_VERSION = APP_VER + " · 20.11.2026";
 /* Eure Datenbank. Neue App-Installationen verbinden sich automatisch damit. */
 var DEFAULT_DB = "https://theresdennis-default-rtdb.europe-west1.firebasedatabase.app";
@@ -302,7 +311,8 @@ var weekOffset = 0;
 var online = "local";                 // local | ok | off
 var gotInitial = false;
 
-function save() { LS.set("tree", tree); LS.set("queue", queue); LS.set("cfg", cfg); }
+var treeGen = 0;
+function save() { treeGen++; LS.set("tree", tree); LS.set("queue", queue); LS.set("cfg", cfg); }
 function me() { return cfg.me || "p1"; }
 function other(p) { return (p || me()) === "p1" ? "p2" : "p1"; }
 function person(p) { var x = (tree.people || {})[p]; return { name: (x && x.name) || (p === "p1" ? "Person 1" : "Person 2") }; }
@@ -1491,6 +1501,122 @@ function openStock(id) {
   $("#sx-del").onclick = function () { ask(v.name + " aus den Vorräten löschen?", function () { write("stock/" + id, null); closeSheet(); }, "Löschen"); };
 }
 
+/* ---------- REZEPT-VORSCHLÄGE (250 eigene Rezepte in rezepte.json) ---------- */
+var RZ_DATA = null, RZ_LOADING = false, rzMode = LS.get("rzmode", "unsere"), rzCat = "Alle", rzSearch = "", rzShow = 30;
+var RZ_CATS = ["Nudeln", "Reis", "Kartoffeln", "Eier", "Suppen", "Gemüse", "Fleisch", "Fisch", "Ofen", "Salate", "Snacks", "Süßes"];
+/* Was man fast immer zu Hause hat: zählt nicht als „fehlt“ */
+var BASICS = ["salz", "pfeffer", "oel", "olivenoel", "zucker", "wasser", "paprikapulver", "paprikapulveredelsuess", "oregano", "muskat", "zimt", "kreuzkuemmel", "chiliflocken", "chilipulver", "kuemmel", "majoran", "kraeuterderprovence", "bohnenkraut", "gewuerzenachlaune", "currypulver", "essig", "zimtundzucker", "speisestaerke"];
+var SYN = {
+  nudeln: ["spaghetti", "penne", "makkaroni", "fusilli", "farfalle", "tagliatelle", "suppennudeln", "kleinenudeln", "gekochtenudeln", "nudelnvongestern", "pasta"],
+  eier: ["ei", "eiern"], zwiebel: ["zwiebeln", "rotezwiebel", "rotezwiebeln", "gemuesezwiebel"],
+  kartoffeln: ["kartoffel", "kartoffelnfestkochend", "kartoffelnmehligkochend", "grossekartoffeln", "kartoffelngekocht", "pellkartoffeln"],
+  tomatenausderdose: ["dosentomaten", "passiertetomaten", "tomatenpassiert", "stueckigetomaten", "tomatendose", "tomatenausderdoseoderpassiert"],
+  hackfleisch: ["hack", "rinderhack", "gehacktes", "gemischteshack"],
+  reibekaese: ["kaese", "geriebenerkaese", "gouda", "emmentaler", "cheddar", "cheddaroderreibekaese"],
+  sahne: ["schlagsahne", "kochsahne"], haehnchenbrust: ["haehnchen", "huehnerbrust", "haehnchenschenkel", "haehnchenbrustoderschenkel"],
+  karotte: ["karotten", "moehre", "moehren"], gemuesebruehe: ["bruehe", "huehnerbruehe", "rinderbruehe", "fleischbruehe"],
+  knoblauch: ["knoblauchzehe", "knoblauchzehen"], reis: ["reisgekocht", "basmatireis", "jasminreis", "langkornreis"],
+  milch: ["vollmilch", "hmilch", "frischmilch"], butter: ["margarine"], paprika: ["paprikaschote", "paprikaschoten"],
+  tomaten: ["tomate"], champignons: ["pilze", "champignon", "grossechampignons"], joghurt: ["naturjoghurt", "joghurtgriechisch", "griechischerjoghurt"],
+  schmand: ["sauerrahm", "sourcream", "cremefraiche", "schmandodercremefraiche"], wienerwuerstchen: ["wuerstchen", "wiener"],
+  thunfisch: ["thunfischdose"], mais: ["maisdose"], erbsen: ["erbsentiefgekuehlt"], kochschinken: ["schinken"]
+};
+var SYN_IDX = {}; Object.keys(SYN).forEach(function (k) { SYN_IDX[k] = k; SYN[k].forEach(function (s) { SYN_IDX[s] = k; }); });
+var STOPW = /\b(tiefgekühlt|tk|gekocht|frisch|frische|große|kleine|kleiner|reife|altbackene|vom vortag|weiß|grüner|rote|aufschnitt|optional)\b/gi;
+var canonMemo = {};
+function canonList(name) {
+  if (canonMemo[name]) return canonMemo[name];
+  return canonMemo[name] = String(name || "").replace(/\(.*?\)/g, "").split(/\s+oder\s+|\s*\/\s*/i).map(function (alt) {
+    var raw = normWord(alt), c = normWord(alt.replace(STOPW, " "));
+    var k = SYN_IDX[raw] || SYN_IDX[c] || c;
+    if (!SYN_IDX[k] && k.length > 4) { var ks = [k.replace(/en$/, ""), k.replace(/n$/, ""), k.replace(/e$/, ""), k.replace(/s$/, "")]; for (var i = 0; i < ks.length; i++) if (SYN_IDX[ks[i]]) { k = SYN_IDX[ks[i]]; break; } }
+    return k;
+  }).filter(Boolean);
+}
+var stockCanonCache = null, stockCanonKey = -1;
+function stockCanon() {
+  var key = treeGen; if (key === stockCanonKey && stockCanonCache) return stockCanonCache;
+  var m = {}; entries("stock").forEach(function (v) { canonList(v.name).forEach(function (c) { if (!m[c] || v.lvl > m[c].lvl) m[c] = v; }); });
+  stockCanonCache = m; stockCanonKey = key; return m;
+}
+function stockFor(ingName) { var m = stockCanon(), cs = canonList(ingName); for (var i = 0; i < cs.length; i++) if (m[cs[i]]) return m[cs[i]]; return null; }
+function isBasic(ing) { var cs = canonList(ing[0]); if (/zum braten/i.test(ing[1] || "")) return true; return cs.some(function (c) { return BASICS.indexOf(c) >= 0; }); }
+function isOptional(ing) { return /optional|zum servieren|zum dippen|zum bestreuen|nach wahl|^etwas$/i.test(ing[1] || ""); }
+function rzStatus(r) {
+  var need = r.z.filter(function (z) { return !isBasic(z) && !isOptional(z); });
+  var miss = need.filter(function (z) { var s = stockFor(z[0]); return !(s && s.lvl > 0); });
+  return { need: need.length, miss: miss, have: need.length - miss.length };
+}
+function loadRz(cb) {
+  if (RZ_DATA) return cb();
+  if (RZ_LOADING) return; RZ_LOADING = true;
+  fetch("rezepte.json").then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }).then(function (d) { RZ_DATA = d; RZ_LOADING = false; cb(); })
+    .catch(function () { RZ_LOADING = false; var el = $("#rv-res"); if (el) el.innerHTML = '<div class="empty-hint">Die Vorschläge konnten nicht geladen werden. Bitte einmal mit Internet öffnen.</div>'; });
+}
+function ownNames() { var m = {}; entries("recipes").forEach(function (r) { m[normWord(r.name)] = true; }); return m; }
+function renderVorschlaege() {
+  var h = '<div class="searchbox"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><label for="rv-q" class="sr">Vorschläge durchsuchen</label><input id="rv-q" type="search" placeholder="Gericht oder Zutat, z. B. Hack" value="' + esc(rzSearch) + '" autocomplete="off"></div>';
+  h += '<div class="chips topicrow" id="rv-cats">' + ["Alle", "Schnell"].concat(RZ_CATS).map(function (c) { return '<button class="chip" data-rc="' + c + '" aria-pressed="' + (rzCat === c) + '">' + (c === "Schnell" ? "Bis 20 Min" : c) + "</button>"; }).join("") + "</div>";
+  h += '<div id="rv-res" style="display:flex;flex-direction:column;gap:10px"><div class="empty-hint">Rezepte werden geladen …</div></div>';
+  $("#rz-wrap").innerHTML = h;
+  $("#rv-q").oninput = function () { rzSearch = this.value; rzShow = 30; fillVorschlaege(); };
+  $$("#rv-cats [data-rc]").forEach(function (b) { b.onclick = function () { rzCat = b.getAttribute("data-rc"); rzShow = 30; paintSeg("#rv-cats", "data-rc", rzCat); fillVorschlaege(); }; });
+  loadRz(fillVorschlaege);
+}
+function fillVorschlaege() {
+  var el = $("#rv-res"); if (!el || !RZ_DATA) return;
+  var q = normWord(rzSearch), own = ownNames(), hasStock = entries("stock").length > 0, h = "";
+  // Eigene Rezepte haben Vorrang: passende eigene zuerst
+  if (q) {
+    var mine = entries("recipes").filter(function (r) { return normWord(r.name + " " + (r.ing || []).join(" ")).indexOf(q) >= 0; });
+    if (mine.length) h += '<p class="label">Aus euren Rezepten</p>' + recipeCards(mine, mine.length);
+  }
+  var list = RZ_DATA.map(function (r, i) { return { r: r, i: i }; }).filter(function (x) {
+    var r = x.r; if (own[normWord(r.n)]) return false;
+    if (rzCat === "Schnell" ? r.t > 20 : (rzCat !== "Alle" && r.c !== rzCat)) return false;
+    return !q || normWord(r.n + " " + r.z.map(function (z) { return z[0]; }).join(" ")).indexOf(q) >= 0;
+  });
+  list.forEach(function (x) { x.s = rzStatus(x.r); });
+  if (hasStock) list.sort(function (a, b) { return (a.s.miss.length - b.s.miss.length) || (b.s.have - a.s.have) || a.r.n.localeCompare(b.r.n, "de"); });
+  else list.sort(function (a, b) { return a.r.n.localeCompare(b.r.n, "de"); });
+  if (hasStock && !q) h += '<p class="help" style="margin:0">Sortiert nach euren Vorräten: Oben steht, wofür ihr am meisten dahabt. Salz, Öl und Gewürze gelten als vorhanden.</p>';
+  if (!list.length) h += '<div class="empty-hint">Nichts gefunden.</div>';
+  h += '<div style="display:flex;flex-direction:column;gap:8px">' + list.slice(0, rzShow).map(function (x) {
+    var r = x.r, s = x.s, st;
+    if (!hasStock) st = '<span class="muted">' + r.z.length + " Zutaten</span>";
+    else if (!s.miss.length) st = '<span class="okline">Alles da!</span>';
+    else st = '<span class="rzmiss">Fehlt: ' + esc(s.miss.slice(0, 3).map(function (z) { return z[0]; }).join(", ")) + (s.miss.length > 3 ? " +" + (s.miss.length - 3) : "") + "</span>";
+    return '<button class="rvcard" data-rv="' + x.i + '"><span class="rvn">' + esc(r.n) + '</span><span class="muted rvm">' + esc(r.c) + " · " + r.t + " Min</span>" + st + "</button>";
+  }).join("") + "</div>";
+  if (list.length > rzShow) h += '<button class="btn sec" id="rv-more">Mehr anzeigen (' + (list.length - rzShow) + ")</button>";
+  el.innerHTML = h;
+  bindRecipeCards();
+  $$("#rv-res [data-rv]").forEach(function (b) { b.onclick = function () { openVorschlag(+b.getAttribute("data-rv")); }; });
+  var mb = $("#rv-more"); if (mb) mb.onclick = function () { rzShow += 30; fillVorschlaege(); };
+}
+function openVorschlag(i) {
+  var r = RZ_DATA[i]; if (!r) return; var s = rzStatus(r);
+  var html = '<div class="grab"></div><div class="ph"><h2>' + esc(r.n) + '</h2><button class="icon" data-close aria-label="Schließen">' + ICON_X + '</button></div><div class="muted" style="margin-top:-8px">' + esc(r.c) + " · ca. " + r.t + " Min · für 2</div>";
+  html += '<section class="card" style="gap:4px"><h2 style="margin-bottom:4px">Zutaten</h2>' + r.z.map(function (z, k) {
+    var basic = isBasic(z), opt = isOptional(z), st = stockFor(z[0]), have = st && st.lvl > 0, tag;
+    if (have) tag = '<span class="pill ok">' + (fmtQty(st) ? esc(fmtQty(st)) + " da" : "da") + "</span>";
+    else if (basic) tag = '<span class="pill mute">Basis</span>';
+    else if (opt) tag = '<span class="pill mute">optional</span>';
+    else tag = '<span class="pill warn">fehlt</span>';
+    return '<label class="ingrow"><input type="checkbox" data-zi="' + k + '"' + (!have && !basic && !opt ? " checked" : "") + '><span style="flex:1">' + esc(z[0]) + "</span>" + tag + "</label>";
+  }).join("") + '<button class="btn" id="vz-shop" style="margin-top:8px">Angehakte auf die Einkaufsliste</button></section>';
+  html += '<section class="card" style="gap:6px"><h2>So geht\'s</h2>' + r.k.map(function (k) { return '<div class="newsrow"><span class="newsdot" aria-hidden="true"></span><span>' + esc(k) + "</span></div>"; }).join("");
+  html += '<details class="more"><summary>Genaue Anleitung mit Mengen</summary><div class="amounts">' + r.z.map(function (z) { return "<div><span>" + esc(z[0]) + "</span><b>" + esc(z[1] || "nach Geschmack") + "</b></div>"; }).join("") + '</div><ol class="steps">' + r.d.map(function (d) { return "<li>" + esc(d) + "</li>"; }).join("") + "</ol></details></section>";
+  html += '<button class="btn sec" id="vz-own">Zu unseren Rezepten hinzufügen</button>';
+  openSheet(html);
+  $("#vz-shop").onclick = function () { var n = 0, any = false; $$("#panel [data-zi]").forEach(function (c) { if (c.checked) { any = true; if (addToShop(r.z[+c.getAttribute("data-zi")][0])) n++; } }); if (!any) { toast("Erst die fehlenden Zutaten anhaken"); return; } toast(n ? n + " Zutat" + (n > 1 ? "en" : "") + " auf die Einkaufsliste gesetzt" : "Steht schon alles drauf"); closeSheet(); };
+  $("#vz-own").onclick = function () {
+    var id = rid();
+    write("recipes/" + id, { name: r.n, ing: r.z.map(function (z) { return z[1] ? z[0] + " (" + z[1] + ")" : z[0]; }), steps: r.d.join("\n"), by: me(), at: Date.now(), from: "vorschlag" });
+    toast("„" + r.n + "“ steht jetzt bei euren Rezepten"); rzMode = "unsere"; LS.set("rzmode", rzMode); renderEinkauf(); openRecipe(id);
+  };
+}
+
 /* ---------- REZEPTE ---------- */
 var SEED_RECIPES = {
   "seed-nudeln-garnelen": { name: "Nudeln & Garnelen", ing: ["Nudeln", "Tomaten", "Knoblauch", "Garnelen", "Zwiebeln", "Etwas Wasser", "Salz", "Pfeffer", "Paprika oder Brokkoli (wahlweise)"], steps: "Nudeln kochen.\nZwiebeln und Knoblauch klein schneiden und in der Pfanne anbraten.\nGarnelen dazugeben und kurz mitbraten.\nTomaten und etwas Wasser dazu, einköcheln lassen. Wer mag: Paprika oder Brokkoli mitgaren.\nMit Salz und Pfeffer abschmecken und die Nudeln unterheben." },
@@ -1505,12 +1631,18 @@ function seedRecipes() {
 }
 function renderRezepte() {
   seedRecipes();
+  $("#k-body").innerHTML = '<div class="seg" id="rz-seg"><button type="button" data-rm="unsere">Unsere (' + entries("recipes").length + ')</button><button type="button" data-rm="ideen">Vorschläge (250)</button></div><div id="rz-wrap" style="display:flex;flex-direction:column;gap:12px"></div>';
+  paintSeg("#rz-seg", "data-rm", rzMode);
+  $$("#rz-seg button").forEach(function (b) { b.onclick = function () { rzMode = b.getAttribute("data-rm"); LS.set("rzmode", rzMode); renderRezepte(); }; });
+  if (rzMode === "ideen") return renderVorschlaege();
   var list = entries("recipes").sort(function (a, b) { return a.name.localeCompare(b.name, "de"); });
   var q = normWord(recipeSearch);
   var shown = list.filter(function (r) { return !q || normWord(r.name + " " + (r.ing || []).join(" ")).indexOf(q) >= 0; });
   var h = '<div class="row"><label for="rz-q" class="sr">Rezept suchen</label><input class="f" id="rz-q" type="search" placeholder="Suchen, z. B. Garnelen" value="' + esc(recipeSearch) + '"><button class="icon dark" id="rz-new" style="width:48px;height:48px;border-radius:14px" aria-label="Neues Rezept"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div>';
   h += '<div id="rz-list">' + recipeCards(shown, list.length) + "</div>";
-  $("#k-body").innerHTML = h;
+  h += '<button class="btn sec" id="rz-toideas">Keine Idee? 250 Vorschläge ansehen</button>';
+  $("#rz-wrap").innerHTML = h;
+  $("#rz-toideas").onclick = function () { rzMode = "ideen"; LS.set("rzmode", rzMode); renderRezepte(); };
   $("#rz-q").oninput = function () { recipeSearch = this.value; var qq = normWord(recipeSearch); $("#rz-list").innerHTML = recipeCards(list.filter(function (r) { return !qq || normWord(r.name + " " + (r.ing || []).join(" ")).indexOf(qq) >= 0; }), list.length); bindRecipeCards(); };
   $("#rz-new").onclick = function () { openRecipeEdit(null); };
   bindRecipeCards();
@@ -1519,7 +1651,7 @@ function recipeCards(shown, total) {
   if (!total) return '<div class="empty-hint">Noch keine Rezepte. Mit + das erste eintragen.</div>';
   if (!shown.length) return '<div class="empty-hint">Nichts gefunden.</div>';
   return '<div style="display:flex;flex-direction:column;gap:10px">' + shown.map(function (r) {
-    var have = (r.ing || []).filter(function (i) { var s = stockByName(i); return s && s.lvl > 0; }).length;
+    var have = (r.ing || []).filter(function (i) { var s = stockFor(i); return s && s.lvl > 0; }).length;
     return '<button class="tile" data-rz="' + r.id + '" style="flex-direction:row;align-items:center;gap:12px;width:100%"><span class="rzicon" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11h18a9 9 0 0 1-18 0z"/><path d="M8 7c0-2 2-2 2-4M13 7c0-2 2-2 2-4"/></svg></span><span style="flex:1;display:flex;flex-direction:column;gap:2px;min-width:0"><span class="t">' + esc(r.name) + '</span><span class="muted" style="font-weight:600">' + (r.ing || []).length + " Zutaten" + (have ? " · " + have + " im Vorrat" : "") + "</span></span></button>";
   }).join("") + "</div>";
 }
@@ -1528,7 +1660,7 @@ function openRecipe(id) {
   var r = coll("recipes")[id]; if (!r) return;
   var html = '<div class="grab"></div><div class="ph"><h2>' + esc(r.name) + '</h2><button class="icon" data-close aria-label="Schließen">' + ICON_X + "</button></div>";
   html += '<section class="card" style="gap:4px"><h2 style="margin-bottom:4px">Zutaten</h2><p class="help" style="margin-bottom:6px">Antippen, was fehlt. Dann auf „Auf die Einkaufsliste“.</p>' + (r.ing || []).map(function (i, k) {
-    var s = stockByName(i), tag = s ? (s.lvl > 0 ? '<span class="pill ok">' + (fmtQty(s) ? esc(fmtQty(s)) + " da" : "im Vorrat") + "</span>" : '<span class="pill warn">leer</span>') : "";
+    var s = stockFor(i), tag = s ? (s.lvl > 0 ? '<span class="pill ok">' + (fmtQty(s) ? esc(fmtQty(s)) + " da" : "im Vorrat") + "</span>" : '<span class="pill warn">leer</span>') : "";
     return '<label class="ingrow"><input type="checkbox" data-ing="' + k + '"' + (s && s.lvl === 0 ? " checked" : "") + '><span style="flex:1">' + esc(i) + "</span>" + tag + "</label>";
   }).join("") + '<button class="btn" id="rv-shop" style="margin-top:8px">Auf die Einkaufsliste</button></section>';
   if (r.steps) html += '<section class="card"><h2>Zubereitung</h2><div style="white-space:pre-line;font-size:15px;line-height:1.55">' + esc(r.steps) + "</div></section>";
@@ -1685,6 +1817,7 @@ function openStoryRead(id) {
 /* ---------- UPDATES + FEEDBACK ---------- */
 /* Bei jedem Update: APP_VER erhöhen und oben in CHANGES eintragen, was neu ist. */
 var CHANGES = {
+  "2.2": ["250 Rezeptvorschläge unter Einkauf › Rezepte › Vorschläge", "Die Vorschläge sind nach euren Vorräten sortiert: „Alles da!“ oder „Fehlt: …“", "Fehlendes mit einem Tipp auf die Einkaufsliste, Lieblinge zu euren Rezepten übernehmen"],
   "2.1": ["Vorräte: neuer Bereich „Backzutaten“", "Suche in den Vorräten", "Bereiche lassen sich einklappen, Leeres und Knappes steht jeweils oben"],
   "2.0": ["Neue Vorräte: Die App fragt direkt, wie viel davon da ist"],
   "1.9": ["Updates kommen jetzt zuverlässiger an: Sobald eins bereitliegt, erscheint ein Fenster zum Aktualisieren", "In den Einstellungen steht ganz unten, welche Version gerade läuft"],
