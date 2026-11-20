@@ -146,11 +146,18 @@ details.card summary{font-weight:700;cursor:pointer}
 .stockgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 .stock{display:flex;align-items:stretch;background:var(--card);border-radius:12px;border-left:0;overflow:hidden;min-height:50px}
 .stmain{flex:1;min-width:0;border:0;background:none;text-align:left;padding:7px 4px 7px 12px;display:flex;flex-direction:column;justify-content:center;gap:2px}
-.stmain .sn{font-size:14px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.stmain .sn{font-size:14px;font-weight:700;line-height:1.25;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow-wrap:anywhere;hyphens:auto}
 .stmain .sl{font-size:11px;font-weight:700;display:flex;align-items:center;gap:5px}
 .stmain .sl i{width:8px;height:8px;border-radius:50%;background:currentColor;display:inline-block}
 .lv2 .sl{color:var(--oki)}.lv1 .sl{color:var(--warn)}.lv0 .sl{color:var(--danger)}
 .lv0{background:#FDF1F1}.lv1{background:#FFF7E6}
+.searchbox{display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--line2);border-radius:12px;padding:0 12px;height:46px;color:var(--mute)}
+.searchbox input{flex:1;border:0;background:none;font-size:16px;height:44px;outline:none;color:var(--ink);min-width:0}
+.searchbox:focus-within{outline:3px solid var(--a);outline-offset:2px}
+.stsec{display:flex;flex-direction:column;gap:8px}
+.sthead{display:flex;align-items:center;gap:8px;border:0;background:none;padding:6px 2px;min-height:40px;text-align:left;color:var(--ink)}
+.sthead .stt{font-size:15px;font-weight:800;flex:1}.sthead .stc{font-size:13px;color:var(--mute);font-weight:600}.sthead .stc b{color:var(--warn)}
+.sthead .chev{color:var(--mute);transition:transform .15s}.sthead[aria-expanded=false] .chev{transform:rotate(-90deg)}
 .qaskrow{display:flex;flex-direction:column;gap:6px;background:var(--card);border-radius:14px;padding:10px 12px}.qaskname{font-size:15px;font-weight:700}
 .qtyrow{display:grid;grid-template-columns:44px minmax(0,1fr) 44px minmax(0,1.3fr);gap:8px;align-items:center}.qtyrow input{text-align:center;font-weight:700}
 .stmore{width:34px;border:0;background:none;color:var(--mute);display:flex;align-items:center;justify-content:center}
@@ -268,7 +275,7 @@ details.card summary{font-weight:700;cursor:pointer}
 
 <script>
 "use strict";
-var APP_VER = "2.0";
+var APP_VER = "2.1";
 var APP_VERSION = APP_VER + " · 20.11.2026";
 /* Eure Datenbank. Neue App-Installationen verbinden sich automatisch damit. */
 var DEFAULT_DB = "https://theresdennis-default-rtdb.europe-west1.firebasedatabase.app";
@@ -1376,7 +1383,9 @@ function onAdd(id, fn) { var f = $("#" + id); if (!f) return; f.onsubmit = funct
 function addToShop(name) { var n = normWord(name), exists = entries("shop").some(function (v) { return !v.done && normWord(v.name) === n; }); if (!exists) write("shop/" + rid(), { name: name, by: me(), at: Date.now(), done: false }); return !exists; }
 
 /* ---------- VORRÄTE ---------- */
-var PLACES = [["kuehl", "Kühlschrank"], ["tk", "Gefrierfach"], ["schrank", "Vorratsschrank"]];
+var PLACES = [["kuehl", "Kühlschrank"], ["tk", "Gefrierfach"], ["schrank", "Vorratsschrank"], ["backen", "Backzutaten"]];
+var PLACE_SHORT = { kuehl: "Kühlschr.", tk: "Gefrier", schrank: "Schrank", backen: "Backen" };
+var stockSearch = "";
 var LVL = [["Leer", "lv0"], ["Wenig", "lv1"], ["Genug", "lv2"]];
 var stockFilter = LS.get("sfilter", "alle");
 var UNITS = ["", "Stk", "Packung", "g", "kg", "ml", "l", "Dose", "Flasche", "Glas", "Beutel"];
@@ -1394,29 +1403,51 @@ function parseQty(t) {
   return { name: t, qty: null, unit: "" };
 }
 function stockByName(name) { var n = normWord(name); return entries("stock").filter(function (v) { return normWord(v.name) === n; })[0] || null; }
+function stockTile(v, showPlace) {
+  var onList = entries("shop").some(function (s) { return !s.done && normWord(s.name) === normWord(v.name); });
+  var pl = showPlace ? (PLACES.filter(function (p) { return p[0] === v.place; })[0] || ["", ""])[1] + " · " : "";
+  return '<div class="stock ' + LVL[v.lvl][1] + '"><button class="stmain" data-lv="' + v.id + '" aria-label="' + esc(v.name) + ": " + LVL[v.lvl][0] + ', tippen zum Ändern"><span class="sn">' + esc(v.name) + '</span><span class="sl"><i></i>' + esc(pl) + (fmtQty(v) ? esc(fmtQty(v)) + " · " : "") + LVL[v.lvl][0] + (onList ? " · auf der Liste" : "") + '</span></button>' + (v.qty > 0 ? '<button class="stmore" data-sminus="' + v.id + '" aria-label="' + esc(v.name) + ': eins weniger"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 12h12"/></svg></button>' : "") + '<button class="stmore" data-sm="' + v.id + '" aria-label="Mehr zu ' + esc(v.name) + '"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/></svg></button></div>';
+}
+function stockSort(a, b) { return (a.lvl - b.lvl) || a.name.localeCompare(b.name, "de"); }
 function renderVorrat() {
-  var all = entries("stock").sort(function (a, b) { return a.name.localeCompare(b.name, "de"); });
-  var low = all.filter(function (v) { return v.lvl < 2; }).length;
+  var all = entries("stock"), low = all.filter(function (v) { return v.lvl < 2; }).length;
   var h = addRow("st-form", "z. B. 6 Eier, Milch …", '<label for="st-place" class="sr">Ort</label><select class="f" id="st-place" style="width:auto;padding:0 8px">' + PLACES.map(function (p) { return '<option value="' + p[0] + '"' + (LS.get("splace", "kuehl") === p[0] ? " selected" : "") + ">" + p[1] + "</option>"; }).join("") + "</select>");
-  h += '<div class="chips topicrow">' + [["alle", "Alle"], ["knapp", "Knapp (" + low + ")"]].concat(PLACES).map(function (f) { return '<button class="chip" data-sf="' + f[0] + '" aria-pressed="' + (stockFilter === f[0]) + '">' + f[1] + "</button>"; }).join("") + "</div>";
-  if (!all.length) h += '<div class="empty-hint">Tragt ein, was ihr zu Hause habt, gern mit Menge wie „6 Eier“ oder „500 g Hack“. Ein Tipp auf einen Vorrat schaltet zwischen Genug, Wenig und Leer um, mit „−“ zieht ihr ab, was verbraucht ist.</div>';
-  PLACES.forEach(function (p) {
-    if (stockFilter !== "alle" && stockFilter !== "knapp" && stockFilter !== p[0]) return;
-    var items = all.filter(function (v) { return v.place === p[0] && (stockFilter !== "knapp" || v.lvl < 2); });
-    if (!items.length) return;
-    h += '<p class="label">' + p[1] + '</p><div class="stockgrid">' + items.map(function (v) {
-      var onList = entries("shop").some(function (s) { return !s.done && normWord(s.name) === normWord(v.name); });
-      return '<div class="stock ' + LVL[v.lvl][1] + '"><button class="stmain" data-lv="' + v.id + '" aria-label="' + esc(v.name) + ": " + LVL[v.lvl][0] + ', tippen zum Ändern"><span class="sn">' + esc(v.name) + '</span><span class="sl"><i></i>' + (fmtQty(v) ? esc(fmtQty(v)) + " · " : "") + LVL[v.lvl][0] + (onList ? " · auf der Liste" : "") + '</span></button>' + (v.qty > 0 ? '<button class="stmore" data-sminus="' + v.id + '" aria-label="' + esc(v.name) + ': eins weniger"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 12h12"/></svg></button>' : "") + '<button class="stmore" data-sm="' + v.id + '" aria-label="Mehr zu ' + esc(v.name) + '"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/></svg></button></div>';
-    }).join("") + "</div>";
-  });
-  if (low) h += '<button class="btn sec" id="st-low">Alles Knappe auf die Einkaufsliste</button>';
+  h += '<div class="searchbox"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><label for="st-q" class="sr">In den Vorräten suchen</label><input id="st-q" type="search" placeholder="Was haben wir noch? Suchen …" value="' + esc(stockSearch) + '" autocomplete="off"></div>';
+  h += '<div class="chips topicrow" id="st-chips">' + [["alle", "Alle"], ["knapp", "Knapp (" + low + ")"]].concat(PLACES).map(function (f) { return '<button class="chip" data-sf="' + f[0] + '" aria-pressed="' + (stockFilter === f[0]) + '">' + f[1] + "</button>"; }).join("") + "</div>";
+  h += '<div id="st-res" style="display:flex;flex-direction:column;gap:10px"></div>';
   $("#k-body").innerHTML = h;
+  fillStock();
   onAdd("st-form", function (v) { var askIds = [], pl = $("#st-place").value; LS.set("splace", pl); v.split(/\s*,\s*/).filter(Boolean).forEach(function (t) { var q = parseQty(t), ex = stockByName(q.name); if (ex) { if (q.qty != null) write("stock/" + ex.id, Object.assign({}, ex, { qty: q.qty, unit: q.unit || ex.unit || "", lvl: q.qty > 0 ? 2 : 0, at: Date.now(), by: me() })); else toast(q.name + " gibt es schon"); return; } var nid = rid(); write("stock/" + nid, { name: q.name, place: pl, lvl: q.qty === 0 ? 0 : 2, qty: q.qty, unit: q.unit || (q.qty != null ? "Stk" : ""), by: me(), at: Date.now() }); if (q.qty == null) askIds.push(nid); }); if (askIds.length) openQtyAsk(askIds); });
-  $$("#k-body [data-sf]").forEach(function (b) { b.onclick = function () { stockFilter = b.getAttribute("data-sf"); LS.set("sfilter", stockFilter); renderVorrat(); }; });
-  $$("#k-body [data-lv]").forEach(function (b) { b.onclick = function () { var id = b.getAttribute("data-lv"), v = coll("stock")[id]; if (!v) return; var nl = v.lvl === 0 ? 2 : v.lvl - 1; write("stock/" + id + "/lvl", nl); write("stock/" + id + "/at", Date.now()); write("stock/" + id + "/by", me()); if (nl === 0 && addToShop(v.name)) toast(v.name + " ist leer und steht jetzt auf der Einkaufsliste"); }; });
-  $$("#k-body [data-sm]").forEach(function (b) { b.onclick = function () { openStock(b.getAttribute("data-sm")); }; });
-  $$("#k-body [data-sminus]").forEach(function (b) { b.onclick = function () { var id = b.getAttribute("data-sminus"), v = coll("stock")[id]; if (!v || !(v.qty > 0)) return; var nq = Math.max(0, Math.round((v.qty - unitStep(v.unit)) * 100) / 100), nv = Object.assign({}, v, { qty: nq, at: Date.now(), by: me() }); if (nq === 0) { nv.lvl = 0; if (addToShop(v.name)) toast(v.name + " ist alle und steht jetzt auf der Einkaufsliste"); } write("stock/" + id, nv); }; });
-  var lw = $("#st-low"); if (lw) lw.onclick = function () { var n = 0; all.forEach(function (v) { if (v.lvl < 2 && addToShop(v.name)) n++; }); toast(n ? n + " Sachen auf die Einkaufsliste gesetzt" : "Steht schon alles drauf"); };
+  $("#st-q").oninput = function () { stockSearch = this.value; fillStock(); };
+  $$("#k-body [data-sf]").forEach(function (b) { b.onclick = function () { stockFilter = b.getAttribute("data-sf"); LS.set("sfilter", stockFilter); paintSeg("#st-chips", "data-sf", stockFilter); fillStock(); }; });
+}
+function fillStock() {
+  var all = entries("stock"), q = normWord(stockSearch), col = LS.get("scol", {}), h = "";
+  if (!all.length) h = '<div class="empty-hint">Tragt ein, was ihr zu Hause habt, gern mit Menge wie „6 Eier“ oder „500 g Hack“. Ein Tipp auf einen Vorrat schaltet zwischen Genug, Wenig und Leer um, mit „−“ zieht ihr ab, was verbraucht ist.</div>';
+  else if (q) {
+    var hits = all.filter(function (v) { return normWord(v.name).indexOf(q) >= 0; }).sort(stockSort);
+    if (hits.length) h = '<p class="label">' + hits.length + " Treffer</p>" + '<div class="stockgrid">' + hits.map(function (v) { return stockTile(v, true); }).join("") + "</div>";
+    else h = '<div class="empty-hint">„' + esc(stockSearch) + '“ habt ihr nicht im Vorrat.<div class="row" style="justify-content:center;margin-top:10px;flex-wrap:wrap"><button class="btn sec" style="width:auto" id="st-addq">Zum Vorrat hinzufügen</button><button class="btn sec" style="width:auto" id="st-shopq">Auf die Einkaufsliste</button></div></div>';
+  } else {
+    PLACES.forEach(function (p) {
+      if (stockFilter !== "alle" && stockFilter !== "knapp" && stockFilter !== p[0]) return;
+      var items = all.filter(function (v) { return v.place === p[0] && (stockFilter !== "knapp" || v.lvl < 2); }).sort(stockSort);
+      if (!items.length) return;
+      var lw = items.filter(function (v) { return v.lvl < 2; }).length, closed = !!col[p[0]] && stockFilter === "alle";
+      h += '<section class="stsec"><button class="sthead" data-col="' + p[0] + '" aria-expanded="' + !closed + '"><span class="stt">' + p[1] + '</span><span class="stc">' + items.length + (lw ? ' · <b>' + lw + " knapp</b>" : "") + '</span><svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>' + (closed ? "" : '<div class="stockgrid">' + items.map(function (v) { return stockTile(v, false); }).join("") + "</div>") + "</section>";
+    });
+    if (!h) h = '<div class="empty-hint">' + (stockFilter === "knapp" ? "Nichts knapp. Alles da!" : "Hier ist noch nichts eingetragen.") + "</div>";
+    var low = all.filter(function (v) { return v.lvl < 2; }).length;
+    if (low) h += '<button class="btn sec" id="st-low">Alles Knappe auf die Einkaufsliste</button>';
+  }
+  $("#st-res").innerHTML = h;
+  $$("#st-res [data-col]").forEach(function (b) { b.onclick = function () { var c = LS.get("scol", {}), k = b.getAttribute("data-col"); if (stockFilter !== "alle") { stockFilter = "alle"; LS.set("sfilter", stockFilter); paintSeg("#st-chips", "data-sf", "alle"); } c[k] = !c[k]; LS.set("scol", c); fillStock(); }; });
+  $$("#st-res [data-lv]").forEach(function (b) { b.onclick = function () { var id = b.getAttribute("data-lv"), v = coll("stock")[id]; if (!v) return; var nl = v.lvl === 0 ? 2 : v.lvl - 1; write("stock/" + id + "/lvl", nl); write("stock/" + id + "/at", Date.now()); write("stock/" + id + "/by", me()); if (nl === 0 && addToShop(v.name)) toast(v.name + " ist leer und steht jetzt auf der Einkaufsliste"); }; });
+  $$("#st-res [data-sm]").forEach(function (b) { b.onclick = function () { openStock(b.getAttribute("data-sm")); }; });
+  $$("#st-res [data-sminus]").forEach(function (b) { b.onclick = function () { var id = b.getAttribute("data-sminus"), v = coll("stock")[id]; if (!v || !(v.qty > 0)) return; var nq = Math.max(0, Math.round((v.qty - unitStep(v.unit)) * 100) / 100), nv = Object.assign({}, v, { qty: nq, at: Date.now(), by: me() }); if (nq === 0) { nv.lvl = 0; if (addToShop(v.name)) toast(v.name + " ist alle und steht jetzt auf der Einkaufsliste"); } write("stock/" + id, nv); }; });
+  var lb = $("#st-low"); if (lb) lb.onclick = function () { var n = 0; all.forEach(function (v) { if (v.lvl < 2 && addToShop(v.name)) n++; }); toast(n ? n + " Sachen auf die Einkaufsliste gesetzt" : "Steht schon alles drauf"); };
+  var aq = $("#st-addq"); if (aq) aq.onclick = function () { var t = stockSearch.trim(); stockSearch = ""; $("#st-q").value = ""; $("#st-form-in").value = t; $("#st-form").requestSubmit ? $("#st-form").requestSubmit() : $("#st-form").onsubmit(new Event("submit")); };
+  var sq = $("#st-shopq"); if (sq) sq.onclick = function () { toast(addToShop(stockSearch.trim()) ? stockSearch.trim() + " steht jetzt auf der Einkaufsliste" : "Steht schon drauf"); };
 }
 /* Nach dem Hinzufügen direkt nach der Menge fragen */
 function openQtyAsk(ids) {
@@ -1444,7 +1475,7 @@ function openStock(id) {
   var v = coll("stock")[id]; if (!v) return;
   var html = '<div class="grab"></div><div class="ph"><h2>' + esc(v.name) + '</h2><button class="icon" data-close aria-label="Schließen">' + ICON_X + "</button></div>";
   html += '<div class="fl"><label for="sx-name">Name</label><input class="f" id="sx-name" value="' + esc(v.name) + '"></div>';
-  html += '<div class="fl"><span class="lab">Wo?</span><div class="seg three" id="sx-pl">' + PLACES.map(function (p) { return '<button type="button" data-p="' + p[0] + '" aria-pressed="' + (v.place === p[0]) + '">' + p[1].replace("Vorratsschrank", "Schrank").replace("Kühlschrank", "Kühlschr.") + "</button>"; }).join("") + "</div></div>";
+  html += '<div class="fl"><span class="lab">Wo?</span><div class="seg four" id="sx-pl">' + PLACES.map(function (p) { return '<button type="button" data-p="' + p[0] + '" aria-pressed="' + (v.place === p[0]) + '">' + PLACE_SHORT[p[0]] + "</button>"; }).join("") + "</div></div>";
   html += '<div class="fl"><span class="lab">Menge (optional)</span><div class="qtyrow"><button type="button" class="icon" id="sx-minus" aria-label="Weniger"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 12h12"/></svg></button><label for="sx-qty" class="sr">Menge</label><input class="f" id="sx-qty" inputmode="decimal" placeholder="–" value="' + (v.qty != null ? fmtNum(v.qty) : "") + '"><button type="button" class="icon" id="sx-plus" aria-label="Mehr"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 6v12M6 12h12"/></svg></button><label for="sx-unit" class="sr">Einheit</label><select class="f" id="sx-unit">' + UNITS.map(function (u) { return '<option value="' + u + '"' + ((v.unit || "") === u ? " selected" : "") + ">" + (u || "Einheit") + "</option>"; }).join("") + "</select></div></div>";
   html += '<div class="fl"><span class="lab">Wie viel ist da?</span><div class="seg three" id="sx-lv">' + LVL.map(function (l, i) { return '<button type="button" data-l="' + i + '" aria-pressed="' + (v.lvl === i) + '">' + l[0] + "</button>"; }).join("") + "</div></div>";
   html += '<button class="btn sec" id="sx-shop">Auf die Einkaufsliste</button><div class="actions"><button class="btn danger" id="sx-del">Löschen</button><button class="btn" id="sx-save">Speichern</button></div>';
@@ -1654,6 +1685,7 @@ function openStoryRead(id) {
 /* ---------- UPDATES + FEEDBACK ---------- */
 /* Bei jedem Update: APP_VER erhöhen und oben in CHANGES eintragen, was neu ist. */
 var CHANGES = {
+  "2.1": ["Vorräte: neuer Bereich „Backzutaten“", "Suche in den Vorräten", "Bereiche lassen sich einklappen, Leeres und Knappes steht jeweils oben"],
   "2.0": ["Neue Vorräte: Die App fragt direkt, wie viel davon da ist"],
   "1.9": ["Updates kommen jetzt zuverlässiger an: Sobald eins bereitliegt, erscheint ein Fenster zum Aktualisieren", "In den Einstellungen steht ganz unten, welche Version gerade läuft"],
   "1.8": ["Vorräte mit Mengenangabe, z. B. „6 Stk“ oder „500 g“", "Mit „−“ direkt am Vorrat abziehen, was verbraucht ist. Bei 0 kommt es auf die Einkaufsliste", "Beim Eintragen geht auch „6 Eier“ oder „500 g Hack“"],
