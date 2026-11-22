@@ -4,7 +4,7 @@
 <meta name="theme-color" content="#F5F6FA"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Wir zwei"><meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <title>Wir zwei</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#F5F6FA;--card:#fff;--ink:#1B1E2B;--mute:#5B6172;--line:#E3E6EE;--line2:#D5D8E1;
 --a:#2F5BD8;--at:#E5ECFC;--ai:#1E3A8A;--b:#B9470B;--bt:#FCEBDD;--bi:#7C2D07;
@@ -170,7 +170,7 @@ details.more summary::before{content:"▸";display:inline-block;transition:trans
 .steps{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:8px;font-size:15px;line-height:1.5}
 .bkprog{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:700;color:var(--mute)}.bkbar{flex:1;height:8px;border-radius:4px;background:#E3E6EE;overflow:hidden}.bkbar i{display:block;height:100%;background:var(--b);border-radius:4px}
 .bkcard{background:var(--card);border-radius:16px;padding:12px 14px;display:flex;flex-direction:column;gap:6px}.bkt{display:flex;gap:10px;align-items:flex-start;font-size:16px;font-weight:700;line-height:1.35}.bkt svg{flex-shrink:0;margin-top:1px}
-#ev-seg .chip{height:40px;padding:0 14px;font-size:14px}
+#irg-seg .chip{height:40px;padding:0 14px;font-size:14px}
 .foodcard .rvcard{background:#F7F8FB}
 .qaskrow{display:flex;flex-direction:column;gap:6px;background:var(--card);border-radius:14px;padding:10px 12px}.qaskname{font-size:15px;font-weight:700}
 .qastate{margin-top:6px}.qastate button{font-size:12px;height:40px}
@@ -186,6 +186,15 @@ details.more summary::before{content:"▸";display:inline-block;transition:trans
 .storytext{font-size:17px;line-height:1.7;background:var(--card);border-radius:16px;padding:16px}
 .storytext .sp-p1{color:var(--ai)}.storytext .sp-p2{color:var(--bi)}
 .longwarn{font-size:15px;font-weight:800;background:var(--warnt);color:var(--warn);border-radius:14px;padding:10px 14px;text-align:center}
+.postit{background:#FFE88A;border-radius:4px 4px 18px 4px;padding:14px 16px 12px;box-shadow:0 6px 14px rgba(120,90,0,.18);transform:rotate(-1deg);display:flex;flex-direction:column;gap:6px;color:#3D3000}
+.pihead{font-size:12px;font-weight:700;color:#6B5600}
+.pitext{font-family:'Caveat','Noteworthy','Bradley Hand','Segoe Print',cursive;font-size:28px;line-height:1.15;font-weight:700;white-space:pre-line;overflow-wrap:anywhere}
+.pinput{border:0;background:transparent;width:100%;min-height:110px;resize:none;color:#3D3000;outline:none}
+.pibtn{border:0;background:rgba(61,48,0,.08);color:#3D3000;border-radius:10px;height:40px;padding:0 14px;font-weight:700;font-size:14px}.pibtn.dark{background:#3D3000;color:#FFE88A}
+.pimine{display:flex;justify-content:space-between;gap:10px;font-size:13px;color:var(--mute);background:#FFF7D1;border-radius:12px;padding:8px 12px}.pimine b{white-space:nowrap;color:#6B5600}
+.lastdone{display:flex;align-items:center;gap:8px;background:var(--card);border-radius:16px;padding:6px 8px 6px 6px}
+.ldmain{flex:1;min-width:0;display:flex;align-items:center;gap:10px;border:0;background:none;text-align:left;padding:6px;min-height:44px}
+.ldt{flex:1;min-width:0;font-size:14px;line-height:1.3;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}.ldt small{display:block;color:var(--mute);font-size:12px}
 .hero{background:var(--ink);color:#fff;border-radius:22px;padding:18px;display:flex;flex-direction:column;gap:14px}
 .hero[data-go]{cursor:pointer}
 .heroline{display:flex;gap:12px;align-items:flex-start}
@@ -212,7 +221,8 @@ details.more summary::before{content:"▸";display:inline-block;transition:trans
 <main class="view" id="v-heute" data-view="heute">
   <div class="top">
     <div><div class="kicker" id="h-date"></div><h1 id="h-hello">Hallo</h1></div>
-    <button class="icon" id="btn-settings" aria-label="Einstellungen"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
+    <div class="row" style="gap:8px"><button class="icon" id="btn-note" aria-label="Zettel schreiben"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16v11l-5 5H4z"/><path d="M15 20v-5h5"/><path d="M8 9h8M8 13h5"/></svg></button>
+    <button class="icon" id="btn-settings" aria-label="Einstellungen"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button></div>
   </div>
   <div id="h-status"></div>
   <div id="h-body" style="display:flex;flex-direction:column;gap:14px"></div>
@@ -251,12 +261,12 @@ details.more summary::before{content:"▸";display:inline-block;transition:trans
 <!-- ========== EVENTS ========== -->
 <main class="view" id="v-events" data-view="events" hidden>
   <div class="top"><h1 id="evh-title">Events</h1><button class="icon dark" id="e-add" aria-label="Event hinzufügen"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div>
-  <div class="chips topicrow" id="ev-seg"><button type="button" class="chip" data-e="termine">Termine</button><button type="button" class="chip" data-e="irgendwann">Irgendwann</button><button type="button" class="chip" data-e="serien">Serien</button><button type="button" class="chip" data-e="wuensche">Geschenke</button></div>
+  <div class="seg" id="ev-seg"><button type="button" data-e="termine">Termine</button><button type="button" data-e="irgendwann">Irgendwann</button></div>
   <div id="ev-termine" style="display:flex;flex-direction:column;gap:14px">
   <div id="e-free"></div>
   <div id="e-list"></div>
   </div>
-  <div class="seg" id="irg-seg" hidden><button type="button" data-i="wunsch">Wunschliste</button><button type="button" data-i="ideen">Ideen</button></div>
+  <div class="chips topicrow" id="irg-seg" hidden><button type="button" class="chip" data-i="wunsch">Wunschliste</button><button type="button" class="chip" data-i="ideen">Ideen</button><button type="button" class="chip" data-i="serien">Serien</button><button type="button" class="chip" data-i="wuensche">Geschenke</button></div>
   <div id="ev-body" style="display:flex;flex-direction:column;gap:12px" hidden></div>
 </main>
 
@@ -299,7 +309,7 @@ details.more summary::before{content:"▸";display:inline-block;transition:trans
 
 <script>
 "use strict";
-var APP_VER = "2.5";
+var APP_VER = "2.6";
 var APP_VERSION = APP_VER + " · 20.11.2026";
 /* Eure Datenbank. Neue App-Installationen verbinden sich automatisch damit. */
 var DEFAULT_DB = "https://theresdennis-default-rtdb.europe-west1.firebasedatabase.app";
@@ -385,7 +395,8 @@ function snapshotKeys() {
   var ds = {}; Object.keys(drawColl()).forEach(function (k) { ds[k] = drawColl()[k].status; });
   var wl = wheelLast();
   var so = statusOf(other());
-  return { bucket: Object.keys(coll("bucket")), fb: feedbackList().map(function (f) { return f.key + f.at; }), stAt: so ? so.at : 0, story: storyMyTurn(), ideas: Object.keys(coll("ideas")), wishes: Object.keys(((tree.wishes || {})[other()]) || {}), log: Object.keys(coll("log")), shop: Object.keys(coll("shop")), events: Object.keys(coll("events")), draw: ds, wheelAt: wl ? wl.at : 0, quizOther: quizWaiting() };
+  var no = noteOf(other());
+  return { noteAt: no ? no.at : 0, bucket: Object.keys(coll("bucket")), fb: feedbackList().map(function (f) { return f.key + f.at; }), stAt: so ? so.at : 0, story: storyMyTurn(), ideas: Object.keys(coll("ideas")), wishes: Object.keys(((tree.wishes || {})[other()]) || {}), log: Object.keys(coll("log")), shop: Object.keys(coll("shop")), events: Object.keys(coll("events")), draw: ds, wheelAt: wl ? wl.at : 0, quizOther: quizWaiting() };
 }
 function applyRemote(ops) {
   var before = snapshotKeys();
@@ -413,6 +424,7 @@ function notifyNew(before) {
   if (quizWaiting() > before.quizOther && !(tab === "spiele" && gameTab === "quiz")) msgs.push(o + " hat Quizfragen beantwortet. Du bist dran!");
   var so = statusOf(other()); if (so && so.at !== before.stAt) msgs.unshift(o + ": " + statusText(so));
   feedbackList().forEach(function (f) { if (f.by !== me() && before.fb.indexOf(f.key + f.at) < 0) msgs.unshift(o + " hat Update " + (f.v || "") + " bewertet: " + starStr(f.stars) + (f.text ? " „" + f.text + "“" : "")); });
+  var nn = noteOf(other()); if (nn && nn.at !== before.noteAt && nn.t) msgs.unshift(o + " hat dir einen Zettel geschrieben: „" + nn.t + "“");
   entries("bucket").forEach(function (v) { if (before.bucket.indexOf(v.id) < 0 && v.by !== me()) msgs.push(o + " hat etwas auf eure Wunschliste gesetzt: " + v.t); });
   if (storyMyTurn() && !before.story) msgs.push(o + " hat die Geschichte weitergeschrieben. Du bist dran!");
   entries("ideas").forEach(function (v) { if (before.ideas.indexOf(v.id) < 0 && v.by !== me()) msgs.push(o + " hat eine Idee notiert: " + v.t); });
@@ -524,7 +536,7 @@ function renderHeute() {
   var h = new Date().getHours();
   $("#h-date").textContent = WDL[t.getDay()] + ", " + t.getDate() + ". " + MONL[t.getMonth()];
   $("#h-hello").textContent = (h < 11 ? "Guten Morgen" : h < 18 ? "Hallo" : "Guten Abend") + ", " + person(me()).name;
-  var html = heroCard();
+  var html = noteCard() + heroCard();
   var fc = foodCard();
   // Dienste heute
   html += '<section class="card"><div class="card-h"><h2>Heute</h2><button class="link" data-go="dienste">Dienstplan</button></div>';
@@ -537,11 +549,8 @@ function renderHeute() {
   html += '<div class="muted">Morgen: ' + tomorrow + "</div></section>";
   // Haushalt zuletzt
   html += fc;
-  var logs = entries("log").sort(function (a, b) { return b.at - a.at; }).slice(0, 3);
-  html += '<section class="card"><div class="card-h"><h2>Zuletzt erledigt</h2><button class="link" data-go="haushalt">Haushalt</button></div>';
-  if (!logs.length) html += '<div class="muted">Hier erscheint, was ihr im Haushalt erledigt habt.</div>';
-  logs.forEach(function (l) { html += '<div class="row">' + av(l.by) + '<span style="flex:1;font-size:14px;font-weight:600">' + esc(nm(l.by)) + ": " + esc(l.title) + '</span><span class="muted">' + when(l.at) + "</span></div>"; });
-  html += '<button class="btn sec" data-act="log">Ich habe etwas erledigt</button></section>';
+  var last = entries("log").sort(function (a, b) { return b.at - a.at; })[0];
+  html += '<div class="lastdone"><button class="ldmain" data-go="haushalt">' + (last ? av(last.by) + '<span class="ldt"><b>' + esc(nm(last.by)) + ":</b> " + esc(last.title) + '<small>' + when(last.at) + "</small></span>" : '<span class="ldt" style="color:var(--mute)">Noch nichts im Haushalt erledigt gemeldet</span>') + '</button><button class="pillbtn" data-act="log">+ Erledigt</button></div>';
   // Kacheln
   var openShop = entries("shop").filter(function (v) { return !v.done; }).length;
   var openTodo = entries("todos").length;
@@ -554,7 +563,7 @@ function renderHeute() {
   html += '<button class="tile" data-go="spiele" style="flex-direction:row;align-items:center;gap:12px;width:100%"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.5v.7M12 17h.01"/></svg><span style="display:flex;flex-direction:column"><span class="t">Quiz</span><span class="muted" style="font-weight:600">' + (qw ? esc(person(other()).name) + " hat " + qw + " Frage" + (qw > 1 ? "n" : "") + " beantwortet, die du noch nicht hast" : "Ein paar Fragen zwischendurch?") + "</span></span></button>";
   if (openTodo) html += '<button class="tile" data-go="haushalt" style="flex-direction:row;align-items:center;gap:12px;width:100%"><span class="num">' + openTodo + '</span><span class="muted" style="font-weight:600">Aufgabe' + (openTodo > 1 ? "n" : "") + " im Haushalt eingetragen</span></button>";
   $("#h-body").innerHTML = html;
-  bindCommon($("#h-body")); bindFood($("#h-body"));
+  bindCommon($("#h-body")); bindFood($("#h-body")); bindNote($("#h-body"));
 }
 function bindCommon(root) {
   $$("[data-go]", root).forEach(function (b) { b.onclick = function () { var g = b.getAttribute("data-go"); if (g === "spiele") { gameTab = "quiz"; LS.set("gtab", gameTab); } show(g); }; });
@@ -687,7 +696,7 @@ function renderEvents() {
   $("#ev-termine").hidden = eTab !== "termine"; $("#ev-body").hidden = eTab === "termine"; $("#e-add").hidden = eTab !== "termine";
   $("#evh-title").textContent = { termine: "Events", irgendwann: "Irgendwann", serien: "Watchlist", wuensche: "Geschenke" }[eTab] || "Events";
   $("#irg-seg").hidden = eTab !== "irgendwann"; paintSeg("#irg-seg", "data-i", iTab);
-  if (eTab === "irgendwann") return iTab === "ideen" ? renderIdeen() : renderBucket();
+  if (eTab === "irgendwann") return iTab === "ideen" ? renderIdeen() : iTab === "serien" ? renderWatch() : iTab === "wuensche" ? renderWuensche() : renderBucket();
   if (eTab === "ideen") return renderIdeen();
   if (eTab === "serien") return renderWatch();
   if (eTab === "wuensche") return renderWuensche();
@@ -1370,6 +1379,29 @@ function spinTo(idx, at) {
   requestAnimationFrame(step);
 }
 
+/* ---------- ZETTEL an den anderen ---------- */
+function noteOf(p) { return (tree.notes || {})[p] || null; }
+function noteCard() {
+  var o = other(), n = noteOf(o), dis = LS.get("notedis", 0), mine = noteOf(me()), h = "";
+  if (n && n.t && n.at > dis) {
+    if (!n.readAt) setTimeout(function () { var x = noteOf(o); if (x && !x.readAt && tab === "heute") write("notes/" + o + "/readAt", Date.now()); }, 1500);
+    h += '<div class="postit" role="note"><div class="pihead">Zettel von ' + esc(person(o).name) + " · " + when(n.at) + '</div><div class="pitext">' + esc(n.t) + '</div><div class="row" style="justify-content:flex-end;gap:8px"><button class="pibtn" id="pi-done">Abhaken</button><button class="pibtn dark" id="pi-reply">Antworten</button></div></div>';
+  }
+  if (mine && mine.t && Date.now() - mine.at < 3 * 864e5) h += '<div class="pimine"><span>Dein Zettel an ' + esc(person(o).name) + ': „' + esc(mine.t.length > 50 ? mine.t.slice(0, 50) + "…" : mine.t) + "“</span><b>" + (mine.readAt ? "gelesen ✓" : "noch nicht gelesen") + "</b></div>";
+  return h;
+}
+function bindNote(root) {
+  var d = $("#pi-done", root); if (d) d.onclick = function () { var n = noteOf(other()); LS.set("notedis", n ? n.at : Date.now()); renderHeute(); };
+  var rp = $("#pi-reply", root); if (rp) rp.onclick = function () { openNote(); };
+}
+function openNote() {
+  var o = person(other()).name;
+  openSheet('<div class="grab"></div><div class="ph"><h2>Zettel an ' + esc(o) + '</h2><button class="icon" data-close aria-label="Schließen">' + ICON_X + '</button></div><p class="help">Er klebt bei ' + esc(o) + ' ganz oben auf „Heute“, bis er abgehakt wird. Ein neuer Zettel ersetzt den alten.</p><div class="postit"><label for="nt-in" class="sr">Dein Zettel</label><textarea id="nt-in" class="pitext pinput" maxlength="200" placeholder="Hab dich lieb ❤️"></textarea></div><button class="btn" id="nt-send">Ankleben</button>');
+  setTimeout(function () { try { $("#nt-in").focus(); } catch (e) {} }, 250);
+  $("#nt-send").onclick = function () { var t = $("#nt-in").value.trim(); if (!t) return; var n = noteOf(other()); if (n) LS.set("notedis", n.at); write("notes/" + me(), { t: t, at: Date.now(), by: me() }); closeSheet(); toast("Zettel klebt bei " + o); };
+}
+$("#btn-note").onclick = function () { openNote(); };
+
 /* ---------- HEUTE: Feierabend-Countdown › nächstes Highlight › Spruch ---------- */
 var SPRUECHE = [
   "Heute ist ein guter Tag für Pizza.",
@@ -1483,7 +1515,7 @@ function openOwnStatus() {
 
 /* ---------- Unter-Reiter (Einkauf, Events) ---------- */
 var kTab = LS.get("ktab", "liste"), eTab = LS.get("etab", "termine"), iTab = LS.get("itab", "wunsch");
-if (eTab === "wunsch" || eTab === "ideen") { iTab = eTab; eTab = "irgendwann"; }
+if (["wunsch", "ideen", "serien", "wuensche"].indexOf(eTab) >= 0) { iTab = eTab; eTab = "irgendwann"; }
 $$("#irg-seg button").forEach(function (b) { b.onclick = function () { iTab = b.getAttribute("data-i"); LS.set("itab", iTab); renderEvents(); }; });
 function paintSeg(sel, attr, val) { $$(sel + " button").forEach(function (b) { b.setAttribute("aria-pressed", b.getAttribute(attr) === val); }); }
 $$("#k-seg button").forEach(function (b) { b.onclick = function () { kTab = b.getAttribute("data-k"); LS.set("ktab", kTab); renderEinkauf(); }; });
@@ -1969,6 +2001,7 @@ function openStoryRead(id) {
 /* ---------- UPDATES + FEEDBACK ---------- */
 /* Bei jedem Update: APP_VER erhöhen und oben in CHANGES eintragen, was neu ist. */
 var CHANGES = {
+  "2.6": ["Neu: Zettel an den anderen. Oben rechts auf „Heute“ schreiben, er klebt dann beim anderen ganz oben", "„Zuletzt erledigt“ ist jetzt nur noch eine Zeile", "Events aufgeräumt: nur noch Termine und Irgendwann. Serien und Geschenke stecken jetzt in „Irgendwann“"],
   "2.5": ["Wunschliste und Ideen stehen jetzt zusammen unter „Irgendwann“", "Spiele heißen jetzt „Zeitverschwendung“"],
   "2.4": ["Ganz oben auf „Heute“: Feierabend-Countdown, sonst der Countdown zum nächsten Highlight, sonst ein Spruch des Tages", "„Wo seid ihr?“ ist raus, steht ja eh im Dienstplan"],
   "2.3": ["Neue Wunschliste unter Events: Sachen, die ihr unbedingt mal machen wollt", "Auf „Heute“ fragt die App, ob ihr nicht wisst, was ihr essen sollt, und schlägt Gerichte vor, für die alles da ist. Eure eigenen Rezepte zuerst", "Vorräte: angebrochene oder fast leere Packungen direkt so eintragen", "Update-Übersicht nach Versionen sortiert", "„Wünsche“ heißt jetzt „Geschenke“"],
