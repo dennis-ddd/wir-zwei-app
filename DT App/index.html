@@ -8,7 +8,7 @@
 <style>
 :root{--bg:#F5F6FA;--card:#fff;--ink:#1B1E2B;--mute:#5B6172;--line:#E3E6EE;--line2:#D5D8E1;
 --a:#2F5BD8;--at:#E5ECFC;--ai:#1E3A8A;--b:#B9470B;--bt:#FCEBDD;--bi:#7C2D07;
---ok:#157347;--okt:#DFF3E8;--oki:#0F5132;--warn:#8A3A00;--warnt:#FFF1D6;--danger:#A61B1B;
+--ok:#157347;--soft:#F0F1F5;--soft2:#E9EBF1;--solid:#1B1E2B;--onsolid:#fff;--hero:#1B1E2B;--okt2:#EAF7EF;--badt:#FDECEC;--warnt2:#FFF7E6;--secret:#F3EEFB;--pin:#FFF7D1;--starbg:#FFF7E0;--okt:#DFF3E8;--oki:#0F5132;--warn:#8A3A00;--warnt:#FFF1D6;--danger:#A61B1B;
 --safe-t:env(safe-area-inset-top,0px);--safe-b:env(safe-area-inset-bottom,0px)}
 *{box-sizing:border-box}[hidden]{display:none!important}
 html,body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.4 'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;-webkit-tap-highlight-color:transparent}
@@ -25,8 +25,8 @@ h2{margin:0;font-size:16px;font-weight:700}
 .card-h{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
 .link{background:none;border:0;color:var(--a);font-weight:700;font-size:14px;padding:6px 0;min-height:36px}
 .icon{width:44px;height:44px;border-radius:12px;border:1px solid var(--line);background:var(--card);display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;padding:0}
-.icon.dark{background:var(--ink);border-color:var(--ink);color:#fff}
-.btn{height:52px;border-radius:14px;border:0;background:var(--ink);color:#fff;font-size:15px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px;padding:0 18px;width:100%}
+.icon.dark{background:var(--solid);border-color:var(--solid);color:var(--onsolid)}
+.btn{height:52px;border-radius:14px;border:0;background:var(--solid);color:var(--onsolid);font-size:15px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px;padding:0 18px;width:100%}
 .btn.sec{background:var(--card);color:var(--ink);border:1px solid var(--line2)}
 .btn.danger{background:var(--card);color:var(--danger);border:1px solid #E3B4B4}
 .btn.big{height:60px;font-size:16px;border-radius:18px}
@@ -34,38 +34,39 @@ h2{margin:0;font-size:16px;font-weight:700}
 .av{width:28px;height:28px;border-radius:50%;color:#fff;font-weight:700;font-size:12px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
 .av-p1{background:var(--a)}.av-p2{background:var(--b)}.av.lg{width:36px;height:36px;font-size:14px}
 .pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;padding:5px 10px;border-radius:999px}
-.pill.ok{background:var(--okt);color:var(--oki)}.pill.warn{background:var(--warnt);color:var(--warn)}.pill.mute{background:#E9EBF1;color:var(--mute)}
-.new{font-size:10px;font-weight:800;background:var(--ink);color:#fff;border-radius:6px;padding:2px 6px;letter-spacing:.3px}
+.pill.ok{background:var(--okt);color:var(--oki)}.pill.warn{background:var(--warnt);color:var(--warn)}.pill.mute{background:var(--soft2);color:var(--mute)}
+.new{font-size:10px;font-weight:800;background:var(--solid);color:var(--onsolid);border-radius:6px;padding:2px 6px;letter-spacing:.3px}
 input.f,select.f,textarea.f{width:100%;height:48px;border-radius:12px;border:1px solid var(--line2);background:var(--card);padding:0 14px;font-size:16px}
 textarea.f{height:72px;padding:12px 14px;resize:none}
 .fl{display:flex;flex-direction:column;gap:6px}.fl>label,.fl>.lab{font-size:13px;font-weight:700;color:var(--mute)}
 .row{display:flex;gap:8px;align-items:center}
 .grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
 .grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
-.seg{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;background:#E9EBF1;padding:4px;border-radius:14px}
+.seg{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;background:var(--soft2);padding:4px;border-radius:14px}
 .seg.three{grid-template-columns:repeat(3,minmax(0,1fr))}
 .seg button{height:44px;border-radius:11px;border:0;background:transparent;color:var(--mute);font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center;gap:8px}
 .seg button[aria-pressed=true]{background:var(--card);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.12)}
 .chip{height:46px;border-radius:12px;border:1px solid var(--line2);background:var(--card);font-weight:700;font-size:14px}
-.chip[aria-pressed=true]{background:var(--sel,var(--ink));border-color:var(--sel,var(--ink));color:#fff}
+.chip[aria-pressed=true]{background:var(--sel,var(--solid));border-color:var(--sel,var(--solid));color:var(--onsel,var(--onsolid))}
+#sh-type .chip{--onsel:#fff}
 .chips{display:flex;flex-wrap:wrap;gap:8px}
 .chips .chip{height:40px;padding:0 14px;border-radius:999px;font-size:13px}
 /* Heute */
 .shiftrow{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:14px}
 .shiftrow.p1{background:var(--at);color:var(--ai)}.shiftrow.p2{background:var(--bt);color:var(--bi)}
-.shiftrow.none{background:#F0F1F5;color:var(--mute)}
+.shiftrow.none{background:var(--soft);color:var(--mute)}
 .shiftrow b{display:block;font-size:14px}.shiftrow small{font-size:12px;font-weight:600}
 .tile{background:var(--card);border-radius:20px;padding:16px;display:flex;flex-direction:column;gap:6px;border:0;text-align:left}
 .tile .num{font-size:26px;font-weight:800;line-height:1.1}.tile .t{font-size:17px;font-weight:800;line-height:1.25}
 .status{display:flex;gap:8px;align-items:center;font-size:13px;font-weight:600;border-radius:14px;padding:10px 12px;border:0;text-align:left;width:100%}
-.status.ok{background:var(--okt);color:var(--oki)}.status.local{background:#E9EBF1;color:var(--mute)}.status.off{background:var(--warnt);color:var(--warn)}
+.status.ok{background:var(--okt);color:var(--oki)}.status.local{background:var(--soft2);color:var(--mute)}.status.off{background:var(--warnt);color:var(--warn)}
 .status i{width:9px;height:9px;border-radius:50%;background:currentColor;flex-shrink:0}
 /* Dienste */
 .wk{display:flex;gap:6px;align-items:center}.wk span{font-size:13px;font-weight:700;min-width:58px;text-align:center}
 .dgrid{display:grid;grid-template-columns:48px minmax(0,1fr) minmax(0,1fr);gap:8px;align-items:stretch}
 .dhead{font-size:12px;font-weight:700;color:var(--mute);padding:0 6px}
 .dhead span{display:inline-flex;gap:6px;align-items:center}.dot{width:10px;height:10px;border-radius:50%;display:inline-block}
-.day{padding:6px;border-radius:16px}.day.today{background:var(--card);box-shadow:0 0 0 2px var(--ink) inset}.day.both{background:#EAF7EF}
+.day{padding:6px;border-radius:16px}.day.today{background:var(--card);box-shadow:0 0 0 2px var(--ink) inset}.day.both{background:var(--okt2)}
 .dl{display:flex;flex-direction:column;justify-content:center}.dl small{font-size:12px;font-weight:600;color:var(--mute)}.dl b{font-size:18px;font-weight:800}
 .cell{border-radius:12px;padding:8px 10px;display:flex;flex-direction:column;justify-content:center;gap:1px;min-height:48px;border:0;text-align:left;width:100%}
 .cell b{font-size:13px}.cell small{font-size:11px;font-weight:600}
@@ -75,7 +76,7 @@ textarea.f{height:72px;padding:12px 14px;resize:none}
 .bothtag{margin:8px 0 0 56px}
 /* Listen */
 .list{background:var(--card);border-radius:16px;display:flex;flex-direction:column;overflow:hidden}
-.item{display:flex;align-items:center;gap:12px;min-height:54px;padding:4px 8px 4px 14px;border-bottom:1px solid #F0F1F5}
+.item{display:flex;align-items:center;gap:12px;min-height:54px;padding:4px 8px 4px 14px;border-bottom:1px solid var(--soft)}
 .item:last-child{border-bottom:0}
 .item .main{flex:1;min-width:0;display:flex;align-items:center;gap:12px;background:none;border:0;text-align:left;padding:8px 0;min-height:46px}
 .item .txt{flex:1;min-width:0;font-size:15px;font-weight:600;overflow-wrap:anywhere}
@@ -86,13 +87,13 @@ textarea.f{height:72px;padding:12px 14px;resize:none}
 .addrow{display:flex;gap:8px}.addrow input{flex:1}
 .empty-hint{background:var(--card);border-radius:16px;padding:18px;color:var(--mute);font-size:14px;text-align:center}
 .ev{background:var(--card);border-radius:18px;padding:14px;display:flex;gap:14px;border:0;text-align:left;width:100%}
-.cal{width:52px;height:60px;border-radius:14px;background:#F0F1F5;display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0}
+.cal{width:52px;height:60px;border-radius:14px;background:var(--soft);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0}
 .cal small{font-size:11px;font-weight:700;color:var(--mute)}.cal b{font-size:20px;font-weight:800;line-height:1.1}
 .ev .body{display:flex;flex-direction:column;gap:5px;flex:1;min-width:0}.ev .ttl{font-size:16px;font-weight:700}
 .conf{font-size:12px;font-weight:700;color:var(--warn);background:var(--warnt);padding:6px 8px;border-radius:8px}
 .okline{font-size:12px;font-weight:700;color:var(--oki)}
 .freebox{background:var(--okt);border-radius:20px;padding:16px;display:flex;flex-direction:column;gap:10px;color:var(--oki)}
-.freebox .chip{border-color:var(--ok);color:var(--oki);background:#fff}
+.freebox .chip{border-color:var(--ok);color:var(--oki);background:var(--card)}
 .logday{font-size:12px;font-weight:800;color:var(--mute);padding:10px 14px 2px;text-transform:uppercase;letter-spacing:.5px}
 .logitem{display:flex;gap:10px;align-items:center;padding:8px 8px 8px 14px;min-height:50px}
 .logitem .txt{flex:1;font-size:14px;font-weight:600;min-width:0;overflow-wrap:anywhere}.logitem .txt small{display:block;font-size:12px;color:var(--mute)}
@@ -113,8 +114,8 @@ nav.tabs button[aria-current=page] svg{stroke-width:2.3}
 .actions{display:grid;grid-template-columns:1fr 2fr;gap:10px}.actions.one{grid-template-columns:1fr}
 .setup{position:fixed;inset:0;z-index:40;background:var(--bg);overflow:auto}
 .setup .view{padding-bottom:40px}
-.toast{position:fixed;left:50%;transform:translateX(-50%);top:calc(var(--safe-t) + 12px);background:var(--ink);color:#fff;padding:12px 16px;border-radius:14px;font-size:14px;font-weight:600;z-index:50;max-width:90vw;box-shadow:0 6px 20px rgba(0,0,0,.2)}
-.help{font-size:13px;color:var(--mute);line-height:1.5;margin:0}.help code{background:#E9EBF1;padding:1px 5px;border-radius:5px;font-size:12px}
+.toast{position:fixed;left:50%;transform:translateX(-50%);top:calc(var(--safe-t) + 12px);background:var(--hero);color:#fff;padding:12px 16px;border-radius:14px;font-size:14px;font-weight:600;z-index:50;max-width:90vw;box-shadow:0 6px 20px rgba(0,0,0,.2)}
+.help{font-size:13px;color:var(--mute);line-height:1.5;margin:0}.help code{background:var(--soft2);padding:1px 5px;border-radius:5px;font-size:12px}
 details.card summary{font-weight:700;cursor:pointer}
 .score{display:flex;align-items:center;justify-content:center;gap:10px;background:var(--card);border-radius:16px;padding:10px}
 .score b{font-size:22px;font-weight:800;min-width:24px;text-align:center}
@@ -124,9 +125,9 @@ details.card summary{font-weight:700;cursor:pointer}
 .qopt:disabled{cursor:default;opacity:1}
 .qopt.mine{border:2px solid var(--ink)}
 .qopt.right{background:var(--okt);border-color:var(--ok);color:var(--oki)}
-.qopt.wrong{background:#FDECEC;border-color:#E3B4B4;color:var(--danger)}
+.qopt.wrong{background:var(--badt);border-color:#E3B4B4;color:var(--danger)}
 .qopt .marks{display:flex;gap:4px}
-.res{font-size:12px;font-weight:800;border-radius:8px;padding:3px 7px}.res.y{background:var(--okt);color:var(--oki)}.res.n{background:#FDECEC;color:var(--danger)}
+.res{font-size:12px;font-weight:800;border-radius:8px;padding:3px 7px}.res.y{background:var(--okt);color:var(--oki)}.res.n{background:var(--badt);color:var(--danger)}
 .drawcard{background:var(--card);border-radius:18px;padding:10px;display:flex;gap:12px;align-items:center}
 .drawimg{width:84px;height:84px;border-radius:12px;overflow:hidden;border:1px solid var(--line);padding:0;background:#fff;flex-shrink:0}
 .drawimg img{width:100%;height:100%;display:block}
@@ -151,7 +152,7 @@ details.card summary{font-weight:700;cursor:pointer}
 .stmain .sl{font-size:11px;font-weight:700;display:flex;align-items:center;gap:5px}
 .stmain .sl i{width:8px;height:8px;border-radius:50%;background:currentColor;display:inline-block}
 .lv2 .sl{color:var(--oki)}.lv1 .sl{color:var(--warn)}.lv0 .sl{color:var(--danger)}
-.lv0{background:#FDF1F1}.lv1{background:#FFF7E6}
+.lv0{background:var(--badt)}.lv1{background:var(--warnt2)}
 .searchbox{display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--line2);border-radius:12px;padding:0 12px;height:46px;color:var(--mute)}
 .searchbox input{flex:1;border:0;background:none;font-size:16px;height:44px;outline:none;color:var(--ink);min-width:0}
 .searchbox:focus-within{outline:3px solid var(--a);outline-offset:2px}
@@ -162,27 +163,27 @@ details.card summary{font-weight:700;cursor:pointer}
 .rvcard{background:var(--card);border:0;border-radius:14px;padding:12px 14px;display:flex;flex-direction:column;gap:3px;text-align:left;width:100%}
 .rvcard .rvn{font-size:16px;font-weight:700}.rvcard .rvm{font-size:12px;font-weight:600}
 .rzmiss{font-size:12px;font-weight:700;color:var(--warn)}
-details.more{margin-top:6px;border-top:1px solid #F0F1F5;padding-top:8px}
+details.more{margin-top:6px;border-top:1px solid var(--soft);padding-top:8px}
 details.more summary{font-weight:700;color:var(--a);cursor:pointer;min-height:40px;display:flex;align-items:center;gap:6px;list-style:none}
 details.more summary::-webkit-details-marker{display:none}
 details.more summary::before{content:"▸";display:inline-block;transition:transform .15s}details.more[open] summary::before{transform:rotate(90deg)}
-.amounts{display:flex;flex-direction:column;gap:2px;margin:6px 0 10px;font-size:14px}.amounts div{display:flex;justify-content:space-between;gap:10px;border-bottom:1px dashed #E3E6EE;padding:4px 0}.amounts b{font-weight:700;text-align:right}
+.amounts{display:flex;flex-direction:column;gap:2px;margin:6px 0 10px;font-size:14px}.amounts div{display:flex;justify-content:space-between;gap:10px;border-bottom:1px dashed var(--line);padding:4px 0}.amounts b{font-weight:700;text-align:right}
 .steps{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:8px;font-size:15px;line-height:1.5}
-.bkprog{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:700;color:var(--mute)}.bkbar{flex:1;height:8px;border-radius:4px;background:#E3E6EE;overflow:hidden}.bkbar i{display:block;height:100%;background:var(--b);border-radius:4px}
+.bkprog{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:700;color:var(--mute)}.bkbar{flex:1;height:8px;border-radius:4px;background:var(--line);overflow:hidden}.bkbar i{display:block;height:100%;background:var(--b);border-radius:4px}
 .bkcard{background:var(--card);border-radius:16px;padding:12px 14px;display:flex;flex-direction:column;gap:6px}.bkt{display:flex;gap:10px;align-items:flex-start;font-size:16px;font-weight:700;line-height:1.35}.bkt svg{flex-shrink:0;margin-top:1px}
 #irg-seg .chip{height:40px;padding:0 14px;font-size:14px}
-.foodcard .rvcard{background:#F7F8FB}
+.foodcard .rvcard{background:var(--soft)}
 .qaskrow{display:flex;flex-direction:column;gap:6px;background:var(--card);border-radius:14px;padding:10px 12px}.qaskname{font-size:15px;font-weight:700}
 .qastate{margin-top:6px}.qastate button{font-size:12px;height:40px}
 .qtyrow{display:grid;grid-template-columns:44px minmax(0,1fr) 44px minmax(0,1.3fr);gap:8px;align-items:center}.qtyrow input{text-align:center;font-weight:700}
 .stmore{width:34px;border:0;background:none;color:var(--mute);display:flex;align-items:center;justify-content:center}
 .rzicon{width:44px;height:44px;border-radius:12px;background:var(--bt);color:var(--bi);display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.ingrow{display:flex;align-items:center;gap:12px;min-height:44px;font-size:15px;font-weight:600;border-bottom:1px solid #F0F1F5}
+.ingrow{display:flex;align-items:center;gap:12px;min-height:44px;font-size:15px;font-weight:600;border-bottom:1px solid var(--soft)}
 .ingrow input{width:22px;height:22px;accent-color:var(--ink);flex-shrink:0}
 .pillbtn{border:1px solid var(--line2);background:var(--card);border-radius:999px;height:36px;padding:0 12px;font-size:13px;font-weight:700;flex-shrink:0}
-.card.secret{background:#F3EEFB}
-.lastline{display:flex;gap:10px;align-items:flex-start;font-size:17px;font-weight:600;line-height:1.45;background:#F7F8FB;border-radius:14px;padding:12px}
-.hiddenlines{display:flex;flex-direction:column;gap:6px}.hiddenlines span{height:10px;border-radius:5px;background:#E3E6EE}.hiddenlines span:nth-child(odd){width:85%}.hiddenlines span:nth-child(even){width:70%}
+.card.secret{background:var(--secret)}
+.lastline{display:flex;gap:10px;align-items:flex-start;font-size:17px;font-weight:600;line-height:1.45;background:var(--soft);border-radius:14px;padding:12px}
+.hiddenlines{display:flex;flex-direction:column;gap:6px}.hiddenlines span{height:10px;border-radius:5px;background:var(--line)}.hiddenlines span:nth-child(odd){width:85%}.hiddenlines span:nth-child(even){width:70%}
 .storytext{font-size:17px;line-height:1.7;background:var(--card);border-radius:16px;padding:16px}
 .storytext .sp-p1{color:var(--ai)}.storytext .sp-p2{color:var(--bi)}
 .longwarn{font-size:15px;font-weight:800;background:var(--warnt);color:var(--warn);border-radius:14px;padding:10px 14px;text-align:center}
@@ -191,28 +192,46 @@ details.more summary::before{content:"▸";display:inline-block;transition:trans
 .pitext{font-family:'Caveat','Noteworthy','Bradley Hand','Segoe Print',cursive;font-size:28px;line-height:1.15;font-weight:700;white-space:pre-line;overflow-wrap:anywhere}
 .pinput{border:0;background:transparent;width:100%;min-height:110px;resize:none;color:#3D3000;outline:none}
 .pibtn{border:0;background:rgba(61,48,0,.08);color:#3D3000;border-radius:10px;height:40px;padding:0 14px;font-weight:700;font-size:14px}.pibtn.dark{background:#3D3000;color:#FFE88A}
-.pimine{display:flex;justify-content:space-between;gap:10px;font-size:13px;color:var(--mute);background:#FFF7D1;border-radius:12px;padding:8px 12px}.pimine b{white-space:nowrap;color:#6B5600}
+.pimine{display:flex;justify-content:space-between;gap:10px;font-size:13px;color:var(--mute);background:var(--pin);border-radius:12px;padding:8px 12px}.pimine b{white-space:nowrap;color:#6B5600}
 .lastdone{display:flex;align-items:center;gap:8px;background:var(--card);border-radius:16px;padding:6px 8px 6px 6px}
 .ldmain{flex:1;min-width:0;display:flex;align-items:center;gap:10px;border:0;background:none;text-align:left;padding:6px;min-height:44px}
 .ldt{flex:1;min-width:0;font-size:14px;line-height:1.3;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}.ldt small{display:block;color:var(--mute);font-size:12px}
-.hero{background:var(--ink);color:#fff;border-radius:22px;padding:18px;display:flex;flex-direction:column;gap:14px}
+.tbtn{border:0;background:#fff;color:#1B1E2B;border-radius:10px;height:36px;padding:0 12px;font-weight:800;margin-left:12px;flex-shrink:0}
+.toast{display:flex;align-items:center}
+.holdhint{text-align:center;font-size:12px;color:var(--mute);margin:4px 0 0}
+.item,.logitem,.bkcard{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
+.shopbanner{display:flex;gap:10px;align-items:center;background:var(--okt);color:var(--oki);border-radius:14px;padding:10px 12px;font-size:14px}
+.shopmodebar{display:flex;justify-content:space-between;align-items:center;background:var(--hero);color:#fff;border-radius:14px;padding:8px 8px 8px 14px;font-size:15px}
+.shopmodebar .pillbtn{background:#fff;color:#1B1E2B;border:0;height:40px;padding:0 16px}
+.list.big .item{min-height:64px}.list.big .txt{font-size:18px}.list.big .box{width:30px;height:30px;border-radius:10px}
+.hero{background:var(--hero);color:#fff;border-radius:22px;padding:18px;display:flex;flex-direction:column;gap:14px}
 .hero[data-go]{cursor:pointer}
 .heroline{display:flex;gap:12px;align-items:flex-start}
 .herokick{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:#FFD84D}
 .herot{font-size:18px;font-weight:600;line-height:1.35}.herot b{font-weight:800}.herot.big{font-size:21px;font-weight:700}
 .heros{font-size:13px;color:#C9CCD6;margin-top:2px}
 .herobar{height:6px;border-radius:3px;background:#3A3E4F;margin-top:8px;overflow:hidden}.herobar i{display:block;height:100%;background:#FFD84D;border-radius:3px}
-.updline{font-size:20px;font-weight:800;line-height:1.35;background:var(--ink);color:#fff;border-radius:18px;padding:18px}
+.updline{font-size:20px;font-weight:800;line-height:1.35;background:var(--hero);color:#fff;border-radius:18px;padding:18px}
 .newsrow{display:flex;gap:10px;align-items:flex-start;font-size:15px;font-weight:600;line-height:1.4}
 .newsdot{width:8px;height:8px;border-radius:50%;background:var(--b);margin-top:7px;flex-shrink:0}
 .stars{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
 .stars button{border:1px solid var(--line2);background:var(--card);border-radius:14px;padding:10px 2px;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11px;font-weight:700;color:var(--mute)}
 .stars .st{font-size:28px;line-height:1;color:#C9CCD6}
-.stars button.on{border-color:#E8A100;background:#FFF7E0;color:var(--ink)}.stars button.on .st{color:#E8A100}
-.updbanner{position:fixed;left:12px;right:12px;bottom:calc(var(--safe-b) + 78px);z-index:20;background:var(--ink);color:#fff;border-radius:16px;padding:10px 10px 10px 16px;display:flex;align-items:center;gap:10px;font-size:14px;font-weight:600;box-shadow:0 6px 20px rgba(0,0,0,.25);max-width:536px;margin:0 auto}
-.updbanner span{flex:1}.updbanner button{border:0;background:#fff;color:var(--ink);border-radius:10px;height:40px;padding:0 14px;font-weight:800;flex-shrink:0}
-.fbrow{display:flex;flex-direction:column;gap:4px;padding:10px 0;border-top:1px solid #F0F1F5}
+.stars button.on{border-color:#E8A100;background:var(--starbg);color:var(--ink)}.stars button.on .st{color:#E8A100}
+.updbanner{position:fixed;left:12px;right:12px;bottom:calc(var(--safe-b) + 78px);z-index:20;background:var(--hero);color:#fff;border-radius:16px;padding:10px 10px 10px 16px;display:flex;align-items:center;gap:10px;font-size:14px;font-weight:600;box-shadow:0 6px 20px rgba(0,0,0,.25);max-width:536px;margin:0 auto}
+.updbanner span{flex:1}.updbanner button{border:0;background:#fff;color:#1B1E2B;border-radius:10px;height:40px;padding:0 14px;font-weight:800;flex-shrink:0}
+.fbrow{display:flex;flex-direction:column;gap:4px;padding:10px 0;border-top:1px solid var(--soft)}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+:root[data-theme=dark]{--bg:#111318;--card:#1B1E26;--ink:#ECEEF3;--mute:#A3A9B8;--line:#2A2E39;--line2:#3A3F4C;--soft:#232733;--soft2:#2A2E3A;--solid:#ECEEF3;--onsolid:#14161C;--hero:#262A36;
+--a:#7FA3FF;--at:#1D2A4D;--ai:#B9CCFF;--b:#F08A4B;--bt:#3B2416;--bi:#FFC7A3;--ok:#3DBB77;--okt:#14301F;--okt2:#16281D;--oki:#93E3B4;--warn:#FFC977;--warnt:#3A2C12;--warnt2:#33270F;--danger:#FF8A8A;--badt:#3A1D1D;--secret:#262033;--pin:#3A3418;--starbg:#3A3115;color-scheme:dark}
+:root[data-theme=dark] .av-p2{background:#C9551A}
+:root[data-theme=dark] .av-p1{background:#3D63D9}
+:root[data-theme=dark] .lv0{background:var(--badt)}
+:root[data-theme=dark] .freebox .chip{background:var(--card)}
+:root[data-theme=dark] .seg button[aria-pressed=true]{box-shadow:0 1px 3px rgba(0,0,0,.5)}
+:root[data-theme=dark] input.f,:root[data-theme=dark] select.f,:root[data-theme=dark] textarea.f{color-scheme:dark}
+:root[data-theme=dark] .sheet{background:rgba(0,0,0,.6)}
+:root[data-theme=dark] .grab{background:#4A4F5C}
 </style>
 </head>
 <body>
@@ -278,6 +297,7 @@ details.more summary::before{content:"▸";display:inline-block;transition:trans
   <form class="addrow" id="todo-form" autocomplete="off">
     <label for="todo-in" class="sr">Aufgabe eintragen</label>
     <input class="f" id="todo-in" placeholder="Aufgabe eintragen …" enterkeyhint="done">
+    <label for="todo-rep" class="sr">Wiederholen</label><select class="f" id="todo-rep" style="width:auto;padding:0 6px"><option value="">einmal</option><option value="1">täglich</option><option value="7">wöchentlich</option><option value="14">alle 2 Wochen</option><option value="30">monatlich</option></select>
     <button class="icon dark" style="width:48px;height:48px;border-radius:14px" aria-label="Aufgabe hinzufügen"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
   </form>
   <div id="t-list"></div>
@@ -309,7 +329,7 @@ details.more summary::before{content:"▸";display:inline-block;transition:trans
 
 <script>
 "use strict";
-var APP_VER = "2.6";
+var APP_VER = "2.7";
 var APP_VERSION = APP_VER + " · 20.11.2026";
 /* Eure Datenbank. Neue App-Installationen verbinden sich automatisch damit. */
 var DEFAULT_DB = "https://theresdennis-default-rtdb.europe-west1.firebasedatabase.app";
@@ -317,7 +337,7 @@ var $ = function (s, r) { return (r || document).querySelector(s); };
 var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
 var LS = {
   get: function (k, d) { try { var v = localStorage.getItem("wz_" + k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
-  set: function (k, v) { try { localStorage.setItem("wz_" + k, JSON.stringify(v)); } catch (e) {} }
+  set: function (k, v) { try { localStorage.setItem("wz_" + k, JSON.stringify(v)); } catch (e) { if (!LS.warned) { LS.warned = true; setTimeout(function () { try { toast("Der Speicher auf diesem Handy ist voll. Einstellungen › Speicher › Aufräumen hilft."); } catch (x) {} }, 500); } } }
 };
 function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
 function rid(n) { var a = "abcdefghijkmnpqrstuvwxyz23456789", s = ""; var r = new Uint8Array(n || 12); (window.crypto || window.msCrypto).getRandomValues(r); for (var i = 0; i < r.length; i++) s += a[r[i] % a.length]; return s; }
@@ -395,8 +415,8 @@ function snapshotKeys() {
   var ds = {}; Object.keys(drawColl()).forEach(function (k) { ds[k] = drawColl()[k].status; });
   var wl = wheelLast();
   var so = statusOf(other());
-  var no = noteOf(other());
-  return { noteAt: no ? no.at : 0, bucket: Object.keys(coll("bucket")), fb: feedbackList().map(function (f) { return f.key + f.at; }), stAt: so ? so.at : 0, story: storyMyTurn(), ideas: Object.keys(coll("ideas")), wishes: Object.keys(((tree.wishes || {})[other()]) || {}), log: Object.keys(coll("log")), shop: Object.keys(coll("shop")), events: Object.keys(coll("events")), draw: ds, wheelAt: wl ? wl.at : 0, quizOther: quizWaiting() };
+  var no = noteOf(other()), sp0 = shoppingOf(other());
+  return { shopAt: sp0 ? sp0.at : 0, noteAt: no ? no.at : 0, bucket: Object.keys(coll("bucket")), fb: feedbackList().map(function (f) { return f.key + f.at; }), stAt: so ? so.at : 0, story: storyMyTurn(), ideas: Object.keys(coll("ideas")), wishes: Object.keys(((tree.wishes || {})[other()]) || {}), log: Object.keys(coll("log")), shop: Object.keys(coll("shop")), events: Object.keys(coll("events")), draw: ds, wheelAt: wl ? wl.at : 0, quizOther: quizWaiting() };
 }
 function applyRemote(ops) {
   var before = snapshotKeys();
@@ -407,8 +427,9 @@ function applyRemote(ops) {
   queue.forEach(function (q) { tree = setAt(tree, splitPath(q.p), q.d); });
   online = "ok";
   if (gotInitial) notifyNew(before);
-  gotInitial = true;
+  var first = !gotInitial; gotInitial = true;
   save(); render();
+  if (first) setTimeout(function () { cleanup(); }, 2000);
 }
 function notifyNew(before) {
   var msgs = [];
@@ -424,6 +445,7 @@ function notifyNew(before) {
   if (quizWaiting() > before.quizOther && !(tab === "spiele" && gameTab === "quiz")) msgs.push(o + " hat Quizfragen beantwortet. Du bist dran!");
   var so = statusOf(other()); if (so && so.at !== before.stAt) msgs.unshift(o + ": " + statusText(so));
   feedbackList().forEach(function (f) { if (f.by !== me() && before.fb.indexOf(f.key + f.at) < 0) msgs.unshift(o + " hat Update " + (f.v || "") + " bewertet: " + starStr(f.stars) + (f.text ? " „" + f.text + "“" : "")); });
+  var sp1 = shoppingOf(other()); if (sp1 && sp1.at !== before.shopAt) msgs.unshift(o + " geht einkaufen. Fehlt noch was? Schnell auf die Liste!");
   var nn = noteOf(other()); if (nn && nn.at !== before.noteAt && nn.t) msgs.unshift(o + " hat dir einen Zettel geschrieben: „" + nn.t + "“");
   entries("bucket").forEach(function (v) { if (before.bucket.indexOf(v.id) < 0 && v.by !== me()) msgs.push(o + " hat etwas auf eure Wunschliste gesetzt: " + v.t); });
   if (storyMyTurn() && !before.story) msgs.push(o + " hat die Geschichte weitergeschrieben. Du bist dran!");
@@ -553,7 +575,7 @@ function renderHeute() {
   html += '<div class="lastdone"><button class="ldmain" data-go="haushalt">' + (last ? av(last.by) + '<span class="ldt"><b>' + esc(nm(last.by)) + ":</b> " + esc(last.title) + '<small>' + when(last.at) + "</small></span>" : '<span class="ldt" style="color:var(--mute)">Noch nichts im Haushalt erledigt gemeldet</span>') + '</button><button class="pillbtn" data-act="log">+ Erledigt</button></div>';
   // Kacheln
   var openShop = entries("shop").filter(function (v) { return !v.done; }).length;
-  var openTodo = entries("todos").length;
+  var openTodo = entries("todos").filter(function (v) { return !v.due || v.due <= iso(today()); }).length;
   var next = upcomingEvents()[0];
   html += '<div class="grid2">';
   html += '<button class="tile" data-go="einkauf"><span class="num">' + openShop + '</span><span class="muted" style="font-weight:600">offen auf der Einkaufsliste</span></button>';
@@ -639,7 +661,7 @@ function openShift(p, date) {
     }
     closeSheet(); toast(rep ? "Dienst " + (rep + 1) + "× eingetragen" : "Dienst gespeichert");
   };
-  if (orig) $("#sh-del").onclick = function () { ask("Diesen Dienst löschen?", function () { write("shifts/" + origKey, null); closeSheet(); }, "Löschen"); };
+  if (orig) $("#sh-del").onclick = function () { del(["shifts/" + origKey]); closeSheet();  };
 }
 
 /* ---------- EINKAUF ---------- */
@@ -654,21 +676,37 @@ function renderEinkauf() {
 function renderListe() {
   var all = entries("shop"), open = all.filter(function (v) { return !v.done; }).sort(function (a, b) { return a.at - b.at; }), done = all.filter(function (v) { return v.done; }).sort(function (a, b) { return (b.doneAt || 0) - (a.doneAt || 0); });
   $("#s-count").textContent = open.length + " offen";
-  var html = "";
-  if (!all.length) html = '<div class="empty-hint">Die Liste ist leer. Was fehlt, oben eintragen. Ihr seht beide sofort, was dazukommt.</div>';
-  if (open.length) html += '<div class="list">' + open.map(shopItem).join("") + "</div>";
+  var html = "", ps = shoppingOf(other());
+  if (ps) html += '<div class="shopbanner">' + av(other()) + "<span><b>" + esc(person(other()).name) + " ist gerade einkaufen.</b> Was du jetzt einträgst, sieht " + (other() === "p2" ? "sie" : "er") + " sofort.</span></div>";
+  if (shopMode) {
+    html += '<div class="shopmodebar"><span><b>Einkaufsmodus</b> · ' + open.length + ' offen</span><button class="pillbtn" id="s-stop">Fertig</button></div>';
+    var groups = {}; open.forEach(function (v) { var a = aisleOf(v.name); (groups[a] = groups[a] || []).push(v); });
+    Object.keys(groups).map(Number).sort(function (a, b) { return a - b; }).forEach(function (a) { html += '<p class="label">' + (AISLES[a] ? AISLES[a][0] : "Sonstiges") + '</p><div class="list big">' + groups[a].map(shopItem).join("") + "</div>"; });
+    if (!open.length) html += '<div class="empty-hint">Alles im Wagen! Tipp auf „Fertig“, wenn du zurück bist.</div>';
+  } else {
+    if (open.length) html += '<button class="btn sec" id="s-start"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h2l2.4 11h11l2-8H6.2"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Ich gehe einkaufen</button>';
+    var qb = quickBuys();
+    if (qb.length) html += '<div class="fl"><span class="lab">Schnell nochmal</span><div class="chips topicrow">' + qb.map(function (n) { return '<button class="chip" data-qb="' + esc(n) + '">+ ' + esc(n) + "</button>"; }).join("") + "</div></div>";
+    if (!all.length) html += '<div class="empty-hint">Die Liste ist leer. Was fehlt, oben eintragen.</div>';
+    if (open.length) html += '<div class="list">' + open.map(shopItem).join("") + "</div>";
+  }
   if (done.length) {
     html += '<div class="card-h" style="padding:0 4px"><span class="label">Im Wagen (' + done.length + ')</span><button class="link" id="s-clear">Erledigte löschen</button></div>';
     html += '<div class="list">' + done.map(shopItem).join("") + "</div>";
   }
+  if (all.length) html += '<p class="holdhint">Tipp: Lange drücken zum Bearbeiten</p>';
   $("#s-list").innerHTML = html;
-  $$("#s-list [data-toggle]").forEach(function (b) { b.onclick = function () { var id = b.getAttribute("data-toggle"), v = coll("shop")[id]; if (!v) return; var n = Object.assign({}, v, { done: !v.done, doneBy: !v.done ? me() : null, doneAt: !v.done ? Date.now() : null }); write("shop/" + id, n); var st = stockByName(v.name); if (n.done && st && (st.lvl < 2 || st.ang)) { write("stock/" + st.id + "/lvl", 2); write("stock/" + st.id + "/ang", false); if (st.qty === 0) write("stock/" + st.id + "/qty", null); } }; });
-  $$("#s-list [data-del]").forEach(function (b) { b.onclick = function () { write("shop/" + b.getAttribute("data-del"), null); }; });
-  var c = $("#s-clear"); if (c) c.onclick = function () { ask("Alle abgehakten Artikel löschen?", function () { done.forEach(function (v) { write("shop/" + v.id, null); }); }, "Löschen"); };
+  var sb = $("#s-start"); if (sb) sb.onclick = startShopping;
+  var se = $("#s-stop"); if (se) se.onclick = stopShopping;
+  $$("#s-list [data-qb]").forEach(function (b) { b.onclick = function () { addToShop(b.getAttribute("data-qb")); }; });
+  $$("#s-list .item[data-id]").forEach(function (el) { onHold(el, function () { openEditItem("shop/" + el.getAttribute("data-id"), "Artikel bearbeiten", [["name", "Artikel"], ["qty", "Menge (optional, z. B. 2× oder 500 g)"]]); }); });
+  $$("#s-list [data-toggle]").forEach(function (b) { b.onclick = function () { var id = b.getAttribute("data-toggle"), v = coll("shop")[id]; if (!v) return; var n = Object.assign({}, v, { done: !v.done, doneBy: !v.done ? me() : null, doneAt: !v.done ? Date.now() : null }); write("shop/" + id, n); if (n.done) bumpHist(v.name); var st = stockByName(v.name); if (n.done && st && (st.lvl < 2 || st.ang)) { write("stock/" + st.id + "/lvl", 2); write("stock/" + st.id + "/ang", false); if (st.qty === 0) write("stock/" + st.id + "/qty", null); } }; });
+  $$("#s-list [data-del]").forEach(function (b) { b.onclick = function () { del(["shop/" + b.getAttribute("data-del")]); }; });
+  var c = $("#s-clear"); if (c) c.onclick = function () { del(done.map(function (v) { return "shop/" + v.id; }), done.length + " Artikel gelöscht"); };
 }
 function shopItem(v) {
   var nw = isNew(v, "einkauf") ? ' <span class="new">NEU</span>' : "";
-  return '<div class="item' + (v.done ? " done" : "") + '"><button class="main" data-toggle="' + v.id + '" aria-pressed="' + !!v.done + '"><span class="box">' + (v.done ? ICON_CHECK : "") + '</span><span class="txt">' + esc(v.name) + nw + '</span></button><span title="von ' + esc(person(v.by).name) + '">' + av(v.by) + '</span><button class="x" data-del="' + v.id + '" aria-label="' + esc(v.name) + ' löschen">' + ICON_X + "</button></div>";
+  return '<div class="item' + (v.done ? " done" : "") + '" data-id="' + v.id + '"><button class="main" data-toggle="' + v.id + '" aria-pressed="' + !!v.done + '"><span class="box">' + (v.done ? ICON_CHECK : "") + '</span><span class="txt">' + esc(v.name) + nw + (v.qty ? '<span class="sub" style="text-decoration:none">' + esc(v.qty) + "</span>" : "") + '</span></button><span title="von ' + esc(person(v.by).name) + '">' + av(v.by) + '</span><button class="x" data-del="' + v.id + '" aria-label="' + esc(v.name) + ' löschen">' + ICON_X + "</button></div>";
 }
 $("#shop-form").onsubmit = function (e) {
   e.preventDefault(); var i = $("#shop-in"), v = i.value.trim(); if (!v) return;
@@ -745,21 +783,26 @@ function openEvent(id, date, title) {
     write("events/" + (id || rid()), { title: title, date: d, time: $("#ev-time").value || "", who: st.who, note: $("#ev-note").value.trim(), by: v ? v.by : me(), at: v ? v.at : Date.now(), editedBy: me() });
     closeSheet(); toast("Event gespeichert");
   };
-  if (v) $("#ev-del").onclick = function () { ask("Event löschen?", function () { write("events/" + id, null); closeSheet(); }, "Löschen"); };
+  if (v) $("#ev-del").onclick = function () { del(["events/" + id]); closeSheet();  };
 }
 
 /* ---------- HAUSHALT ---------- */
 function renderHaushalt() {
-  var todos = entries("todos").sort(function (a, b) { return a.at - b.at; });
+  var ts0 = iso(today()), all = entries("todos");
+  var todos = all.filter(function (v) { return !v.due || v.due <= ts0; }).sort(function (a, b) { return (a.due || "").localeCompare(b.due || "") || a.at - b.at; });
+  var later = all.filter(function (v) { return v.due && v.due > ts0; }).sort(function (a, b) { return a.due.localeCompare(b.due); });
   var th = "";
-  if (!todos.length) th = '<div class="empty-hint">Nichts eingetragen. Wenn etwas gemacht werden muss, oben eintragen.</div>';
+  if (!todos.length) th = '<div class="empty-hint">' + (later.length ? "Gerade ist nichts fällig." : "Nichts eingetragen. Wenn etwas gemacht werden muss, oben eintragen. Mit „wöchentlich“ & Co. kommt es von selbst wieder.") + "</div>";
   else th = '<div class="list">' + todos.map(function (v) {
     var nw = isNew(v, "haushalt") ? ' <span class="new">NEU</span>' : "";
-    return '<div class="item"><button class="main" data-todo="' + v.id + '" aria-label="' + esc(v.title) + ' als erledigt melden"><span class="box"></span><span class="txt">' + esc(v.title) + nw + '<span class="sub">eingetragen von ' + esc(von(v.by)) + " · " + when(v.at) + '</span></span></button><button class="x" data-tdel="' + v.id + '" aria-label="' + esc(v.title) + ' entfernen">' + ICON_X + "</button></div>";
+    var sub = v.every ? "↻ " + repText(v.every) + (v.lastDone ? " · zuletzt " + esc(von(v.lastBy) === "dir" ? "du" : von(v.lastBy)) + " " + when(v.lastDone) : "") : "eingetragen von " + esc(von(v.by)) + " · " + when(v.at);
+    return '<div class="item" data-id="' + v.id + '"><button class="main" data-todo="' + v.id + '" aria-label="' + esc(v.title) + ' als erledigt melden"><span class="box"></span><span class="txt">' + esc(v.title) + nw + '<span class="sub">' + sub + '</span></span></button><button class="x" data-tdel="' + v.id + '" aria-label="' + esc(v.title) + ' entfernen">' + ICON_X + "</button></div>";
   }).join("") + "</div>";
+  if (later.length) th += '<details class="card" style="padding:12px 16px"><summary>Kommt wieder (' + later.length + ")</summary>" + later.map(function (v) { var d = Math.round((pISO(v.due) - today()) / 864e5); return '<div class="item" data-id="' + v.id + '" style="padding-left:0"><span class="txt">' + esc(v.title) + '<span class="sub">↻ ' + repText(v.every) + " · wieder " + (d === 1 ? "morgen" : "in " + d + " Tagen") + "</span></span></div>"; }).join("") + "</details>";
   $("#t-list").innerHTML = th;
-  $$("#t-list [data-todo]").forEach(function (b) { b.onclick = function () { var id = b.getAttribute("data-todo"), v = coll("todos")[id]; if (!v) return; write("log/" + rid(), { title: v.title, by: me(), at: Date.now() }); write("todos/" + id, null); toast("Erledigt gemeldet: " + v.title); }; });
-  $$("#t-list [data-tdel]").forEach(function (b) { b.onclick = function () { ask("Aufgabe entfernen, ohne sie als erledigt zu melden?", function () { write("todos/" + b.getAttribute("data-tdel"), null); }, "Entfernen"); }; });
+  $$("#t-list [data-todo]").forEach(function (b) { b.onclick = function () { var id = b.getAttribute("data-todo"), v = coll("todos")[id]; if (!v) return; write("log/" + rid(), { title: v.title, by: me(), at: Date.now() }); finishTodo(id); toast("Erledigt gemeldet: " + v.title + (v.every ? " · kommt " + repText(v.every) + " wieder" : "")); }; });
+  $$("#t-list .item[data-id]").forEach(function (el) { onHold(el, function () { openEditItem("todos/" + el.getAttribute("data-id"), "Aufgabe bearbeiten", [["title", "Aufgabe"], ["every", "Wiederholen", "select", REPEAT_OPTS, "num"]], function (n) { if (!n.every) n.due = null; }); }); });
+  $$("#t-list [data-tdel]").forEach(function (b) { b.onclick = function () { del(["todos/" + b.getAttribute("data-tdel")]);  }; });
 
   var logs = entries("log").sort(function (a, b) { return b.at - a.at; }).slice(0, 60);
   var lh = "";
@@ -770,20 +813,25 @@ function renderHaushalt() {
       var day = iso(new Date(v.at));
       if (day !== lastDay) { lh += '<div class="logday">' + esc(relDay(day)) + "</div>"; lastDay = day; }
       var nw = isNew(v, "haushalt") ? ' <span class="new">NEU</span>' : "";
-      lh += '<div class="logitem">' + av(v.by) + '<span class="txt">' + esc(v.title) + nw + "<small>" + esc(nm(v.by)) + (v.note ? " · " + esc(v.note) : "") + "</small></span><time>" + hm(v.at) + "</time>" + (v.by === me() ? '<button class="x" data-ldel="' + v.id + '" aria-label="Eintrag löschen">' + ICON_X + "</button>" : '<span style="width:40px"></span>') + "</div>";
+      lh += '<div class="logitem" data-id="' + v.id + '">' + av(v.by) + '<span class="txt">' + esc(v.title) + nw + "<small>" + esc(nm(v.by)) + (v.note ? " · " + esc(v.note) : "") + "</small></span><time>" + hm(v.at) + "</time>" + (v.by === me() ? '<button class="x" data-ldel="' + v.id + '" aria-label="Eintrag löschen">' + ICON_X + "</button>" : '<span style="width:40px"></span>') + "</div>";
     });
     lh += "</div>";
   }
   $("#l-list").innerHTML = lh;
-  $$("#l-list [data-ldel]").forEach(function (b) { b.onclick = function () { ask("Diesen Eintrag löschen?", function () { write("log/" + b.getAttribute("data-ldel"), null); }, "Löschen"); }; });
+  $$("#l-list [data-ldel]").forEach(function (b) { b.onclick = function () { del(["log/" + b.getAttribute("data-ldel")]);  }; });
+  $$("#l-list .logitem[data-id]").forEach(function (el) { onHold(el, function () { openEditItem("log/" + el.getAttribute("data-id"), "Eintrag bearbeiten", [["title", "Erledigt"], ["note", "Notiz"]]); }); });
 }
-$("#todo-form").onsubmit = function (e) { e.preventDefault(); var i = $("#todo-in"), v = i.value.trim(); if (!v) return; write("todos/" + rid(), { title: v, by: me(), at: Date.now() }); i.value = ""; };
+$("#todo-form").onsubmit = function (e) { e.preventDefault(); var i = $("#todo-in"), v = i.value.trim(); if (!v) return; var ev = +$("#todo-rep").value || null; write("todos/" + rid(), { title: v, by: me(), at: Date.now(), every: ev }); i.value = ""; $("#todo-rep").value = ""; };
+var REPEAT_OPTS = [["", "einmal"], ["1", "täglich"], ["7", "wöchentlich"], ["14", "alle 2 Wochen"], ["30", "monatlich"]];
+function repText(n) { return n === 1 ? "täglich" : n === 7 ? "wöchentlich" : n === 14 ? "alle 2 Wochen" : n === 30 ? "monatlich" : "alle " + n + " Tage"; }
+/* Aufgabe erledigt: wiederkehrende kommen nach Ablauf wieder, einmalige verschwinden */
+function finishTodo(id) { var v = coll("todos")[id]; if (!v) return; if (v.every) write("todos/" + id, Object.assign({}, v, { due: iso(addDays(today(), v.every)), lastDone: Date.now(), lastBy: me() })); else write("todos/" + id, null); }
 $("#log-add").onclick = function () { openLog(); };
 function openLog() {
   // Vorschläge nur aus euren eigenen Einträgen
   var freq = {};
   entries("log").forEach(function (v) { var k = v.title.trim(); freq[k] = (freq[k] || 0) + 1; });
-  var todoTitles = entries("todos").map(function (v) { return v.title; });
+  var todoTitles = entries("todos").filter(function (v) { return !v.due || v.due <= iso(today()); }).map(function (v) { return v.title; });
   var sugg = todoTitles.concat(Object.keys(freq).sort(function (a, b) { return freq[b] - freq[a]; })).filter(function (x, i, a) { return a.indexOf(x) === i; }).slice(0, 10);
   var html = '<div class="grab"></div><div class="ph"><h2>Was hast du erledigt?</h2><button class="icon" data-close aria-label="Schließen">' + ICON_X + "</button></div>";
   html += '<div class="fl"><label for="lg-title">Erledigt</label><input class="f" id="lg-title" placeholder="z. B. Geschirrspüler ausgeräumt" enterkeyhint="done"></div>';
@@ -797,7 +845,7 @@ function openLog() {
   function submit() {
     var t = $("#lg-title").value.trim(); if (!t) { toast("Bitte eintragen, was du erledigt hast"); return; }
     write("log/" + rid(), { title: t, note: $("#lg-note").value.trim(), by: me(), at: Date.now() });
-    entries("todos").forEach(function (v) { if (v.title.trim().toLowerCase() === t.toLowerCase()) write("todos/" + v.id, null); });
+    entries("todos").forEach(function (v) { if (v.title.trim().toLowerCase() === t.toLowerCase() && (!v.due || v.due <= iso(today()))) finishTodo(v.id); });
     closeSheet(); toast("Gemeldet: " + t);
   }
   $("#lg-save").onclick = submit;
@@ -813,326 +861,11 @@ function wheelLists() { return ((G().wheel || {}).lists) || {}; }
 function wheelLast() { return (G().wheel || {}).last || null; }
 
 /* Fragen: [Thema, Frage, [richtige Antwort, falsch, falsch, falsch]] */
-var QZ = [
-["Filme","Welcher Film gewann 1998 den Oscar als bester Film?",["Titanic","Forrest Gump","Gladiator","Der Soldat James Ryan"]],
-["Filme","Wie schnell muss der DeLorean in „Zurück in die Zukunft“ fahren, um durch die Zeit zu reisen?",["88 Meilen pro Stunde","100 Meilen pro Stunde","66 Meilen pro Stunde","121 Meilen pro Stunde"]],
-["Filme","Wie heißt Simbas Vater in „Der König der Löwen“?",["Mufasa","Scar","Rafiki","Zazu"]],
-["Filme","Wie heißt der Schneemann in „Die Eiskönigin“?",["Olaf","Sven","Kristoff","Hans"]],
-["Filme","„Das Leben ist wie eine Schachtel …“ – wie geht Forrest Gumps Spruch weiter?",["Pralinen","Kekse","Streichhölzer","Zigarren"]],
-["Filme","Wer führte Regie bei „Jurassic Park“ (1993)?",["Steven Spielberg","James Cameron","George Lucas","Ridley Scott"]],
-["Filme","Welches Tier begleitet Shrek im ersten Film?",["Ein Esel","Ein Pferd","Ein Drache","Ein Kater"]],
-["Filme","In welchem Film sagt Arnold Schwarzenegger „I'll be back“?",["Terminator","Predator","Total Recall","True Lies"]],
-["Filme","Wie heißt der Cowboy in „Toy Story“?",["Woody","Buzz","Jessie","Rex"]],
-["Filme","Wer spielt Captain Jack Sparrow?",["Johnny Depp","Orlando Bloom","Brad Pitt","Keanu Reeves"]],
-["Filme","Welche Pille schluckt Neo in „Matrix“?",["Die rote","Die blaue","Die grüne","Die weiße"]],
-["Filme","Wie heißt der große weiße Hai in „Findet Nemo“?",["Bruce","Anker","Chum","Jaws"]],
-["Videospiele","Wie heißt Marios Bruder?",["Luigi","Wario","Toad","Yoshi"]],
-["Videospiele","Welche Nummer hat Pikachu im Pokédex?",["25","1","7","151"]],
-["Videospiele","Wie heißt der Held in „The Legend of Zelda“?",["Link","Zelda","Ganon","Epona"]],
-["Videospiele","Wie heißen die grünen Monster in Minecraft, die explodieren?",["Creeper","Zombies","Enderman","Slimes"]],
-["Videospiele","Aus welcher Spielereihe stammt Lara Croft?",["Tomb Raider","Uncharted","Resident Evil","Assassin's Creed"]],
-["Videospiele","In welchem Jahr kam die Nintendo Switch heraus?",["2017","2015","2019","2013"]],
-["Videospiele","Wie heißt die Stadt in GTA V?",["Los Santos","Liberty City","Vice City","San Fierro"]],
-["Videospiele","Aus wie vielen Quadraten besteht jeder Stein in Tetris?",["4","3","5","6"]],
-["Videospiele","Wie viele Geister jagen Pac-Man?",["4","3","5","6"]],
-["Videospiele","Welche Farbe hat Sonic?",["Blau","Rot","Grün","Gelb"]],
-["Videospiele","Wie heißt der Fuchs, der Sonic begleitet?",["Tails","Knuckles","Shadow","Amy"]],
-["Videospiele","Wer ist Marios Erzfeind?",["Bowser","Wario","Donkey Kong","Ganondorf"]],
-["Harry Potter","Wie heißt Harrys Eule?",["Hedwig","Errol","Hermes","Pigwidgeon"]],
-["Harry Potter","Von welchem Gleis fährt der Hogwarts-Express ab?",["Gleis 9 ¾","Gleis 7 ½","Gleis 10 ¼","Gleis 9 ½"]],
-["Harry Potter","Welche Position spielt Harry beim Quidditch?",["Sucher","Hüter","Treiber","Jäger"]],
-["Harry Potter","Mit welchem Zauberspruch entwaffnet man den Gegner?",["Expelliarmus","Stupor","Lumos","Accio"]],
-["Harry Potter","Wie heißt der dreiköpfige Hund im ersten Band?",["Fluffy","Fang","Seidenschnabel","Krätze"]],
-["Harry Potter","Welche Gestalt hat Hermines Patronus?",["Otter","Katze","Hirsch","Schwan"]],
-["Harry Potter","Wie heißt Hagrids Babydrache im ersten Band?",["Norbert","Fawkes","Seidenschnabel","Aragog"]],
-["Harry Potter","Welche Farbe hat der Fahrende Ritter?",["Lila","Rot","Grün","Gelb"]],
-["Harry Potter","Welcher Hauself wird mit einer Socke befreit?",["Dobby","Kreacher","Winky","Hokey"]],
-["Harry Potter","Wer ist der Halbblutprinz?",["Severus Snape","Tom Riddle","Sirius Black","Remus Lupin"]],
-["Harry Potter","Welches Haus hat einen Dachs als Wappentier?",["Hufflepuff","Ravenclaw","Slytherin","Gryffindor"]],
-["Harry Potter","Wie heißt die Tageszeitung der Zauberer?",["Tagesprophet","Klitterer","Hexenwoche","Abendbote"]],
-["Fallout (Serie)","Wie heißt die Hauptfigur, die aus der Vault an die Oberfläche geht?",["Lucy MacLean","Nora","Moira Brown","Veronica Santangelo"]],
-["Fallout (Serie)","Aus welcher Vault stammt Lucy?",["Vault 33","Vault 101","Vault 111","Vault 13"]],
-["Fallout (Serie)","Welcher Schauspieler spielt den Ghul?",["Walton Goggins","Kyle MacLachlan","Aaron Moten","Moisés Arias"]],
-["Fallout (Serie)","Wie hieß der Ghul vor dem Atomkrieg?",["Cooper Howard","Hank MacLean","Bud Askins","Lee Moldaver"]],
-["Fallout (Serie)","Zu welcher Gruppe in Power-Rüstungen gehört Maximus?",["Stählerne Bruderschaft","Enklave","NCR","Minutemen"]],
-["Fallout (Serie)","Wie heißt Lucys Vater?",["Hank MacLean","Cooper Howard","Bud Askins","Norm MacLean"]],
-["Fallout (Serie)","In welcher Gegend spielt Staffel 1?",["Los Angeles","Las Vegas","Boston","Washington, D.C."]],
-["Fallout (Serie)","Welche Firma hat die Vaults gebaut?",["Vault-Tec","RobCo","Nuka-Cola","West-Tek"]],
-["Fallout (Serie)","Wie heißt Lucys jüngerer Bruder?",["Norm","Chet","Woody","Max"]],
-["Fallout (Serie)","Wie heißt die bekannteste Limonade der Fallout-Welt?",["Nuka-Cola","Atom-Cola","Vault-Cola","Rad-Cola"]],
-["Fallout (Serie)","Wie heißt das Maskottchen, das den Daumen hochhält?",["Vault Boy","Mr. Handy","Atom Man","Nuka Boy"]],
-["Fallout (Serie)","Auf welchem Streamingdienst läuft die Serie?",["Prime Video","Netflix","Disney+","Apple TV+"]],
-["Grey's Anatomy","Welchen Spitznamen hat Derek Shepherd?",["McDreamy","McSteamy","McHottie","McCharming"]],
-["Grey's Anatomy","Welchen Spitznamen hat Mark Sloan?",["McSteamy","McDreamy","McHottie","McSexy"]],
-["Grey's Anatomy","In welcher Stadt spielt die Serie?",["Seattle","Boston","Chicago","San Francisco"]],
-["Grey's Anatomy","Wie heißt Merediths Mutter?",["Ellis Grey","Lexie Grey","Susan Grey","Maggie Pierce"]],
-["Grey's Anatomy","Auf welches Fachgebiet spezialisiert sich Cristina Yang?",["Herzchirurgie","Neurochirurgie","Plastische Chirurgie","Kinderchirurgie"]],
-["Grey's Anatomy","Wie hieß das Krankenhaus in den ersten Staffeln?",["Seattle Grace","Seattle Mercy","St. Elsewhere","Grey Sloan Memorial"]],
-["Grey's Anatomy","Wer spielt Meredith Grey?",["Ellen Pompeo","Sandra Oh","Katherine Heigl","Chandra Wilson"]],
-["Grey's Anatomy","Wie heißt Merediths Halbschwester, die mit Mark Sloan zusammenkommt?",["Lexie Grey","Maggie Pierce","Amelia Shepherd","April Kepner"]],
-["Grey's Anatomy","Wer ist Merediths „Person“?",["Cristina Yang","Izzie Stevens","Callie Torres","Addison Montgomery"]],
-["Grey's Anatomy","Welchen Spitznamen bekommt George O'Malley?",["007","Bambi","Rookie","Doc Holiday"]],
-["Grey's Anatomy","Wie heißt Dereks erste Ehefrau?",["Addison Montgomery","Amelia Shepherd","Rose","Arizona Robbins"]],
-["Grey's Anatomy","Wer spielt Cristina Yang?",["Sandra Oh","Ellen Pompeo","Sara Ramírez","Kate Walsh"]],
-["Desperate Housewives","In welcher Straße wohnen die Frauen?",["Wisteria Lane","Elm Street","Maple Drive","Fairview Avenue"]],
-["Desperate Housewives","Wer erzählt die Serie aus dem Off?",["Mary Alice Young","Edie Britt","Susan Mayer","Karen McCluskey"]],
-["Desperate Housewives","Wie heißt Gabrielles Ehemann?",["Carlos Solis","Tom Scavo","Mike Delfino","Rex Van de Kamp"]],
-["Desperate Housewives","Welchen Beruf hat Mike Delfino?",["Klempner","Elektriker","Polizist","Arzt"]],
-["Desperate Housewives","Wer spielt Gabrielle Solis?",["Eva Longoria","Teri Hatcher","Marcia Cross","Felicity Huffman"]],
-["Desperate Housewives","Wie heißt die Stadt, in der die Serie spielt?",["Fairview","Springfield","Stars Hollow","Mystic Falls"]],
-["Desperate Housewives","Welchen Beruf hat Edie Britt?",["Immobilienmaklerin","Anwältin","Krankenschwester","Friseurin"]],
-["Desperate Housewives","Was ist Susan Mayer von Beruf, als die Serie beginnt?",["Kinderbuch-Illustratorin","Lehrerin","Köchin","Journalistin"]],
-["Desperate Housewives","Wie heißt Brees Ehemann in Staffel 1?",["Rex Van de Kamp","Orson Hodge","Karl Mayer","Paul Young"]],
-["Desperate Housewives","Wer spielt Bree?",["Marcia Cross","Nicollette Sheridan","Eva Longoria","Teri Hatcher"]],
-["Desperate Housewives","Wie heißt Lynettes Ehemann?",["Tom Scavo","Carlos Solis","Karl Mayer","Paul Young"]],
-["Bones","Welchen Spitznamen gibt Booth Dr. Temperance Brennan?",["Bones","Doc","Skull","Tempe"]],
-["Bones","Für welche Behörde arbeitet Seeley Booth?",["FBI","CIA","NSA","Polizei von Washington"]],
-["Bones","Wie heißt das Institut, an dem Brennan arbeitet?",["Jeffersonian","Smithsonian","Quantico","Lincoln-Institut"]],
-["Bones","Wer spielt Temperance Brennan?",["Emily Deschanel","Zooey Deschanel","Michaela Conlin","Tamara Taylor"]],
-["Bones","Wer spielt Seeley Booth?",["David Boreanaz","John Francis Daley","T. J. Thyne","Eric Millegan"]],
-["Bones","Was schreibt Brennan nebenbei?",["Kriminalromane","Kochbücher","Kinderbücher","Gedichte"]],
-["Bones","Wessen Bücher sind die Vorlage für die Serie?",["Kathy Reichs","Patricia Cornwell","Agatha Christie","Tess Gerritsen"]],
-["Bones","Worauf ist Jack Hodgins spezialisiert?",["Insekten, Sporen und Mineralien","Gesichtsrekonstruktion","Psychologie","Röntgenbilder"]],
-["Bones","Was macht Angela Montenegro im Team?",["Gesichtsrekonstruktionen und 3D-Bilder","Autopsien","Verhöre","Insektenanalysen"]],
-["Bones","Welchen Beruf hat Lance Sweets?",["Psychologe","Pathologe","Staatsanwalt","Insektenkundler"]],
-["Bones","Wie heißt die Tochter von Booth und Brennan?",["Christine","Angela","Daisy","Parker"]],
-["SpongeBob","Worin wohnt SpongeBob?",["In einer Ananas","In einem Stein","In einer Kokosnuss","In einer Muschel"]],
-["SpongeBob","Wie heißt SpongeBobs Schnecke?",["Gary","Larry","Barry","Harry"]],
-["SpongeBob","Welches Instrument spielt Thaddäus?",["Klarinette","Trompete","Saxophon","Geige"]],
-["SpongeBob","Aus welchem US-Bundesstaat kommt Sandy?",["Texas","Kalifornien","Florida","Alaska"]],
-["SpongeBob","Wie heißt Planktons Computer-Ehefrau?",["Karen","Sarah","Kathy","Carla"]],
-["SpongeBob","Wie heißt Mr. Krabs' Tochter?",["Perla","Sandy","Wanda","Mindy"]],
-["SpongeBob","Was will Plankton immer stehlen?",["Die Geheimformel für den Krabbenburger","Mr. Krabs' Geld","Garys Futter","SpongeBobs Pfannenwender"]],
-["SpongeBob","Wer ist SpongeBobs Fahrlehrerin?",["Mrs. Puff","Sandy","Perla","Mama Krabs"]],
-["SpongeBob","Wie heißen die Superhelden, die SpongeBob verehrt?",["Meerjungfraumann und Blaubarschbube","Aquaman und Robin","Krabbenmann und Muschelbube","Fischmann und Wurmbube"]],
-["SpongeBob","Wo arbeitet SpongeBob?",["In der Krossen Krabbe","Im Abfalleimer","Bei Mrs. Puff","In der Muschelbar"]],
-["SpongeBob","Wie heißt die Stadt, in der SpongeBob lebt?",["Bikini Bottom","Atlantis","Muschelhausen","Rock Bottom"]],
-["90er Kinderserien","Was ist Tabaluga?",["Ein kleiner Drache","Ein Pinguin","Ein Bär","Eine Schildkröte"]],
-["90er Kinderserien","Welche Kopfform hat Arnold aus „Hey Arnold!“?",["Wie ein Football","Wie ein Ei","Wie eine Birne","Wie ein Würfel"]],
-["90er Kinderserien","Wie heißt der lila Teletubby?",["Tinky Winky","Dipsy","Laa-Laa","Po"]],
-["90er Kinderserien","Was wollen Pinky und der Brain jede Nacht?",["Die Weltherrschaft","Käse","Aus dem Käfig ausbrechen","Berühmt werden"]],
-["90er Kinderserien","Welches Digimon gehört zu Tai?",["Agumon","Gabumon","Patamon","Gomamon"]],
-["90er Kinderserien","Wie heißt Bunnys Katze in „Sailor Moon“?",["Luna","Artemis","Diana","Minka"]],
-["90er Kinderserien","Welche Farbe trug Jason, der erste Anführer der Power Rangers?",["Rot","Blau","Schwarz","Grün"]],
-["90er Kinderserien","Wie viele Planeten-Kinder tragen bei „Captain Planet“ einen Ring?",["5","4","3","6"]],
-["90er Kinderserien","Wie heißt der Held von „Dragon Ball“?",["Son Goku","Vegeta","Krillin","Son Gohan"]],
-["90er Kinderserien","Wie heißt das ängstliche Baby mit Brille bei den „Rugrats“?",["Chuckie","Tommy","Phil","Angelica"]],
-["90er Kinderserien","Worin wohnte Peter Lustig bei „Löwenzahn“?",["In einem Bauwagen","In einem Leuchtturm","In einem Baumhaus","In einem Wohnmobil"]],
-["90er Kinderserien","Welches Pokémon bekommt Ash als erstes?",["Pikachu","Glumanda","Schiggy","Bisasam"]],
-["Filme","Wer ruft in „Der Herr der Ringe“: „Du kannst nicht vorbei!“?",["Gandalf","Saruman","Elrond","Aragorn"]],
-["Filme","Wer spielt Iron Man im Marvel-Kinouniversum?",["Robert Downey Jr.","Chris Evans","Chris Hemsworth","Mark Ruffalo"]],
-["Filme","Wie heißt Nemos Vater in „Findet Nemo“?",["Marlin","Gill","Crush","Bruce"]],
-["Filme","In welcher Stadt spielt „Die Monster AG“?",["Monstropolis","Monsterhausen","Gruselstadt","Schreckensburg"]],
-["Filme","Wer spielt die Hauptrolle in „Pretty Woman“?",["Julia Roberts","Meg Ryan","Sandra Bullock","Cameron Diaz"]],
-["Filme","Wie heißt Han Solos Raumschiff?",["Millennium Falke","Todesstern","X-Wing","Enterprise"]],
-["Filme","Welche Farbe hat Darth Vaders Lichtschwert?",["Rot","Blau","Grün","Lila"]],
-["Filme","Wie heißt Arielles Krabbenfreund in „Arielle, die Meerjungfrau“?",["Sebastian","Fabius","Scuttle","Ursula"]],
-["Filme","In welcher Stadt spielt „Kevin – Allein in New York“?",["New York","Chicago","Los Angeles","Boston"]],
-["Filme","Wie viele Zwerge begleiten Bilbo in „Der Hobbit“?",["13","7","12","9"]],
-["Filme","In welchem Pixar-Film kocht eine Ratte in Paris?",["Ratatouille","Coco","Oben","Cars"]],
-["Filme","Wie heißt der blaue Flaschengeist in Disneys „Aladdin“?",["Dschinni","Abu","Jafar","Jago"]],
-["Filme","Wie heißt das Hotel in „Shining“?",["Overlook Hotel","Bates Motel","Grand Budapest Hotel","Hotel California"]],
-["Videospiele","Wie heißt Marios Dinosaurier-Freund?",["Yoshi","Toad","Birdo","Koopa"]],
-["Videospiele","Welche Firma hat die PlayStation entwickelt?",["Sony","Nintendo","Microsoft","Sega"]],
-["Videospiele","Welches Pokémon hat die Nummer 1 im Pokédex?",["Bisasam","Glumanda","Schiggy","Pikachu"]],
-["Videospiele","Wie heißt die Hauptfigur der „Halo“-Reihe?",["Master Chief","Marcus Fenix","Doomguy","Commander Shepard"]],
-["Videospiele","Welche Sprache sprechen die Figuren in „Die Sims“?",["Simlisch","Englisch","Elbisch","Klingonisch"]],
-["Videospiele","Welche Farbe hat Pac-Man?",["Gelb","Rot","Blau","Grün"]],
-["Videospiele","Wie heißt der Affe, der im Nintendo-Klassiker von 1981 Fässer wirft?",["Donkey Kong","Diddy Kong","King K. Rool","Bowser"]],
-["Videospiele","Wie heißt der Spielmodus in „Fortnite“, in dem 100 Spieler gegeneinander kämpfen?",["Battle Royale","Rette die Welt","Kreativmodus","Deathmatch"]],
-["Videospiele","Wie heißt Kratos' Sohn in „God of War“ (2018)?",["Atreus","Ares","Baldur","Thor"]],
-["Videospiele","In welchem Spiel ist Arthur Morgan die Hauptfigur?",["Red Dead Redemption 2","GTA V","The Last of Us","Mafia"]],
-["Videospiele","Wie viele Münzen braucht Mario für ein Extraleben?",["100","50","10","1000"]],
-["Videospiele","Auf welcher Konsole erschien „Super Mario 64“?",["Nintendo 64","Super Nintendo","GameCube","Game Boy"]],
-["Harry Potter","Wie heißen Rons Zwillingsbrüder?",["Fred und George","Bill und Charlie","Percy und Ginny","Fred und Percy"]],
-["Harry Potter","Welche Gestalt hat Harrys Patronus?",["Hirsch","Otter","Phönix","Wolf"]],
-["Harry Potter","Was zeigt der Spiegel Nerhegeb?",["Die tiefsten Wünsche","Die Zukunft","Die Vergangenheit","Die Wahrheit"]],
-["Harry Potter","Wie heißt der Hausmeister von Hogwarts?",["Argus Filch","Rubeus Hagrid","Horace Slughorn","Gilderoy Lockhart"]],
-["Harry Potter","Wie heißt Filchs Katze?",["Mrs. Norris","Krummbein","Minerva","Mrs. Figg"]],
-["Harry Potter","Wie heißt Hermines Kater?",["Krummbein","Mrs. Norris","Krätze","Fang"]],
-["Harry Potter","Welches Fach unterrichtet Snape die meisten Jahre?",["Zaubertränke","Verteidigung gegen die dunklen Künste","Verwandlung","Kräuterkunde"]],
-["Harry Potter","Was ist ein Muggel?",["Ein Mensch ohne Zauberkräfte","Ein Hauself","Ein Zaubertrank","Ein Quidditch-Ball"]],
-["Harry Potter","Wie heißt das Zaubererdorf neben Hogwarts?",["Hogsmeade","Godric's Hollow","Little Whinging","Ottery St. Catchpole"]],
-["Harry Potter","Wie heißt die Bank der Zauberer?",["Gringotts","Ollivanders","Borgin & Burkes","Flourish & Blotts"]],
-["Harry Potter","Mit welchem Zauberspruch lässt man Dinge schweben?",["Wingardium Leviosa","Alohomora","Lumos","Riddikulus"]],
-["Harry Potter","Wie heißt Voldemorts Schlange?",["Nagini","Basilisk","Aragog","Seidenschnabel"]],
-["Harry Potter","Welchen Beruf ergreift Harry nach der Schule?",["Auror","Lehrer","Heiler","Zaubereiminister"]],
-["Fallout (Serie)","Wer spielt Lucy MacLean?",["Ella Purnell","Ella Hunt","Emma Mackey","Florence Pugh"]],
-["Fallout (Serie)","Wer spielt Lucys Vater Hank?",["Kyle MacLachlan","Walton Goggins","Aaron Moten","Michael Emerson"]],
-["Fallout (Serie)","Wer spielt Maximus?",["Aaron Moten","Moisés Arias","Walton Goggins","Kyle MacLachlan"]],
-["Fallout (Serie)","Welches Paar, bekannt durch „Westworld“, hat die Serie produziert?",["Jonathan Nolan und Lisa Joy","Joel und Ethan Coen","David Benioff und D. B. Weiss","Matt und Ross Duffer"]],
-["Fallout (Serie)","Welches Studio macht die Fallout-Spiele seit Teil 3?",["Bethesda","Rockstar","Ubisoft","BioWare"]],
-["Fallout (Serie)","Was ist ein Ghul in der Fallout-Welt?",["Ein durch Strahlung veränderter Mensch","Ein Roboter","Ein Zombie aus einem Labor","Ein Außerirdischer"]],
-["Fallout (Serie)","Was ist der Pip-Boy?",["Ein Computer am Handgelenk","Ein Roboterhund","Eine Waffe","Ein Getränk"]],
-["Fallout (Serie)","Womit bezahlt man im Ödland?",["Mit Kronkorken","Mit Dollar","Mit Patronen","Mit Goldmünzen"]],
-["Fallout (Serie)","Wie heißen die zweiköpfigen Kühe der Fallout-Welt?",["Brahmin","Yao Guai","Radhirsche","Molerats"]],
-["Grey's Anatomy","Wie heißt Merediths Vater?",["Thatcher Grey","Richard Webber","Derek Grey","Jackson Avery"]],
-["Grey's Anatomy","Welche Ärztin ist Merediths Halbschwester mütterlicherseits?",["Maggie Pierce","Lexie Grey","Amelia Shepherd","Jo Wilson"]],
-["Grey's Anatomy","Auf welches Fachgebiet ist Callie Torres spezialisiert?",["Orthopädie","Neurochirurgie","Herzchirurgie","Gynäkologie"]],
-["Grey's Anatomy","Auf welches Fachgebiet ist Arizona Robbins spezialisiert?",["Kinderchirurgie","Orthopädie","Plastische Chirurgie","Notfallmedizin"]],
-["Grey's Anatomy","Wie heißt der Ableger, in dem Addison nach Los Angeles geht?",["Private Practice","Station 19","Chicago Med","The Resident"]],
-["Grey's Anatomy","Wer ist in den ersten Staffeln Chef der Chirurgie?",["Richard Webber","Derek Shepherd","Owen Hunt","Preston Burke"]],
-["Grey's Anatomy","Wie heißt Izzies Verlobter, der an einem Herzleiden stirbt?",["Denny Duquette","Alex Karev","George O'Malley","Finn Dandridge"]],
-["Grey's Anatomy","Worauf schreiben Meredith und Derek ihr Eheversprechen?",["Auf ein Post-it","Auf eine Serviette","Auf ein Röntgenbild","In ein Krankenblatt"]],
-["Grey's Anatomy","Wer spielt Miranda Bailey?",["Chandra Wilson","Sandra Oh","Kate Walsh","Kim Raver"]],
-["Grey's Anatomy","Welcher Arzt kommt aus dem Irakkrieg ans Krankenhaus?",["Owen Hunt","Mark Sloan","Alex Karev","Jackson Avery"]],
-["Desperate Housewives","Wer spielt Susan Mayer?",["Teri Hatcher","Felicity Huffman","Marcia Cross","Eva Longoria"]],
-["Desperate Housewives","Wer spielt Lynette Scavo?",["Felicity Huffman","Teri Hatcher","Nicollette Sheridan","Dana Delany"]],
-["Desperate Housewives","Wie heißt Susans Tochter?",["Julie","Danielle","Penny","Celia"]],
-["Desperate Housewives","Wie heißt Brees Sohn?",["Andrew","Zach","Preston","Porter"]],
-["Desperate Housewives","In welcher Branche arbeitete Lynette, bevor sie Kinder bekam?",["Werbung","Medizin","Gastronomie","Mode"]],
-["Desperate Housewives","Wie heißt Brees zweiter Ehemann?",["Orson Hodge","Rex Van de Kamp","Karl Mayer","Chuck Vance"]],
-["Desperate Housewives","Was eröffnen Lynette und Tom zusammen?",["Eine Pizzeria","Ein Café","Eine Bäckerei","Einen Blumenladen"]],
-["Desperate Housewives","Wie viele Staffeln hat die Serie?",["8","6","10","5"]],
-["Desperate Housewives","Wie heißt die ältere Nachbarin, deren toter Ehemann in der Kühltruhe lag?",["Karen McCluskey","Edie Britt","Martha Huber","Ida Greenberg"]],
-["Bones","Wie heißt Booths Sohn?",["Parker","Hank","Ben","Christopher"]],
-["Bones","Wie heißt Brennans Vater?",["Max Keenan","Russ Brennan","Hank Booth","Gordon Wyatt"]],
-["Bones","Wie heißt Brennans Bruder?",["Russ","Jared","Max","Zack"]],
-["Bones","Wie heißt die Pathologin, die später das Labor leitet?",["Camille Saroyan","Angela Montenegro","Daisy Wick","Caroline Julian"]],
-["Bones","Wen heiratet Angela Montenegro?",["Jack Hodgins","Zack Addy","Lance Sweets","Seeley Booth"]],
-["Bones","Welcher junge Wissenschaftler wird zum Komplizen des Gormogon-Mörders?",["Zack Addy","Jack Hodgins","Lance Sweets","Clark Edison"]],
-["Bones","In welcher Stadt spielt die Serie?",["Washington, D.C.","New York","Chicago","Boston"]],
-["Bones","Wie viele Staffeln hat die Serie?",["12","8","10","15"]],
-["Bones","Mit welcher Sucht hatte Booth früher zu kämpfen?",["Glücksspiel","Alkohol","Rauchen","Kaufsucht"]],
-["SpongeBob","Was liebt Mr. Krabs über alles?",["Geld","Krabbenburger","Seefahrt","Seine Mutter"]],
-["SpongeBob","Wie heißt Planktons Restaurant?",["Abfalleimer","Krosse Krabbe","Muschelbar","Fischkopp"]],
-["SpongeBob","Was machen SpongeBob und Patrick am liebsten mit dem Netz?",["Quallen fischen","Schmetterlinge fangen","Muscheln sammeln","Krabben jagen"]],
-["SpongeBob","Als was arbeitet Thaddäus in der Krossen Krabbe?",["Kassierer","Koch","Putzmann","Kellner"]],
-["SpongeBob","Was trägt Sandy unter Wasser auf dem Kopf?",["Einen Taucherhelm","Eine Muschel","Eine Krone","Eine Mütze"]],
-["SpongeBob","Welche Kampfsportart macht Sandy?",["Karate","Boxen","Judo","Ringen"]],
-["SpongeBob","Wo wohnt Patrick?",["Unter einem Stein","In einer Ananas","In einer Osterinsel-Figur","In einer Muschel"]],
-["SpongeBob","Wie heißt Patrick mit Nachnamen?",["Star","Seestern","Rock","Pink"]],
-["SpongeBob","Wie heißt der Geisterpirat, der SpongeBob erschreckt?",["Der Fliegende Holländer","Käpt'n Blaubär","Kapitän Haken","Painty der Pirat"]],
-["SpongeBob","Was ist SpongeBob von Beruf?",["Burgerbrater","Kassierer","Rettungsschwimmer","Fahrlehrer"]],
-["90er Kinderserien","Welche Ninja Turtle trägt eine rote Maske?",["Raphael","Leonardo","Donatello","Michelangelo"]],
-["90er Kinderserien","Wie heißt Ashs Rivale in „Pokémon“?",["Gary","Rocko","Misty","James"]],
-["90er Kinderserien","Wie heißt das Gaunertrio aus Jessie, James und Mauzi?",["Team Rocket","Team Aqua","Team Magma","Team Galaktik"]],
-["90er Kinderserien","Welcher Professor gibt Ash sein erstes Pokémon?",["Professor Eich","Professor Lind","Professor Birk","Professor Esche"]],
-["90er Kinderserien","Wie heißt Bibi Blocksbergs Besen?",["Kartoffelbrei","Besenstiel","Flitzer","Sausewind"]],
-["90er Kinderserien","Wie heißt Tinas Pferd bei „Bibi und Tina“?",["Amadeus","Sabrina","Max","Blitz"]],
-["90er Kinderserien","Wie heißt das gemeine ältere Mädchen bei den „Rugrats“?",["Angelica","Susie","Lil","Didi"]],
-["90er Kinderserien","Welches Tier ist Darkwing Duck?",["Eine Ente","Ein Adler","Eine Fledermaus","Ein Pinguin"]],
-["90er Kinderserien","Was lässt die Gummibären so hoch hüpfen?",["Gummibärensaft","Zaubertrank","Honig","Federn"]],
-["90er Kinderserien","Wie heißt der reiche Onkel in „DuckTales“?",["Dagobert Duck","Donald Duck","Gustav Gans","Daniel Düsentrieb"]],
-["90er Kinderserien","Tick, Trick und …?",["Track","Truck","Trick","Tack"]],
-["90er Kinderserien","Welches Element steuert Wheeler bei „Captain Planet“?",["Feuer","Wasser","Wind","Erde"]],
-["90er Kinderserien","Wie heißt Bunny aus „Sailor Moon“ im japanischen Original?",["Usagi","Rei","Ami","Makoto"]],
-["Dexter","In welcher Stadt spielt „Dexter“?",["Miami","Los Angeles","New York","Chicago"]],
-["Dexter","Welchen Beruf hat Dexter bei der Polizei?",["Blutspurenanalyst","Pathologe","Detective","Polizeifotograf"]],
-["Dexter","Wie heißt Dexters Schwester?",["Debra","Rita","Maria","Lumen"]],
-["Dexter","Wer hat Dexter den „Kodex“ beigebracht?",["Sein Adoptivvater Harry","Seine Schwester Debra","Sergeant Doakes","Der Trinity-Killer"]],
-["Dexter","Wer spielt Dexter Morgan?",["Michael C. Hall","Bryan Cranston","Jon Hamm","Dominic West"]],
-["Dexter","Was behält Dexter von seinen Opfern als Trophäe?",["Einen Blutstropfen auf einem Objektträger","Eine Haarlocke","Einen Ring","Ein Foto"]],
-["Dexter","Wie heißt Dexters Frau?",["Rita","Hannah","Lila","Debra"]],
-["Dexter","Wer spielt den Trinity-Killer?",["John Lithgow","Jimmy Smits","Keith Carradine","Colin Hanks"]],
-["Dexter","Wie heißt Dexters Sohn?",["Harrison","Cody","Astor","Brian"]],
-["Dexter","Wer ist der Kühllaster-Killer aus Staffel 1?",["Dexters Bruder Brian","Sergeant Doakes","Angel Batista","Vince Masuka"]],
-["Dexter","Wofür ist Debra Morgan besonders bekannt?",["Für ihr ständiges Fluchen","Für ihre Kochkünste","Für ihre Ruhe","Für ihr Schweigen"]],
-["Dexter","Welcher Kollege misstraut Dexter von Anfang an?",["Sergeant Doakes","Angel Batista","Vince Masuka","Joey Quinn"]],
-["Dexter","Wie heißt Dexters Boot?",["Slice of Life","Dark Passenger","Blood Line","Sea Killer"]],
-["Dexter","Wie heißen Ritas Kinder?",["Astor und Cody","Harrison und Astor","Cody und Brian","Jamie und Cody"]],
-["Dexter","Wie nennen die Medien Dexter in Staffel 2?",["Bay Harbor Butcher","Ice Truck Killer","Trinity Killer","Miami Slasher"]],
-["Dexter","Wie heißt die Fortsetzung von 2021?",["Dexter: New Blood","Dexter: Resurrection","Dexter: Original Sin","Dexter: Reborn"]],
-["Dexter","Wie nennt Dexter seinen inneren Drang zu töten?",["Dunkler Begleiter","Schatten","Stimme","Biest"]],
-["Lost","Welche Flugnummer hat das abgestürzte Flugzeug?",["Oceanic 815","Oceanic 316","Ajira 316","Oceanic 108"]],
-["Lost","Welche Zahlenfolge zieht sich durch die Serie?",["4 8 15 16 23 42","1 2 3 5 8 13","7 14 21 28 35 42","3 6 9 12 15 18"]],
-["Lost","Wie heißt der Arzt, der die Überlebenden anführt?",["Jack Shephard","John Locke","Benjamin Linus","Sayid Jarrah"]],
-["Lost","Was ist Sawyers richtiger Name?",["James Ford","Jack Shephard","Hugo Reyes","Desmond Hume"]],
-["Lost","Was konnte John Locke vor dem Absturz nicht?",["Laufen","Sehen","Sprechen","Schwimmen"]],
-["Lost","Womit wurde Hurley reich?",["Lottogewinn","Erbschaft","Eigene Firma","Glücksspiel in Las Vegas"]],
-["Lost","Wie heißt die Organisation, die auf der Insel forschte?",["Dharma Initiative","Widmore Industries","Hanso Group","Oceanic"]],
-["Lost","Alle wie viele Minuten muss der Knopf in der Luke gedrückt werden?",["108","42","60","815"]],
-["Lost","Wie heißt Charlies Band?",["Drive Shaft","Oasis","Geronimo Jackson","The Others"]],
-["Lost","Wie heißt Desmonds große Liebe?",["Penny","Kate","Juliet","Claire"]],
-["Lost","Wer führt die „Anderen“ lange Zeit an?",["Benjamin Linus","Richard Alpert","Charles Widmore","Jacob"]],
-["Lost","Aus welchem Land stammen Jin und Sun?",["Südkorea","Japan","China","Thailand"]],
-["Lost","Von wo nach wo sollte der Flug gehen?",["Von Sydney nach Los Angeles","Von London nach New York","Von Tokio nach Los Angeles","Von Sydney nach London"]],
-["Lost","Wie viele Staffeln hat „Lost“?",["6","5","7","8"]],
-["Lost","Wie heißt Michaels Sohn?",["Walt","Aaron","Charlie","Vincent"]],
-["Lost","Welches Tier taucht überraschend auf der tropischen Insel auf?",["Ein Eisbär","Ein Pinguin","Ein Kamel","Ein Elefant"]],
-["Lost","Was ist das „Monster“ der Insel?",["Eine schwarze Rauchwolke","Ein Riesenkrake","Ein Dinosaurier","Ein Bär"]],
-["Lost","Was war Kate vor dem Absturz?",["Eine gesuchte Flüchtige","Ärztin","Polizistin","Stewardess"]],
-["The Office","Wie heißt die Papierfirma in „The Office“?",["Dunder Mifflin","Wernham Hogg","Sabre","Staples"]],
-["The Office","In welcher Stadt liegt die Filiale?",["Scranton","Stamford","Philadelphia","Utica"]],
-["The Office","Wer spielt Michael Scott?",["Steve Carell","John Krasinski","Rainn Wilson","Ed Helms"]],
-["The Office","Was baut Dwight auf seiner Farm an?",["Rote Bete","Kartoffeln","Mais","Kürbisse"]],
-["The Office","Welchen Job hat Pam am Anfang?",["Empfangsdame","Buchhalterin","Vertrieb","Personalabteilung"]],
-["The Office","Was steht auf Michaels Tasse?",["World's Best Boss","Keep Calm","I Love Scranton","Paper Rules"]],
-["The Office","Worin versteckt Jim Dwights Tacker?",["In Wackelpudding","Im Kühlschrank","Im Papierkorb","In der Decke"]],
-["The Office","Welches Gericht lässt Kevin fallen?",["Sein Chili","Seine Lasagne","Seine Suppe","Seinen Kuchen"]],
-["The Office","Was liebt Angela über alles?",["Ihre Katzen","Ihren Hund","Pferde","Ihre Pflanzen"]],
-["The Office","Wie heißt die jährliche Preisverleihung im Büro?",["Die Dundies","Die Scrantonies","Die Mifflins","Die Papers"]],
-["The Office","Welche Uni hat Andy besucht – und erwähnt das ständig?",["Cornell","Harvard","Yale","Princeton"]],
-["The Office","In welcher Abteilung arbeitet Toby?",["Personalabteilung","Buchhaltung","Lager","Vertrieb"]],
-["The Office","Welchen Spruch bringt Michael ständig?",["That's what she said","Bears. Beets. Battlestar Galactica.","Bazinga","How you doin'?"]],
-["The Office","Wer hat die britische Originalserie erfunden?",["Ricky Gervais","Rowan Atkinson","Sacha Baron Cohen","Simon Pegg"]],
-["The Office","Wie heißt Dwights seltsamer Cousin auf der Farm?",["Mose","Creed","Gabe","Todd"]],
-["The Office","Welcher Tag ist Stanleys Lieblingstag?",["Brezeltag","Pizzatag","Freitag","Zahltag"]],
-["The Office","Wo macht Jim Pam einen Heiratsantrag?",["An einer Tankstelle","Im Büro","In Paris","Am Strand"]],
-["The Office","Wie viele Staffeln hat die US-Serie?",["9","7","11","5"]],
-["The Office","Wie heißt Michaels Geheimagent in seinem Filmdrehbuch?",["Michael Scarn","Agent Scott","Prison Mike","Date Mike"]],
-["Community","Wie heißt das College in „Community“?",["Greendale","Springfield","Riverdale","Pawnee"]],
-["Community","Welchen Beruf hatte Jeff Winger vorher?",["Anwalt","Arzt","Lehrer","Polizist"]],
-["Community","Wer spielt Jeff Winger?",["Joel McHale","Donald Glover","Ken Jeong","Danny Pudi"]],
-["Community","Für welchen Kurs gründet sich die Lerngruppe?",["Spanisch","Mathe","Biologie","Geschichte"]],
-["Community","Wie heißt der verrückte Spanischlehrer?",["Señor Chang","Dean Pelton","Professor Duncan","Mr. Hickey"]],
-["Community","Wie heißt der Dekan von Greendale?",["Craig Pelton","Ben Chang","Ian Duncan","Buzz Hickey"]],
-["Community","Welche Serie liebt Abed?",["Inspector Spacetime","Doctor Who","Cougar Town","Star Trek"]],
-["Community","Welches Spiel eskaliert regelmäßig auf dem ganzen Campus?",["Paintball","Völkerball","Lasertag","Verstecken"]],
-["Community","Womit wurde Pierce Hawthornes Familie reich?",["Feuchttücher","Autos","Öl","Software"]],
-["Community","Wer spielt Troy?",["Donald Glover","Danny Pudi","Joel McHale","Jim Rash"]],
-["Community","Wie heißt Annie mit Nachnamen?",["Edison","Perry","Bennett","Winger"]],
-["Community","Wie heißt Troys und Abeds Fantasie-Raum?",["Dreamatorium","Imaginarium","Fantasiezimmer","Holodeck"]],
-["Community","Wer hat die Serie erfunden?",["Dan Harmon","Michael Schur","Greg Daniels","Chuck Lorre"]],
-["Community","Wie lautet Abeds Motto für die Zukunft der Serie?",["Sechs Staffeln und ein Film","Für immer Greendale","Zehn Staffeln und ein Spin-off","Ein Film reicht"]],
-["Community","Wie heißt das Maskottchen von Greendale?",["Der Greendale Human Being","Der Greendale-Adler","Der Greendale-Bär","Der Greendale-Pinguin"]],
-["Community","Wer spielt Pierce Hawthorne?",["Chevy Chase","Bill Murray","Steve Martin","Dan Aykroyd"]],
-["Community","Mit welchem „Star Trek“-Schauspieler segelt Troy davon?",["LeVar Burton","Patrick Stewart","William Shatner","George Takei"]],
-["Community","Wer spielt Señor Chang?",["Ken Jeong","John Cho","Randall Park","Ken Watanabe"]],
-["Disney-Filme","Welcher der sieben Zwerge spricht nicht?",["Seppl","Brummbär","Happy","Schlafmütz"]],
-["Disney-Filme","Was verliert Cinderella auf der Treppe?",["Einen gläsernen Schuh","Ihre Kette","Ihren Handschuh","Ihr Diadem"]],
-["Disney-Filme","Wie heißt Bambis Hasenfreund?",["Klopfer","Blume","Hoppel","Rammler"]],
-["Disney-Filme","Wie heißt Pinocchios Gewissen?",["Jiminy Grille","Meister Geppetto","Figaro","Kleo"]],
-["Disney-Filme","Wie heißt Mulans kleiner Drache?",["Mushu","Cri-Kee","Khan","Shan Yu"]],
-["Disney-Filme","Wie heißt Belles Vater in „Die Schöne und das Biest“?",["Maurice","Gaston","Lumière","Herr von Unruh"]],
-["Disney-Filme","Wie heißt Tarzans Gorilla-Mutter?",["Kala","Kerchak","Terk","Jane"]],
-["Disney-Filme","Wie heißt Pocahontas' Waschbär?",["Meeko","Flit","Percy","Pumbaa"]],
-["Disney-Filme","Wie heißt Rapunzels Chamäleon?",["Pascal","Maximus","Flynn","Heihei"]],
-["Disney-Filme","Wie heißt der Halbgott in „Vaiana“?",["Maui","Tamatoa","Te Fiti","Hercules"]],
-["Disney-Filme","Wie heißt die Familie in „Encanto“?",["Madrigal","Rivera","Alvarez","Gonzalez"]],
-["Disney-Filme","Welche Nummer hat Stitch als Experiment?",["626","101","42","815"]],
-["Disney-Filme","In welcher Stadt spielt „Aristocats“?",["Paris","London","Rom","Wien"]],
-["Disney-Filme","Wie heißt der Bär im „Dschungelbuch“?",["Balu","Baghira","Kaa","Shir Khan"]],
-["Disney-Filme","Wer ist die Bösewichtin in „101 Dalmatiner“?",["Cruella de Vil","Ursula","Malefiz","Madame Mim"]],
-["Disney-Filme","Wie heißt der Fuchs in „Zoomania“?",["Nick Wilde","Judy Hopps","Flash","Bogo"]],
-["Disney-Filme","Wie heißt Dornröschen mit richtigem Namen?",["Aurora","Belle","Ariel","Jasmin"]],
-["Disney-Filme","Was bedeutet „Hakuna Matata“?",["Keine Sorgen","Hallo Freund","Gute Nacht","Viel Glück"]],
-["Disney-Filme","Wie heißt das geflügelte Pferd von Hercules?",["Pegasus","Maximus","Samson","Achilles"]],
-["Disney-Filme","Wie heißt die Fee von Peter Pan?",["Tinker Bell","Flora","Fauna","Silvermist"]],
-["Better Call Saul","Wie heißt Saul Goodman mit richtigem Namen?",["Jimmy McGill","Chuck McGill","Howard Hamlin","Gene Takavic"]],
-["Better Call Saul","Wie heißt Jimmys großer Bruder?",["Chuck","Howard","Mike","Nacho"]],
-["Better Call Saul","Woran glaubt Chuck zu leiden?",["Elektrosensibilität","Höhenangst","Lichtallergie","Platzangst"]],
-["Better Call Saul","Wie heißt Jimmys Freundin und spätere Ehefrau?",["Kim Wexler","Marie Schrader","Skyler White","Lydia Rodarte"]],
-["Better Call Saul","In welcher Stadt spielt der Großteil der Serie?",["Albuquerque","Phoenix","El Paso","Las Vegas"]],
-["Better Call Saul","Was war Mike Ehrmantraut früher?",["Polizist in Philadelphia","Soldat","Anwalt","Arzt"]],
-["Better Call Saul","Zu welcher Serie ist „Better Call Saul“ die Vorgeschichte?",["Breaking Bad","The Wire","Ozark","Narcos"]],
-["Better Call Saul","Wie heißt Gus Frings Restaurantkette?",["Los Pollos Hermanos","Taco Loco","El Pollo Loco","Casa Fring"]],
-["Better Call Saul","Wo arbeitet Saul als „Gene“ nach Breaking Bad?",["Bei Cinnabon","Bei McDonald's","In einem Waschsalon","In einer Bank"]],
-["Better Call Saul","Wer spielt Saul Goodman?",["Bob Odenkirk","Bryan Cranston","Aaron Paul","Giancarlo Esposito"]],
-["Better Call Saul","Wer spielt Kim Wexler?",["Rhea Seehorn","Anna Gunn","Betsy Brandt","Laura Fraser"]],
-["Better Call Saul","Welchen Spitznamen hatte Jimmy als junger Trickbetrüger?",["Slippin' Jimmy","Jimmy the Rat","Fast Jimmy","Jimmy Two-Times"]],
-["Better Call Saul","Wie heißt Hector Salamancas gefährlicher Neffe?",["Lalo","Tuco","Nacho","Leonel"]],
-["Better Call Saul","Wofür steht HHM?",["Hamlin, Hamlin & McGill","Hamlin, Hughes & Morgan","Howard, Hamlin & Mike","Hughes, Hamlin & McGill"]],
-["Better Call Saul","Wo arbeitet Jimmy zuerst bei HHM?",["In der Poststelle","Am Empfang","In der Buchhaltung","Als Anwalt"]],
-["Better Call Saul","Wo hat Jimmy am Anfang sein Büro?",["Im Hinterzimmer eines Nagelstudios","Im Keller seines Bruders","In seinem Auto","Über einer Bar"]],
-["Better Call Saul","Zu wie vielen Jahren Haft wird Saul am Ende verurteilt?",["86","7","25","150"]],
-["Better Call Saul","Wie viele Staffeln hat die Serie?",["6","5","4","7"]],
-["Better Call Saul","Wie heißt Mikes Enkelin?",["Kaylee","Holly","Stacey","Brock"]]
-];
+var QZ = []; /* Fragen kommen aus quiz.json */
 function hashStr(s) { var h = 2166136261; for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
 function rng(seed) { return function () { seed |= 0; seed = seed + 0x6D2B79F5 | 0; var t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
 function shuffled(arr, seed) { var a = arr.slice(), r = rng(seed); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(r() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
-var QORDER = shuffled(QZ.map(function (_, i) { return i; }), 4711);
+var QORDER = [];
 var QSTART = new Date(2026, 10, 18);
 function qFor(ds) {
   var n = Math.round((pISO(ds) - QSTART) / 864e5), L = QZ.length;
@@ -1140,8 +873,9 @@ function qFor(ds) {
   return { topic: q[0], q: q[1], opts: shuffled(q[2], hashStr(ds)), right: q[2][0] };
 }
 function qid(q) { return hashStr(q[0] + "|" + q[1]).toString(36); }
-var QBY = {}; QZ.forEach(function (q) { QBY[qid(q)] = q; });
-var QSEQ = QZ.map(qid).sort(function (a, b) { return hashStr(a + "#seq") - hashStr(b + "#seq"); });
+var QBY = {}, QSEQ = [], QLOADING = false;
+function initQuiz(d) { QZ = d; QORDER = shuffled(QZ.map(function (_, i) { return i; }), 4711); QBY = {}; QZ.forEach(function (q) { QBY[qid(q)] = q; }); QSEQ = QZ.map(qid).sort(function (a, b) { return hashStr(a + "#seq") - hashStr(b + "#seq"); }); }
+function loadQuiz() { if (QZ.length || QLOADING) return; QLOADING = true; fetch("quiz.json").then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }).then(function (d) { initQuiz(d); QLOADING = false; render(); }).catch(function () { QLOADING = false; }); }
 function qaColl() { return G().qa || {}; }
 function qInfo(id) { var q = QBY[id]; return { id: id, topic: q[0], q: q[1], opts: shuffled(q[2], hashStr(id)), right: q[2][0] }; }
 var quizTopic = LS.get("gqtopic", "Alle"), quizShow = null;
@@ -1154,7 +888,7 @@ function nextQ() {
 }
 function quizScore() {
   var s = { p1: 0, p2: 0 }, ts = iso(today()), all = G().quiz || {}, qa = qaColl();
-  Object.keys(all).forEach(function (ds) {
+  if (QZ.length) Object.keys(all).forEach(function (ds) {
     var d = all[ds], q = qFor(ds), both = d.p1 && d.p2;
     if (!both && ds >= ts) return;
     ["p1", "p2"].forEach(function (p) { if (d[p] && d[p].a === q.right) s[p]++; });
@@ -1181,6 +915,7 @@ function scoreLine(s, label) { return '<div class="score">' + av("p1") + '<b>' +
 
 /* --- Quiz --- */
 function renderQuiz() {
+  if (!QZ.length) { loadQuiz(); $("#g-body").innerHTML = '<div class="empty-hint">Fragen werden geladen …</div>'; return; }
   var qa = qaColl(), on = person(other()).name;
   var topics = ["Alle"].concat(QZ.map(function (q) { return q[0]; }).filter(function (t, i, a) { return a.indexOf(t) === i; }));
   var mineN = 0, hisN = 0; Object.keys(qa).forEach(function (id) { if (!QBY[id]) return; if (qa[id][me()]) mineN++; if (qa[id][other()]) hisN++; });
@@ -1240,7 +975,7 @@ function renderMalen() {
   $("#g-body").innerHTML = h;
   $("#dr-new").onclick = openDraw;
   $$("#g-body [data-dr]").forEach(function (b) { b.onclick = function () { openGuess(b.getAttribute("data-dr")); }; });
-  $$("#g-body [data-drdel]").forEach(function (b) { b.onclick = function () { ask("Dieses Bild löschen?", function () { write("games/draw/" + b.getAttribute("data-drdel"), null); }, "Löschen"); }; });
+  $$("#g-body [data-drdel]").forEach(function (b) { b.onclick = function () { del(["games/draw/" + b.getAttribute("data-drdel")]);  }; });
 }
 function openDraw() {
   var word = WORDS[Math.floor(Math.random() * WORDS.length)];
@@ -1328,7 +1063,7 @@ function openWheelEdit(id) {
     var nid = id || rid(); write("games/wheel/lists/" + nid, { name: name, items: items.slice(0, 24), by: l ? l.by : me(), at: l ? l.at : Date.now() });
     openWheel(nid);
   };
-  if (l) $("#wl-del").onclick = function () { ask("Liste „" + l.name + "“ löschen?", function () { write("games/wheel/lists/" + id, null); closeSheet(); }, "Löschen"); };
+  if (l) $("#wl-del").onclick = function () { del(["games/wheel/lists/" + id]); closeSheet();  };
 }
 var wheelState = null;
 function openWheel(id) {
@@ -1643,7 +1378,7 @@ function openStock(id) {
   $("#sx-minus").onclick = function () { stepQ(-1); }; $("#sx-plus").onclick = function () { stepQ(1); };
   $("#sx-shop").onclick = function () { toast(addToShop(v.name) ? v.name + " steht jetzt auf der Einkaufsliste" : "Steht schon drauf"); };
   $("#sx-save").onclick = function () { var n = $("#sx-name").value.trim() || v.name; var q = qv(); if (q === 0) lv = 0; write("stock/" + id, Object.assign({}, v, { name: n, place: pl, lvl: lv, ang: $("#sx-ang").checked || lv === 1, qty: q, unit: q == null ? "" : ($("#sx-unit").value || "Stk"), at: Date.now(), by: me() })); if (q === 0 && v.qty !== 0 && addToShop(n)) toast(n + " steht jetzt auf der Einkaufsliste"); closeSheet(); };
-  $("#sx-del").onclick = function () { ask(v.name + " aus den Vorräten löschen?", function () { write("stock/" + id, null); closeSheet(); }, "Löschen"); };
+  $("#sx-del").onclick = function () { del(["stock/" + id]); closeSheet();  };
 }
 
 /* ---------- REZEPT-VORSCHLÄGE (250 eigene Rezepte in rezepte.json) ---------- */
@@ -1834,7 +1569,7 @@ function openRecipe(id) {
   openSheet(html);
   $("#rv-shop").onclick = function () { var n = 0; $$("#panel [data-ing]").forEach(function (c) { if (c.checked && addToShop(r.ing[+c.getAttribute("data-ing")])) n++; }); if (!$$("#panel [data-ing]").some(function (c) { return c.checked; })) { toast("Erst die fehlenden Zutaten antippen"); return; } toast(n ? n + " Zutat" + (n > 1 ? "en" : "") + " auf die Einkaufsliste gesetzt" : "Steht schon alles drauf"); closeSheet(); };
   $("#rv-edit").onclick = function () { openRecipeEdit(id); };
-  $("#rv-del").onclick = function () { ask("Rezept „" + r.name + "“ löschen?", function () { write("recipes/" + id, null); closeSheet(); }, "Löschen"); };
+  $("#rv-del").onclick = function () { del(["recipes/" + id]); closeSheet();  };
 }
 function openRecipeEdit(id) {
   var r = id ? coll("recipes")[id] : null;
@@ -1863,7 +1598,7 @@ function renderIdeen() {
   var h = addRow("id-form", "Idee eintragen …", '<label for="id-cat" class="sr">Kategorie</label><select class="f" id="id-cat" style="width:auto;padding:0 8px">' + cats.map(function (c) { return '<option' + ((f !== "Alle" ? f : "Date") === c ? " selected" : "") + ">" + esc(c) + "</option>"; }).join("") + '<option value="__new">+ Neue …</option></select>');
   h += '<div class="chips topicrow">' + ["Alle"].concat(cats.filter(function (c) { return all.some(function (v) { return v.cat === c; }); })).map(function (c) { return '<button class="chip" data-if="' + esc(c) + '" aria-pressed="' + (f === c) + '">' + esc(c) + "</button>"; }).join("") + "</div>";
   if (!open.length && !done.length) h += '<div class="empty-hint">Sammelt hier alles, was ihr mal machen, kaufen oder ausprobieren wollt. Egal ob Date, Ausflug oder Wohnung.</div>';
-  if (open.length) h += '<div class="list">' + open.map(function (v) { var nw = isNew(v, "events") ? ' <span class="new">NEU</span>' : ""; return '<div class="item"><button class="main" data-idone="' + v.id + '" aria-label="' + esc(v.t) + ' als gemacht markieren"><span class="box"></span><span class="txt">' + esc(v.t) + nw + '<span class="sub">' + esc(v.cat || "") + " · von " + esc(von(v.by)) + '</span></span></button><button class="x" data-idel="' + v.id + '" aria-label="' + esc(v.t) + ' löschen">' + ICON_X + "</button></div>"; }).join("") + "</div>";
+  if (open.length) h += '<div class="list">' + open.map(function (v) { var nw = isNew(v, "events") ? ' <span class="new">NEU</span>' : ""; return '<div class="item" data-id="' + v.id + '"><button class="main" data-idone="' + v.id + '" aria-label="' + esc(v.t) + ' als gemacht markieren"><span class="box"></span><span class="txt">' + esc(v.t) + nw + '<span class="sub">' + esc(v.cat || "") + " · von " + esc(von(v.by)) + '</span></span></button><button class="x" data-idel="' + v.id + '" aria-label="' + esc(v.t) + ' löschen">' + ICON_X + "</button></div>"; }).join("") + "</div>";
   if (open.length >= 2) h += '<button class="btn sec" id="id-wheel">Unentschlossen? Ab ins Glücksrad</button>';
   if (done.length) h += '<p class="label">Schon gemacht (' + done.length + ')</p><div class="list">' + done.slice(0, 15).map(function (v) { return '<div class="item done"><button class="main" data-idone="' + v.id + '" aria-label="' + esc(v.t) + ' wieder öffnen"><span class="box">' + ICON_CHECK + '</span><span class="txt">' + esc(v.t) + '<span class="sub" style="text-decoration:none">' + esc(v.cat || "") + (v.doneAt ? " · " + esc(relDay(iso(new Date(v.doneAt)))) : "") + "</span></span></button></div>"; }).join("") + "</div>";
   $("#ev-body").innerHTML = h;
@@ -1871,7 +1606,8 @@ function renderIdeen() {
   onAdd("id-form", function (t) { var c = $("#id-cat").value; if (c === "__new") c = "Sonstiges"; write("ideas/" + rid(), { t: t, cat: c, by: me(), at: Date.now(), done: false }); });
   $$("#ev-body [data-if]").forEach(function (b) { b.onclick = function () { ideaFilter = b.getAttribute("data-if"); LS.set("ifilter", ideaFilter); renderIdeen(); }; });
   $$("#ev-body [data-idone]").forEach(function (b) { b.onclick = function () { var id = b.getAttribute("data-idone"), v = coll("ideas")[id]; if (!v) return; write("ideas/" + id, Object.assign({}, v, { done: !v.done, doneAt: !v.done ? Date.now() : null })); if (!v.done) toast("Schön! „" + v.t + "“ ist erledigt"); }; });
-  $$("#ev-body [data-idel]").forEach(function (b) { b.onclick = function () { ask("Diese Idee löschen?", function () { write("ideas/" + b.getAttribute("data-idel"), null); }, "Löschen"); }; });
+  $$("#ev-body .item[data-id]").forEach(function (el) { onHold(el, function () { openEditItem("ideas/" + el.getAttribute("data-id"), "Idee bearbeiten", [["t", "Idee"], ["cat", "Kategorie", "select", ideaCats().map(function (c) { return [c, c]; })]]); }); });
+  $$("#ev-body [data-idel]").forEach(function (b) { b.onclick = function () { del(["ideas/" + b.getAttribute("data-idel")]);  }; });
   var wb = $("#id-wheel"); if (wb) wb.onclick = function () {
     var lid = "ideen-" + normWord(f), name = f === "Alle" ? "Unsere Ideen" : "Ideen: " + f;
     write("games/wheel/lists/" + lid, { name: name, items: open.slice(0, 24).map(function (v) { return v.t; }), by: me(), at: Date.now() });
@@ -1887,15 +1623,16 @@ function renderBucket() {
   if (!all.length) h += '<div class="empty-hint">Eure gemeinsame Wunschliste: Nordlichter sehen, zusammen ein Konzert, eine Reise, ein Tanzkurs … Alles, was ihr unbedingt mal machen wollt.</div>';
   h += open.map(function (v) {
     var nw = isNew(v, "events") ? ' <span class="new">NEU</span>' : "";
-    return '<div class="bkcard"><div class="bkt"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--b)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l2.6 5.6 6.1.7-4.5 4.2 1.2 6L12 16.6 6.6 19.5l1.2-6L3.3 9.3l6.1-.7z"/></svg><span>' + esc(v.t) + nw + '</span></div><div class="muted">von ' + esc(von(v.by)) + " · " + esc(relDay(iso(new Date(v.at)))) + '</div><div class="row" style="flex-wrap:wrap"><button class="pillbtn" data-bkplan="' + v.id + '">Planen</button><button class="pillbtn" data-bkdone="' + v.id + '">Erlebt!</button><button class="x" data-bkdel="' + v.id + '" aria-label="' + esc(v.t) + ' löschen" style="margin-left:auto">' + ICON_X + "</button></div></div>";
+    return '<div class="bkcard" data-id="' + v.id + '"><div class="bkt"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--b)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l2.6 5.6 6.1.7-4.5 4.2 1.2 6L12 16.6 6.6 19.5l1.2-6L3.3 9.3l6.1-.7z"/></svg><span>' + esc(v.t) + nw + '</span></div><div class="muted">von ' + esc(von(v.by)) + " · " + esc(relDay(iso(new Date(v.at)))) + '</div><div class="row" style="flex-wrap:wrap"><button class="pillbtn" data-bkplan="' + v.id + '">Planen</button><button class="pillbtn" data-bkdone="' + v.id + '">Erlebt!</button><button class="x" data-bkdel="' + v.id + '" aria-label="' + esc(v.t) + ' löschen" style="margin-left:auto">' + ICON_X + "</button></div></div>";
   }).join("");
   if (done.length) h += '<p class="label">Schon erlebt</p><div class="list">' + done.map(function (v) { return '<div class="item done"><button class="main" data-bkundo="' + v.id + '" aria-label="' + esc(v.t) + ' wieder offen"><span class="box">' + ICON_CHECK + '</span><span class="txt">' + esc(v.t) + '<span class="sub" style="text-decoration:none">' + (v.doneAt ? esc(relDay(iso(new Date(v.doneAt)))) : "") + "</span></span></button></div>"; }).join("") + "</div>";
   $("#ev-body").innerHTML = h;
   onAdd("bk-form", function (t) { write("bucket/" + rid(), { t: t, by: me(), at: Date.now(), done: false }); });
+  $$("#ev-body .bkcard[data-id]").forEach(function (el) { onHold(el, function () { openEditItem("bucket/" + el.getAttribute("data-id"), "Wunsch bearbeiten", [["t", "Was wollt ihr machen?"]]); }); });
   $$("#ev-body [data-bkplan]").forEach(function (b) { b.onclick = function () { var v = coll("bucket")[b.getAttribute("data-bkplan")]; if (v) openEvent(null, null, v.t); }; });
   $$("#ev-body [data-bkdone]").forEach(function (b) { b.onclick = function () { var id = b.getAttribute("data-bkdone"), v = coll("bucket")[id]; if (!v) return; write("bucket/" + id, Object.assign({}, v, { done: true, doneAt: Date.now(), doneBy: me() })); toast("Wieder ein Traum weniger auf der Liste!"); }; });
   $$("#ev-body [data-bkundo]").forEach(function (b) { b.onclick = function () { var id = b.getAttribute("data-bkundo"), v = coll("bucket")[id]; if (v) write("bucket/" + id, Object.assign({}, v, { done: false, doneAt: null })); }; });
-  $$("#ev-body [data-bkdel]").forEach(function (b) { b.onclick = function () { ask("Von der Wunschliste löschen?", function () { write("bucket/" + b.getAttribute("data-bkdel"), null); }, "Löschen"); }; });
+  $$("#ev-body [data-bkdel]").forEach(function (b) { b.onclick = function () { del(["bucket/" + b.getAttribute("data-bkdel")]);  }; });
 }
 
 /* ---------- WATCHLIST ---------- */
@@ -1925,7 +1662,7 @@ function openWatch(id) {
   openSheet(html);
   $("#wx-film").onchange = function () { $("#wx-pos").hidden = this.checked; };
   $("#wx-save").onclick = function () { write("watch/" + id, Object.assign({}, v, { title: $("#wx-t").value.trim() || v.title, film: $("#wx-film").checked, s: Math.max(1, +$("#wx-s").value || 1), e: Math.max(0, +$("#wx-e").value || 0), done: $("#wx-done").checked, upd: Date.now(), by: me() })); closeSheet(); };
-  $("#wx-del").onclick = function () { ask("„" + v.title + "“ löschen?", function () { write("watch/" + id, null); closeSheet(); }, "Löschen"); };
+  $("#wx-del").onclick = function () { del(["watch/" + id]); closeSheet();  };
 }
 
 /* ---------- WÜNSCHE ---------- */
@@ -1935,20 +1672,22 @@ function renderWuensche() {
   var his = Object.keys((tree.wishes || {})[o] || {}).map(function (k) { var v = Object.assign({}, tree.wishes[o][k]); v.id = k; return v; }).sort(function (a, b) { return b.at - a.at; });
   var gifts = Object.keys((tree.gifts || {})[me()] || {}).map(function (k) { var v = Object.assign({}, tree.gifts[me()][k]); v.id = k; return v; }).sort(function (a, b) { return (a.done ? 1 : 0) - (b.done ? 1 : 0) || b.at - a.at; });
   var h = '<section class="card secret"><div class="card-h"><h2>Geschenkideen für ' + esc(on) + '</h2><span class="pill mute">nur du siehst das</span></div>' + addRow("gf-form", "Idee für " + on + " …");
-  h += gifts.length ? '<div class="list" style="border:1px solid var(--line)">' + gifts.map(function (v) { return '<div class="item' + (v.done ? " done" : "") + '"><button class="main" data-gd="' + v.id + '" aria-label="' + esc(v.t) + (v.done ? " wieder offen" : " als besorgt markieren") + '"><span class="box">' + (v.done ? ICON_CHECK : "") + '</span><span class="txt">' + esc(v.t) + (v.done ? '<span class="sub">besorgt</span>' : "") + '</span></button><button class="x" data-gx="' + v.id + '" aria-label="Löschen">' + ICON_X + "</button></div>"; }).join("") + "</div>" : '<p class="help">Wenn ' + esc(on) + " mal etwas erwähnt, schnell hier notieren. Abhaken, wenn du es besorgt hast.</p>";
+  h += gifts.length ? '<div class="list" style="border:1px solid var(--line)">' + gifts.map(function (v) { return '<div class="item' + (v.done ? " done" : "") + '" data-gid="' + v.id + '"><button class="main" data-gd="' + v.id + '" aria-label="' + esc(v.t) + (v.done ? " wieder offen" : " als besorgt markieren") + '"><span class="box">' + (v.done ? ICON_CHECK : "") + '</span><span class="txt">' + esc(v.t) + (v.done ? '<span class="sub">besorgt</span>' : "") + '</span></button><button class="x" data-gx="' + v.id + '" aria-label="Löschen">' + ICON_X + "</button></div>"; }).join("") + "</div>" : '<p class="help">Wenn ' + esc(on) + " mal etwas erwähnt, schnell hier notieren. Abhaken, wenn du es besorgt hast.</p>";
   h += "</section>";
   h += '<section class="card"><div class="card-h"><h2>Wünsche von ' + esc(on) + "</h2></div>";
   h += his.length ? '<div class="list" style="border:1px solid var(--line)">' + his.map(function (v) { return '<div class="item"><span class="txt" style="padding:10px 0">' + esc(v.t) + '</span><button class="pillbtn" data-gm="' + v.id + '">Merken</button></div>'; }).join("") + "</div>" : '<p class="help">' + esc(on) + " hat noch keine Wünsche eingetragen.</p>";
   h += "</section>";
   h += '<section class="card"><div class="card-h"><h2>Meine Wünsche</h2><span class="pill mute">' + esc(on) + " sieht das</span></div>" + addRow("mw-form", "Ich wünsche mir …");
-  if (mine.length) h += '<div class="list" style="border:1px solid var(--line)">' + mine.map(function (v) { return '<div class="item"><span class="txt" style="padding:10px 0">' + esc(v.t) + '</span><button class="x" data-mx="' + v.id + '" aria-label="Wunsch löschen">' + ICON_X + "</button></div>"; }).join("") + "</div>";
+  if (mine.length) h += '<div class="list" style="border:1px solid var(--line)">' + mine.map(function (v) { return '<div class="item" data-wid="' + v.id + '"><span class="txt" style="padding:10px 0">' + esc(v.t) + '</span><button class="x" data-mx="' + v.id + '" aria-label="Wunsch löschen">' + ICON_X + "</button></div>"; }).join("") + "</div>";
   h += "</section>";
   $("#ev-body").innerHTML = h;
   onAdd("gf-form", function (t) { write("gifts/" + me() + "/" + rid(), { t: t, at: Date.now() }); });
   onAdd("mw-form", function (t) { write("wishes/" + me() + "/" + rid(), { t: t, at: Date.now(), by: me() }); });
   $$("#ev-body [data-gd]").forEach(function (b) { b.onclick = function () { var id = b.getAttribute("data-gd"), v = ((tree.gifts || {})[me()] || {})[id]; if (v) write("gifts/" + me() + "/" + id + "/done", !v.done); }; });
-  $$("#ev-body [data-gx]").forEach(function (b) { b.onclick = function () { ask("Geschenkidee löschen?", function () { write("gifts/" + me() + "/" + b.getAttribute("data-gx"), null); }, "Löschen"); }; });
-  $$("#ev-body [data-mx]").forEach(function (b) { b.onclick = function () { write("wishes/" + me() + "/" + b.getAttribute("data-mx"), null); }; });
+  $$("#ev-body [data-gx]").forEach(function (b) { b.onclick = function () { del(["gifts/" + me() + "/" + b.getAttribute("data-gx")]);  }; });
+  $$("#ev-body .item[data-gid]").forEach(function (el) { onHold(el, function () { openEditItem("gifts/" + me() + "/" + el.getAttribute("data-gid"), "Geschenkidee bearbeiten", [["t", "Idee"]]); }); });
+  $$("#ev-body .item[data-wid]").forEach(function (el) { onHold(el, function () { openEditItem("wishes/" + me() + "/" + el.getAttribute("data-wid"), "Wunsch bearbeiten", [["t", "Ich wünsche mir …"]]); }); });
+  $$("#ev-body [data-mx]").forEach(function (b) { b.onclick = function () { del(["wishes/" + me() + "/" + b.getAttribute("data-mx")]); }; });
   $$("#ev-body [data-gm]").forEach(function (b) { b.onclick = function () { var v = ((tree.wishes || {})[o] || {})[b.getAttribute("data-gm")]; if (!v) return; write("gifts/" + me() + "/" + rid(), { t: v.t, at: Date.now() }); toast("In deine geheimen Geschenkideen übernommen"); }; });
 }
 
@@ -2001,6 +1740,7 @@ function openStoryRead(id) {
 /* ---------- UPDATES + FEEDBACK ---------- */
 /* Bei jedem Update: APP_VER erhöhen und oben in CHANGES eintragen, was neu ist. */
 var CHANGES = {
+  "2.7": ["Gelöscht? Unten erscheint „Rückgängig“", "Lange auf einen Eintrag drücken zum Bearbeiten: Einkauf, Haushalt, Aufgaben, Ideen, Wunschliste, Geschenke", "Dunkelmodus (Einstellungen › Aussehen)", "Einkaufsmodus: große Häkchen, nach Gängen sortiert, der andere sieht, dass du einkaufen bist", "Schnell nochmal kaufen: häufige Sachen mit einem Tipp auf die Liste", "Wiederkehrende Aufgaben im Haushalt, die ihr selbst festlegt", "Alte Einträge räumt die App automatisch auf, und sie startet schneller"],
   "2.6": ["Neu: Zettel an den anderen. Oben rechts auf „Heute“ schreiben, er klebt dann beim anderen ganz oben", "„Zuletzt erledigt“ ist jetzt nur noch eine Zeile", "Events aufgeräumt: nur noch Termine und Irgendwann. Serien und Geschenke stecken jetzt in „Irgendwann“"],
   "2.5": ["Wunschliste und Ideen stehen jetzt zusammen unter „Irgendwann“", "Spiele heißen jetzt „Zeitverschwendung“"],
   "2.4": ["Ganz oben auf „Heute“: Feierabend-Countdown, sonst der Countdown zum nächsten Highlight, sonst ein Spruch des Tages", "„Wo seid ihr?“ ist raus, steht ja eh im Dienstplan"],
@@ -2115,6 +1855,113 @@ window.addEventListener("focus", function () { checkRemoteUpdate(); });
 window.addEventListener("online", function () { checkRemoteUpdate(); });
 setInterval(checkRemoteUpdate, 5 * 60000);
 
+/* ---------- RÜCKGÄNGIG ---------- */
+function getPath(path) { var o = tree, ps = splitPath(path); for (var i = 0; i < ps.length; i++) { if (!o || typeof o !== "object") return null; o = o[ps[i]]; } return o === undefined || o === null ? null : JSON.parse(JSON.stringify(o)); }
+function del(paths, label) {
+  var saved = paths.map(function (p) { return [p, getPath(p)]; }).filter(function (x) { return x[1] !== null; });
+  paths.forEach(function (p) { write(p, null); });
+  if (!saved.length) return;
+  toast(label || "Gelöscht", { label: "Rückgängig", fn: function () { saved.forEach(function (x) { write(x[0], x[1]); }); toast("Wiederhergestellt"); } });
+}
+
+/* ---------- LANGES DRÜCKEN = BEARBEITEN ---------- */
+function onHold(el, fn) {
+  var t = null, sx = 0, sy = 0, fired = false;
+  el.addEventListener("pointerdown", function (e) { fired = false; sx = e.clientX; sy = e.clientY; clearTimeout(t); t = setTimeout(function () { fired = true; try { if (navigator.vibrate) navigator.vibrate(15); } catch (x) {} fn(); }, 550); });
+  ["pointerup", "pointercancel", "pointerleave"].forEach(function (ev) { el.addEventListener(ev, function () { clearTimeout(t); }); });
+  el.addEventListener("pointermove", function (e) { if (Math.abs(e.clientX - sx) > 8 || Math.abs(e.clientY - sy) > 8) clearTimeout(t); });
+  el.addEventListener("click", function (e) { if (fired) { e.stopPropagation(); e.preventDefault(); fired = false; } }, true);
+  el.addEventListener("contextmenu", function (e) { e.preventDefault(); clearTimeout(t); if (!fired) { fired = true; fn(); } });
+}
+/* fields: [[key, label, type, options]] – type: text | textarea | select */
+function openEditItem(path, title, fields, extraSave) {
+  var v = getPath(path); if (!v) return;
+  var html = '<div class="grab"></div><div class="ph"><h2>' + esc(title) + '</h2><button class="icon" data-close aria-label="Schließen">' + ICON_X + "</button></div>";
+  fields.forEach(function (f, k) {
+    var val = v[f[0]] == null ? "" : v[f[0]];
+    html += '<div class="fl"><label for="ed-' + k + '">' + esc(f[1]) + "</label>";
+    if (f[2] === "textarea") html += '<textarea class="f" id="ed-' + k + '">' + esc(val) + "</textarea>";
+    else if (f[2] === "select") html += '<select class="f" id="ed-' + k + '">' + f[3].map(function (o) { return '<option value="' + esc(o[0]) + '"' + (String(val) === String(o[0]) ? " selected" : "") + ">" + esc(o[1]) + "</option>"; }).join("") + "</select>";
+    else html += '<input class="f" id="ed-' + k + '" value="' + esc(val) + '">';
+    html += "</div>";
+  });
+  html += '<div class="actions"><button class="btn danger" id="ed-del">Löschen</button><button class="btn" id="ed-save">Speichern</button></div>';
+  openSheet(html);
+  $("#ed-save").onclick = function () {
+    var n = Object.assign({}, getPath(path) || v);
+    fields.forEach(function (f, k) { var x = $("#ed-" + k).value; if (f[2] !== "textarea") x = x.trim(); if (f[4] === "num") x = x === "" ? null : +x; n[f[0]] = x; });
+    if (fields[0] && !String(n[fields[0][0]] || "").trim()) { toast("Bitte etwas eintragen"); return; }
+    if (extraSave) extraSave(n);
+    n.editedBy = me(); write(path, n); closeSheet(); toast("Gespeichert");
+  };
+  $("#ed-del").onclick = function () { del([path]); closeSheet(); };
+}
+
+/* ---------- DUNKELMODUS ---------- */
+var themeMode = LS.get("theme", "auto");
+function applyTheme() {
+  var dark = themeMode === "dark" || (themeMode === "auto" && window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches);
+  document.documentElement.setAttribute("data-theme", dark ? "dark" : "light");
+  var m = document.querySelector('meta[name="theme-color"]'); if (m) m.setAttribute("content", dark ? "#111318" : "#F5F6FA");
+}
+applyTheme();
+try { matchMedia("(prefers-color-scheme: dark)").addEventListener("change", applyTheme); } catch (e) {}
+
+/* ---------- EINKAUFSMODUS + SCHNELL NOCHMAL ---------- */
+var AISLES = [
+  ["Obst & Gemüse", "apfel äpfel banane birne orange mandarine zitrone limette traube trauben beeren erdbeere himbeere tomate tomaten kirschtomaten cherrytomaten gurke paprika zucchini aubergine karotte karotten möhre möhren zwiebel zwiebeln knoblauch kartoffel kartoffeln salat feldsalat spinat brokkoli blumenkohl kohl kohlrabi lauch pilze champignons avocado ingwer kräuter petersilie basilikum schnittlauch dill sellerie kürbis obst gemüse radieschen spargel mango ananas melone"],
+  ["Brot & Backwaren", "brot brötchen toast toastbrot baguette brezel brezeln ciabatta croissant wraps tortilla fladenbrot knäckebrot"],
+  ["Kühlregal", "milch hafermilch joghurt quark butter käse reibekäse sahne schmand crème eier mozzarella feta frischkäse halloumi parmesan gouda camembert aufschnitt salami schinken kochschinken speck margarine pudding skyr kefir buttermilch maultaschen gnocchi tortellini spätzle schupfnudeln blätterteig pizzateig"],
+  ["Fleisch & Fisch", "hack hackfleisch fleisch hähnchen hähnchenbrust huhn pute putenbrust schnitzel steak bratwurst würstchen wiener lachs fisch fischfilet garnelen matjes gulasch kotelett leberkäse"],
+  ["Tiefkühl", "tiefkühl tk pizza pommes eis eiscreme fischstäbchen tiefkühlgemüse rahmspinat"],
+  ["Nudeln, Reis & Konserven", "nudeln spaghetti penne makkaroni lasagneplatten reis risottoreis linsen bohnen kidneybohnen kichererbsen dose dosen konserve dosentomaten passierte mais couscous tomatenmark brühe öl olivenöl essig thunfisch ketchup mayonnaise senf sojasoße pesto suppe"],
+  ["Backen & Gewürze", "mehl zucker backpulver hefe vanillezucker salz pfeffer gewürz gewürze zimt paprikapulver puderzucker speisestärke kakao oregano curry"],
+  ["Süßes & Snacks", "schokolade chips kekse gummibärchen nüsse snack snacks müsli haferflocken honig marmelade nutella cornflakes popcorn riegel"],
+  ["Getränke", "wasser cola saft orangensaft apfelsaft bier wein limo limonade kaffee tee sprudel mineralwasser energydrink"],
+  ["Drogerie & Haushalt", "spülmaschinentabs tabs spülmittel klopapier toilettenpapier küchenrolle zahnpasta zahnbürste shampoo duschgel müllbeutel waschmittel weichspüler seife deo tücher schwamm putzmittel batterien rasierer tampons binden"]
+];
+var AISLE_KW = AISLES.map(function (a) { return a[1].split(" ").map(normWord); });
+function aisleOf(name) {
+  var n = normWord(String(name).replace(/\(.*?\)/g, "")), best = AISLES.length, bl = 0;
+  AISLE_KW.forEach(function (kws, i) { kws.forEach(function (k) { if (k && n.indexOf(k) >= 0 && k.length > bl) { bl = k.length; best = i; } }); });
+  return best;
+}
+var shopMode = LS.get("shopmode", false);
+function shoppingOf(p) { var x = (tree.shopping || {})[p]; return x && x.active && Date.now() - x.at < 3 * 36e5 ? x : null; }
+function startShopping() { shopMode = true; LS.set("shopmode", true); write("shopping/" + me(), { active: true, at: Date.now() }); render(); }
+function stopShopping() {
+  shopMode = false; LS.set("shopmode", false); write("shopping/" + me(), null);
+  var done = entries("shop").filter(function (v) { return v.done; });
+  render();
+  if (done.length) del(done.map(function (v) { return "shop/" + v.id; }), "Einkauf fertig, " + done.length + " Abgehakte gelöscht");
+}
+function histKey(n) { return normWord(n).slice(0, 60) || "x"; }
+function bumpHist(name) { var k = histKey(name), h = (tree.shopHist || {})[k] || { name: name, n: 0 }; write("shopHist/" + k, { name: name, n: (h.n || 0) + 1, at: Date.now() }); }
+function quickBuys() {
+  var open = {}; entries("shop").forEach(function (v) { if (!v.done) open[histKey(v.name)] = true; });
+  var h = tree.shopHist || {};
+  return Object.keys(h).filter(function (k) { return !open[k] && h[k] && h[k].name; }).sort(function (a, b) { return (h[b].n - h[a].n) || (h[b].at - h[a].at); }).slice(0, 10).map(function (k) { return h[k].name; });
+}
+
+/* ---------- AUFRÄUMEN: Daten wachsen nicht unbegrenzt ---------- */
+function cleanup(force) {
+  if (synced() && !gotInitial) return;
+  var day = iso(today()); if (!force && LS.get("lastclean", "") === day) return;
+  var now = Date.now(), n = 0, D = 864e5;
+  entries("log").forEach(function (v) { if (v.at < now - 90 * D) { write("log/" + v.id, null); n++; } });
+  entries("shop").forEach(function (v) { if (v.done && (v.doneAt || v.at) < now - 30 * D) { write("shop/" + v.id, null); n++; } });
+  var lim = iso(addDays(today(), -180)); entries("events").forEach(function (v) { if (v.date < lim) { write("events/" + v.id, null); n++; } });
+  entries("ideas").forEach(function (v) { if (v.done && (v.doneAt || 0) < now - 365 * D) { write("ideas/" + v.id, null); n++; } });
+  var st = G().story || {}, sd = Object.keys(st).filter(function (k) { return st[k].status === "done"; }).sort(function (a, b) { return (st[b].endAt || 0) - (st[a].endAt || 0); });
+  sd.slice(10).forEach(function (k) { write("games/story/" + k, null); n++; });
+  var fb = feedbackList(); fb.slice(20).forEach(function (f) { write("feedback/" + f.key, null); n++; });
+  Object.keys(tree.shifts || {}).forEach(function (k) { var ds = k.slice(3); if (ds < iso(addDays(today(), -400))) { write("shifts/" + k, null); n++; } });
+  if (tree.status) { write("status", null); n++; }
+  LS.set("lastclean", day); LS.set("cleaned", (LS.get("cleaned", 0) || 0) + n);
+  return n;
+}
+function storageKB() { try { var t = 0; for (var i = 0; i < localStorage.length; i++) { var k = localStorage.key(i); if (k.indexOf("wz_") === 0) t += (localStorage.getItem(k) || "").length; } return Math.round(t * 2 / 1024); } catch (e) { return 0; } }
+
 /* ---------- Sheet + Toast ---------- */
 var lastFocus = null;
 function openSheet(html) {
@@ -2132,7 +1979,7 @@ function ask(msg, yes, label) {
   $("#ask-yes").onclick = function () { d.hidden = true; yes(); };
 }
 var toastT;
-function toast(msg) { var t = $("#toast"); t.textContent = msg; t.hidden = false; clearTimeout(toastT); toastT = setTimeout(function () { t.hidden = true; }, Math.min(9000, 3200 + msg.length * 40)); }
+function toast(msg, action) { var t = $("#toast"); t.innerHTML = "<span>" + esc(msg) + "</span>" + (action ? '<button class="tbtn" id="t-act">' + esc(action.label) + "</button>" : ""); t.hidden = false; if (action) $("#t-act").onclick = function () { t.hidden = true; action.fn(); }; clearTimeout(toastT); toastT = setTimeout(function () { t.hidden = true; }, action ? 7000 : Math.min(9000, 3200 + String(msg).length * 40)); }
 
 /* ---------- Einstellungen + Verbinden ---------- */
 function inviteLink() { return location.origin + location.pathname + "#join=" + encodeURIComponent(btoa(JSON.stringify({ u: cfg.url, c: cfg.code }))); }
@@ -2155,6 +2002,8 @@ function openSettings() {
   }
   html += "</section>";
   html += '<section class="card"><h2>Benachrichtigungen</h2><p class="help">Solange die App offen ist oder im Hintergrund läuft, erscheint eine Meldung, wenn der andere etwas einträgt.</p><button class="btn sec" id="st-notif">Benachrichtigungen erlauben</button></section>';
+  html += '<section class="card"><h2>Aussehen</h2><div class="seg three" id="st-theme"><button type="button" data-t="auto" aria-pressed="' + (themeMode === "auto") + '">Automatisch</button><button type="button" data-t="light" aria-pressed="' + (themeMode === "light") + '">Hell</button><button type="button" data-t="dark" aria-pressed="' + (themeMode === "dark") + '">Dunkel</button></div><p class="help">„Automatisch“ folgt der Einstellung des Handys.</p></section>';
+  html += '<section class="card"><h2>Speicher</h2><p class="help">Auf diesem Handy belegt: <b>' + storageKB() + ' KB</b> von etwa 5000 KB. Alte Einträge räumt die App automatisch auf: Haushalt nach 3 Monaten, Abgehaktes vom Einkauf nach 30 Tagen, vergangene Termine nach einem halben Jahr.' + (LS.get("cleaned", 0) ? " Bisher aufgeräumt: " + LS.get("cleaned", 0) + " Einträge." : "") + '</p><button class="btn sec" id="st-clean">Jetzt aufräumen</button></section>';
   var fbl = feedbackList();
   html += '<section class="card"><h2>Feedback zu Updates</h2><label class="ingrow" style="border:0"><input type="checkbox" id="st-askfb"' + (askFeedbackOn() ? " checked" : "") + '><span>Mich nach Updates nach meiner Meinung fragen</span></label>' + (fbl.length ? fbl.slice(0, 20).map(function (f) { return '<div class="fbrow"><div class="row" style="justify-content:space-between"><span style="font-weight:700">' + av(f.by) + " " + esc(nm(f.by)) + ' · Update ' + esc(f.v || "") + '</span><span class="muted">' + when(f.at) + '</span></div><div style="color:#B07A00;font-size:18px;letter-spacing:2px" aria-label="' + f.stars + ' von 5 Sternen">' + starStr(f.stars) + "</div>" + (f.text ? '<div style="font-size:14px">„' + esc(f.text) + "“</div>" : "") + "</div>"; }).join("") : '<p class="help">Noch kein Feedback.</p>') + "</section>";
   html += '<section class="card"><h2>Sicherung</h2><div class="grid2"><button class="btn sec" id="st-exp">Exportieren</button><button class="btn sec" id="st-imp">Importieren</button></div><input type="file" id="st-file" accept="application/json" hidden></section>';
@@ -2178,6 +2027,8 @@ function openSettings() {
     $("#st-join").onclick = function () { var o = parseInvite($("#st-inv").value); if (!o) { toast("Das ist kein gültiger Einladungslink"); return; } closeSheet(); startJoin(o); };
   }
   $("#st-notif").onclick = function () { if (!("Notification" in window)) { toast("Dieses Handy unterstützt das hier nicht"); return; } Notification.requestPermission().then(function (p) { toast(p === "granted" ? "Benachrichtigungen sind an" : "Nicht erlaubt"); }); };
+  $$("#st-theme button").forEach(function (b) { b.onclick = function () { themeMode = b.getAttribute("data-t"); LS.set("theme", themeMode); applyTheme(); paintSeg("#st-theme", "data-t", themeMode); }; });
+  $("#st-clean").onclick = function () { var n = cleanup(true) || 0; toast(n ? n + " alte Einträge aufgeräumt" : "Alles schon aufgeräumt"); };
   $("#st-upd").onclick = function () { updShown = false; closeSheet(); toast("Suche nach Updates …"); checkRemoteUpdate(); setTimeout(function () { if (!updShown) toast("Du hast schon die neueste Version " + APP_VER); }, 2500); };
   $("#st-askfb").onchange = function () { LS.set("askfb", this.checked); };
   $("#st-exp").onclick = function () { var a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([JSON.stringify(tree, null, 1)], { type: "application/json" })); a.download = "wir-zwei-sicherung-" + iso(today()) + ".json"; document.body.appendChild(a); a.click(); a.remove(); };
@@ -2227,7 +2078,8 @@ function startJoin(o) {
   else if (!cfg.me) showSetup();
   show("heute");
   connect(); flush();
-  checkNewVersion(); setTimeout(checkRemoteUpdate, 4000);
+  checkNewVersion(); setTimeout(checkRemoteUpdate, 4000); loadQuiz();
+  setTimeout(function () { cleanup(); }, 3000);
   setInterval(function () { if (tab === "heute" && $("#sheet").hidden) renderHeute(); }, 30000);
   if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost")) { try { navigator.serviceWorker.register("sw.js", { updateViaCache: "none" }).then(function (r) { r.update().catch(function () {}); }).catch(function () {}); } catch (e) {} }
 })();
